@@ -39,7 +39,7 @@
 					<!-- begin panel -->
 					<div class="panel panel-inverse" data-sortable-id="index-1">
 						<div class="panel-heading">
-							<h4 class="panel-title">Grafik Pelayanan</h4>
+							<h4 class="panel-title">Grafik Penjualan</h4>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-redo"></i></a>
