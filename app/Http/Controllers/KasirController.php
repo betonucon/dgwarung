@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 use App\Stokready;
 use App\Stokorder;
+use App\Kasir;
 use App\Stok;
 use App\Viewstokorder;
 use App\Barang;
@@ -17,7 +18,7 @@ use App\Keuangan;
 use App\User;
 use PDF;
 
-class StokorderController extends Controller
+class KasirController extends Controller
 {
     
     public function index(request $request)
@@ -25,29 +26,9 @@ class StokorderController extends Controller
         error_reporting(0);
         $template='top';
         
-        return view('stokorder.index',compact('template'));
+        return view('kasir.index',compact('template'));
     }
-    public function index_stok(request $request)
-    {
-        error_reporting(0);
-        $template='top';
-        
-        return view('stokorder.index_stok',compact('template'));
-    }
-    public function index_retur(request $request)
-    {
-        error_reporting(0);
-        $template='top';
-        
-        return view('stokorder.index_retur',compact('template'));
-    }
-    public function index_tukar(request $request)
-    {
-        error_reporting(0);
-        $template='top';
-        
-        return view('stokorder.index_tukar',compact('template'));
-    }
+    
     public function create(request $request)
     {
         error_reporting(0);
@@ -58,7 +39,7 @@ class StokorderController extends Controller
         }else{
             $disabled='readonly';
         }
-        return view('stokorder.create',compact('template','disabled','id'));
+        return view('kasir.create',compact('template','disabled','id'));
     }
     public function view_stok(request $request)
     {
@@ -74,7 +55,7 @@ class StokorderController extends Controller
         if($request->kode==""){
             
         }else{
-            return view('stokorder.view_stok',compact('template','disabled','kode','data','act'));
+            return view('kasir.view_stok',compact('template','disabled','kode','data','act'));
         }
         
     }
@@ -93,7 +74,7 @@ class StokorderController extends Controller
         }else{
             $disabled='readonly';
         }
-        return view('stokorder.modal',compact('template','disabled','id','order','act','ide','data'));
+        return view('kasir.modal',compact('template','disabled','id','order','act','ide','data'));
     }
     
     public function modal_terima(request $request)
@@ -107,7 +88,7 @@ class StokorderController extends Controller
         }else{
             $disabled='readonly';
         }
-        return view('stokorder.modal_terima',compact('template','disabled','id','data'));
+        return view('kasir.modal_terima',compact('template','disabled','id','data'));
     }
     public function modal_retur(request $request)
     {
@@ -120,7 +101,7 @@ class StokorderController extends Controller
         }else{
             $disabled='readonly';
         }
-        return view('stokorder.modal_retur',compact('template','disabled','kode','data'));
+        return view('kasir.modal_retur',compact('template','disabled','kode','data'));
     }
     public function modal_tukar(request $request)
     {
@@ -133,7 +114,7 @@ class StokorderController extends Controller
         }else{
             $disabled='readonly';
         }
-        return view('stokorder.modal_tukar',compact('template','disabled','kode','data'));
+        return view('kasir.modal_tukar',compact('template','disabled','kode','data'));
     }
     public function cari_stok(request $request)
     {
@@ -166,7 +147,7 @@ class StokorderController extends Controller
         }else{
             $disabled='readonly';
         }
-        return view('stokorder.modal_cetak',compact('template','disabled','id','data'));
+        return view('kasir.modal_cetak',compact('template','disabled','id','data'));
     }
 
     public function tentukan_provit(request $request)
@@ -379,8 +360,8 @@ class StokorderController extends Controller
         $rules = [];
         $messages = [];
         
-        $rules['supplier_id']= 'required';
-        $messages['supplier_id.required']= 'Pilih Supplier';
+        $rules['konsumen']= 'required';
+        $messages['konsumen.required']= 'Masukan Nama Konsumen';
         
         $rules['tanggal']= 'required';
         $messages['tanggal.required']= 'Lengkapi tanggal';
@@ -401,11 +382,12 @@ class StokorderController extends Controller
             echo'</div></div>';
         }else{
             if($request->id==0){
-                    $nomor=penomoran_masuk();
-                    $data=Stokorder::create([
+                    $nomor=penomoran_kasir();
+                    $data=Kasir::create([
                         
-                        'nomor_stok'=>$nomor,
-                        'supplier_id'=>$request->supplier_id,
+                        'nomor_transaksi'=>$nomor,
+                        'konsumen'=>$request->konsumen,
+                        'tanggal'=>$request->tanggal,
                         'bulan'=>date('m'),
                         'tahun'=>date('Y'),
                         'status'=>0,
@@ -470,7 +452,6 @@ class StokorderController extends Controller
                     $data=Stok::where('nomor_stok',$request->nomor_stok)->update([
                         
                         'status'=>2,
-                        'aktif'=>0,
                         'proses'=>1,
                         'update'=>date('Y-m-d H:i:s'),
                     ]);
@@ -718,7 +699,7 @@ class StokorderController extends Controller
         error_reporting(0);
         $order=Stokorder::where('nomor_stok',$request->id)->first();
         $data=Viewstokorder::where('nomor_stok',$request->id)->get();
-        $pdf = PDF::loadView('stokorder.cetak', compact('data','order'));
+        $pdf = PDF::loadView('kasir.cetak', compact('data','order'));
         $pdf->setPaper('A4', 'Landscape');
         $pdf->stream($request->id.'.pdf');
         return $pdf->stream();

@@ -32,7 +32,7 @@
                 <!-- end panel-heading -->
                 <!-- begin panel-body -->
                 <div class="panel-body" style="padding: 5px">
-                    <form class="form-horizontal form-bordered" style="margin-bottom: 1%; background: ghostwhite; padding: 1% 0 1% 0;" id="mydata" method="post" action="{{ url('stokorder/store_stok') }}" enctype="multipart/form-data" >
+                    <form class="form-horizontal form-bordered" style="margin-bottom: 1%; background: ghostwhite; padding: 1% 0 1% 0;" id="mydata" method="post" action="{{ url('kasir/store_stok') }}" enctype="multipart/form-data" >
                         @csrf 
                         <input type="hidden" name="nomor_stok" value="{{$id}}">
                         <div class="row">
@@ -83,21 +83,17 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Stok Order Baru</h4>
+                <h4 class="modal-title">Transaksi Baru</h4>
                 <button type="button" class="close" >×</button>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal form-bordered" id="mydataorder" method="post" action="{{ url('stokorder') }}" enctype="multipart/form-data" >
+                <form class="form-horizontal form-bordered" id="mydataorder" method="post" action="{{ url('kasir') }}" enctype="multipart/form-data" >
                     @csrf 
                     <!-- <input type="submit"> -->
+                    
                     <div class="form-group">
-                        <label>Supplier</label>
-                        <select name="supplier_id" class="form-control form-control-sm " id="default-select3" placeholder="Ketik disini....">
-                            <option value="">Pilih Supplier</option>
-                            @foreach(get_supplier() as $sat)
-                                <option value="{{$sat->id}}" @if($data->supplier_id==$sat->id) selected @endif >{{$sat->supplier}}</option>
-                            @endforeach
-                        </select>
+                        <label>Konsumen</label>
+                        <input type="text"  name="konsumen" class="form-control" />
                     </div>
                     <div class="form-group">
                         <label>Tanggal</label>
@@ -106,8 +102,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <a href="javascript:;" class="btn btn-white" onclick="location.assign(`{{url('stokorder')}}`)">Batalkan</a>
-                <a href="javascript:;" class="btn btn-primary" onclick="simpan_order()" >Buat Stok Order</a>
+                <a href="javascript:;" class="btn btn-white" onclick="location.assign(`{{url('kasir')}}`)">Batalkan</a>
+                <a href="javascript:;" class="btn btn-primary" onclick="simpan_order()" >Proses</a>
             </div>
         </div>
     </div>
@@ -125,7 +121,7 @@
                     <div id="notifikasi-import"></div>
                     
                 </div> -->
-                <form class="form-horizontal form-bordered" style="margin-bottom: 1%; padding: 1% 0 1% 0;" id="mydataselesai" method="post" action="{{ url('stokorder/store_selesai') }}" enctype="multipart/form-data" >
+                <form class="form-horizontal form-bordered" style="margin-bottom: 1%; padding: 1% 0 1% 0;" id="mydataselesai" method="post" action="{{ url('kasir/store_selesai') }}" enctype="multipart/form-data" >
                     @csrf 
                     <input type="text" name="nomor_stok" value="{{$id}}">
                     <div id="tampil-form-terima"></div>
@@ -181,7 +177,7 @@
                     responsive: false,
                     paging: false,
                     responsive: false,
-                    ajax:"{{ url('stokorder/get_data')}}?nomor_stok={{$id}}",
+                    ajax:"{{ url('kasir/get_data')}}?nomor_stok={{$id}}",
 					columns: [
                         { data: 'id', render: function (data, type, row, meta) 
 							{
@@ -229,22 +225,22 @@
 
         $(document).ready(function() {
 			TableManageFixedHeader.init();
-            $('#tampil-form').load("{{url('stokorder/modal')}}?id={{$id}}&ide=0&act=new")
+            $('#tampil-form').load("{{url('kasir/modal')}}?id={{$id}}&ide=0&act=new")
 		});
 
         function edit_data(id){
-            $('#tampil-form').load("{{url('stokorder/modal')}}?id={{$id}}&ide="+id+"&act=edit")
+            $('#tampil-form').load("{{url('kasir/modal')}}?id={{$id}}&ide="+id+"&act=edit")
         }
 
         function terima_data(){
             $('#modal-terima .modal-title').text('Konfirmasi ');
             $('#modal-terima').modal('show');
-            $('#tampil-form-terima').load("{{url('stokorder/modal_terima')}}?id={{$id}}")
+            $('#tampil-form-terima').load("{{url('kasir/modal_terima')}}?id={{$id}}")
         }
         function cetak_data(){
             $('#modal-cetak .modal-title').text('Konfirmasi ');
             $('#modal-cetak').modal('show');
-            $('#tampil-form-cetak').load("{{url('stokorder/modal_cetak')}}?id={{$id}}")
+            $('#tampil-form-cetak').load("{{url('kasir/modal_cetak')}}?id={{$id}}")
         }
        
 
@@ -291,7 +287,7 @@
                 
                 $.ajax({
                     type: 'POST',
-                    url: "{{ url('stokorder/store_stok') }}",
+                    url: "{{ url('kasir/store_stok') }}",
                     data: new FormData(form),
                     contentType: false,
                     cache: false,
@@ -307,9 +303,9 @@
 									title: "Success! berhasil disimpan!",
 									icon: "success",
                             });
-                            $('#tampil-form').load("{{url('stokorder/modal')}}?id={{$id}}&ide=0&act=new")
+                            $('#tampil-form').load("{{url('kasir/modal')}}?id={{$id}}&ide=0&act=new")
                             var table=$('#data-table-fixed-header').DataTable();
-			                    table.ajax.url("{{ url('stokorder/get_data')}}?nomor_stok={{$id}}").load();    
+			                    table.ajax.url("{{ url('kasir/get_data')}}?nomor_stok={{$id}}").load();    
                         }else{
                             document.getElementById("loadnya").style.width = "0px";
                             swal({
@@ -344,7 +340,7 @@
                 
                 $.ajax({
                     type: 'POST',
-                    url: "{{ url('stokorder') }}",
+                    url: "{{ url('kasir') }}",
                     data: new FormData(form),
                     contentType: false,
                     cache: false,
@@ -360,7 +356,7 @@
 									title: "Success! berhasil disimpan!",
 									icon: "success",
                             });
-                            location.assign("{{url('stokorder/create')}}?id="+bat[2])   
+                            location.assign("{{url('kasir/create')}}?id="+bat[2])   
                         }else{
                             document.getElementById("loadnya").style.width = "0px";
                             swal({
@@ -395,7 +391,7 @@
                 
                 $.ajax({
                     type: 'POST',
-                    url: "{{ url('stokorder/store_selesai') }}",
+                    url: "{{ url('kasir/store_selesai') }}",
                     data: new FormData(form),
                     contentType: false,
                     cache: false,
@@ -411,7 +407,7 @@
 									title: "Success! berhasil diproses!",
 									icon: "success",
                             });
-                            location.assign("{{url('stokorder/create')}}?id=0")   
+                            location.assign("{{url('kasir/create')}}?id=0")   
                         }else{
                             document.getElementById("loadnya").style.width = "0px";
                             swal({

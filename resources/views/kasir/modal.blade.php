@@ -11,7 +11,7 @@
                            
                             <option value="">Cari Nama Barang</option>
                             
-                            @foreach(get_barang() as $sat)
+                            @foreach(get_stokready() as $sat)
                                 <option value="{{$sat->kode}}" @if($data->kode==$sat->kode) selected @endif >[{{$sat->kode}}] {{$sat->nama_barang}} ({{$sat->satuan}})</option>
                             @endforeach
                         </select>
@@ -29,12 +29,12 @@
                 <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Harga Beli & Jual</label>
                 <div class="col-lg-3" style="padding: 0% 1% 0% 0%;">
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" name="harga_beli" value="{{$data->harga_beli}}" onkeyup="tentukan_provit(this.value)" id="currency1" placeholder="999/99/9999">
+                        <input type="text" class="form-control" name="harga_jual" id="currency2" placeholder="999/99/9999">
                     </div>
                 </div>
                 <div class="col-lg-3" style="padding: 0% 1% 0% 0%;">
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" name="harga_jual" value="{{$data->harga_jual}}" @if(setting_provit()==1) readonly @endif id="currency2" placeholder="999/99/9999">
+                        <input type="text" class="form-control" name="stok"  id="currency2" placeholder="999/99/9999">
                     </div>
                 </div>
                 
@@ -110,12 +110,13 @@
         function cari_barang(text){
             $.ajax({
                 type: 'GET',
-                url: "{{url('barang/cari_barang')}}",
+                url: "{{url('barang/cari_barang_jual')}}",
                 data: "kode="+text,
                 success: function(msg){
                     var bat=msg.split('@');
         
                         $('#satuan').val(bat[1]);
+                        $('#currency2').val(bat[2]);
                 }
             });
         }

@@ -1,4 +1,4 @@
-        <div id="sidebar" class="sidebar" style="background: linear-gradient(to right, #0e0e0d, #55686e);">
+        <div id="sidebar" class="sidebar sidebar-grid" style="background: linear-gradient(to right, #0e0e0d, #55686e);">
 			<!-- begin sidebar scrollbar -->
 			<div data-scrollbar="true" data-height="100%">
 				<!-- begin sidebar user -->
@@ -46,19 +46,27 @@
 							
 						</ul>
 					</li>
-					<li class="has-sub closed">
+					<li class="has-sub @if(Request::is('stokorder/*')==1 || Request::is('stokorder')==1 || Request::is('stok')==1 || Request::is('stok/*')==1) active @endif">
 						<a href="javascript:;">
 							<b class="caret"></b>
 							<i class="fa fa-clone"></i>
 							<span>Stok</span>
 						</a>
-						<ul class="sub-menu" style="display: none;">
+						<ul class="sub-menu" @if(Request::is('stokorder/*')==1 || Request::is('stokorder')==1 || Request::is('stok')==1 || Request::is('stok/*')==1) style="display: block;" @endif>
 							
 							<li><a href="{{url('stokorder')}}">Order Stok</a></li>
-							<li><a href="{{url('barang')}}">Limit Stok</a></li>
-							
+							<li><a href="{{url('stok')}}">Stok Tersedia</a></li>
+							<li><a href="{{url('stokorder/retur')}}">Retur Barang</a></li>
+							<li><a href="{{url('stokorder/tukar')}}">Tukar Satuan</a></li>
 						</ul>
 					</li>
+					<li>
+						<a href="{{url('/keuangan')}}">
+							<i class="fas fa-money-bill-alt"></i> 
+							<span>Keuangan</span>
+						</a>
+					</li>
+					
 					<li>
 						<a href="{{url('/setting')}}">
 							<i class="fa fa-cog"></i> 

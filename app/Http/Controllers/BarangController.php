@@ -55,6 +55,11 @@ class BarangController extends Controller
         $dT=Barang::where('kode',$request->kode)->first();
         return '@'.$dT->satuan;
     }
+    public function cari_barang_jual(request $request)
+    {
+        $dT=Barang::where('kode',$request->kode)->first();
+        return '@'.$dT->satuan.'@'.stok_ready($request->kode).'@'.nomor_stok_ready($request->kode).'@'.jual_stok_ready($request->kode);
+    }
 
     public function get_data(request $request)
     {

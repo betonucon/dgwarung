@@ -9,7 +9,6 @@
 	<meta content="" name="author" />
 	
 	<!-- ================== BEGIN BASE CSS STYLE ================== -->
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
 	<link href="{{url_plug()}}/assets/css/default/app.min.css" rel="stylesheet" />
 	<!-- ================== END BASE CSS STYLE ================== -->
 	
@@ -34,7 +33,7 @@
 	<link href="{{url_plug()}}/assets/plugins/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" />
     <link href="{{url_plug()}}/assets/plugins/gritter/css/jquery.gritter.css" rel="stylesheet" />
 	<link href="{{url_plug()}}/assets/plugins/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.min.css" rel="stylesheet" />
-    @stack('style')
+    
 	<style>
         .loadnya {
 			height: 100%;
@@ -149,7 +148,9 @@
 				width:50%;
 			}
 		}
+		
     </style>
+	@stack('style')
 </head>
 <body style="font-family: sans-serif;">
 	<!-- begin #page-loader -->

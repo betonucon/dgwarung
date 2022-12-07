@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Stokorder extends Model
+class Kategorikeuangan extends Model
 {
-    protected $table = 't_stok_order';
+    protected $table = 'm_kategori_keuangan';
     protected $guarded = ['id'];
     public $timestamps = false;
-    function msupplier(){
-        return $this->belongsTo('App\Supplier','supplier_id','id');
-    }
+    // function mjabatan(){
+    //     return $this->belongsTo('App\Models\Jabatan','jabatan_id','id');
+    // }
     // function mgroup(){
     //     return $this->belongsTo('App\Models\Group','group_id','id');
     // }
