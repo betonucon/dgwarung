@@ -58,20 +58,18 @@
            
             
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" style="height: 95px;padding-top: 3.3%;">
             <div class="form-group row">
                 <label style="padding: 0% 1% 0% 3%;" class="col-lg-5 col-form-label">Tot Barang</label>
-                <div class="col-lg-2" style="padding: 0% 1% 0% 1%;">
-                    {{total_item_stok($id)}} Item
+                <div class="col-lg-7" style="padding: 0% 1% 0% 0%;border: solid 1px #f7f7ff; background: #e8e8f3;height:30px">
+                    <p  style="margin-top: 0; margin-left: 3%; margin-bottom: 0px; line-height: 2.1; font-size: 13px;">{{total_item_stok($id)}} Item</p>
                 </div>
-                
             </div>
             <div class="form-group row">
                 <label style="padding: 0% 1% 0% 3%;" class="col-lg-5 col-form-label">Tot Harga</label>
-                <div class="col-lg-2" style="padding: 0% 1% 0% 1%;">
-                    Rp.{{uang(total_harga_stok($id))}} 
+                <div class="col-lg-7" style="padding: 0% 1% 0% 0%;border: solid 1px #f7f7ff; background: #e8e8f3;height:30px">
+                    <p  style="margin-top: 0; margin-left: 3%; margin-bottom: 0px; line-height: 2.1; font-size: 13px;">Rp.{{uang(total_harga_stok($id))}} </p>
                 </div>
-                
             </div>
             
             

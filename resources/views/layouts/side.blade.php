@@ -66,6 +66,12 @@
 							<span>Keuangan</span>
 						</a>
 					</li>
+					<li>
+						<a href="{{url('/kasir')}}">
+							<i class="fas fa-calculator"></i> 
+							<span>Kasir</span>
+						</a>
+					</li>
 					
 					<li>
 						<a href="{{url('/setting')}}">

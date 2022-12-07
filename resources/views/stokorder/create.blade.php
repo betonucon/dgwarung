@@ -127,7 +127,7 @@
                 </div> -->
                 <form class="form-horizontal form-bordered" style="margin-bottom: 1%; padding: 1% 0 1% 0;" id="mydataselesai" method="post" action="{{ url('stokorder/store_selesai') }}" enctype="multipart/form-data" >
                     @csrf 
-                    <input type="text" name="nomor_stok" value="{{$id}}">
+                    <input type="hidden" name="nomor_stok" value="{{$id}}">
                     <div id="tampil-form-terima"></div>
                  </form>
             </div>

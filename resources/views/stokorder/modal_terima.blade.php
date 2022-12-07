@@ -1,4 +1,4 @@
-    <input type="text" name="kategori_keuangan_id" value="1">
+    <input type="hidden" name="kategori_keuangan_id" value="1">
     <div class="row">
         
         <div class="col-md-12">

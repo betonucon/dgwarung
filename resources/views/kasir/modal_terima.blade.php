@@ -1,4 +1,4 @@
-    <input type="text" name="kategori_keuangan_id" value="1">
+    <input type="hidden" name="kategori_keuangan_id" value="2">
     <div class="row">
         
         <div class="col-md-12">
@@ -6,8 +6,8 @@
                 <label style="padding: 1% 1% 2% 3%;" class="col-lg-5 col-form-label">Jumlah</label>
                 <div class="col-lg-5" style="padding: 1% 1% 2% 1%;">
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" readonly  value="{{uang(total_harga_stok($id))}}" id="currency1">
-                        <input type="hidden" class="form-control" name="nilai" readonly  value="{{total_harga_stok($id)}}" >
+                        <input type="text" class="form-control" readonly  value="{{uang(total_harga_jual($id))}}" id="currency1">
+                        <input type="hidden" class="form-control" name="nilai" readonly  value="{{total_harga_jual($id)}}" >
                     </div>
                 </div>
             </div>
@@ -16,8 +16,8 @@
                 <div class="col-lg-7" style="padding: 1% 1% 2% 1%;">
                     <div class="input-group input-group-sm">
                         <select  name="status_keuangan_id" onchange="pilih_status_keuangan(this.value)" class="form-control form-control-sm" placeholder="Ketik disini....">
-                            <option value="2" >Pembayaran Langsung</option>
-                            <option value="3">Pembayaran Tempo</option>
+                            <option value="1" > Tunai</option>
+                            <option value="4"> Tempo</option>
                         </select>
                         
                     </div>
@@ -50,7 +50,7 @@
         });
 
         function pilih_status_keuangan(id){
-            if(id==3){
+            if(id==4){
                 $("#hidden_tanggal_tempo").show();
             }else{
                 $("#hidden_tanggal_tempo").hide();

@@ -34,14 +34,17 @@
                 <div class="panel-body" style="padding: 5px">
                     <form class="form-horizontal form-bordered" style="margin-bottom: 1%; background: ghostwhite; padding: 1% 0 1% 0;" id="mydata" method="post" action="{{ url('kasir/store_stok') }}" enctype="multipart/form-data" >
                         @csrf 
-                        <input type="hidden" name="nomor_stok" value="{{$id}}">
+                        <input type="hidden" name="nomor_transaksi" value="{{$id}}">
                         <div class="row">
         
                             <div class="col-md-8">
                                 <div class="form-group row">
                                     <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Nomor Order</label>
-                                    <div class="col-lg-6" style="padding: 0% 1% 0% 0%;">
-                                        {{$id}}
+                                    <div class="col-lg-3" style="padding: 0% 1% 0% 0%;border: solid 1px #f7f7ff; background: #e8e8f3;">
+                                        <p  style="margin-top: 0; margin-left: 3%; margin-bottom: 0px; line-height: 2.1; font-size: 13px;">{{$id}}&nbsp;</p>
+                                    </div>
+                                    <div class="col-lg-3" style="padding: 0% 1% 0% 0%;border: solid 1px #f7f7ff; background: #e8e8f3;">
+                                        <p  style="margin-top: 0; margin-left: 3%; margin-bottom: 0px; line-height: 2.1; font-size: 13px;">Tn. {{$data->konsumen}}&nbsp;</p>
                                     </div>
                                 </div>
                              </div>
@@ -59,8 +62,7 @@
                                     <th class="text-nowrap">Nama Barang</th>
                                     <th class="text-nowrap"  width="7%">Qty</th>
                                     <th class="text-nowrap"  width="7%">Satuan</th>
-                                    <th class="text-nowrap"  width="12%">Beli</th>
-                                    <th class="text-nowrap"  width="12%">Jual</th>
+                                    <th class="text-nowrap"  width="12%">H.Satuan</th>
                                     <th class="text-nowrap"  width="12%">Total</th>
                                     <th class="text-nowrap" width="8%">Act</th>
                                 </tr>
@@ -123,7 +125,7 @@
                 </div> -->
                 <form class="form-horizontal form-bordered" style="margin-bottom: 1%; padding: 1% 0 1% 0;" id="mydataselesai" method="post" action="{{ url('kasir/store_selesai') }}" enctype="multipart/form-data" >
                     @csrf 
-                    <input type="text" name="nomor_stok" value="{{$id}}">
+                    <input type="hidden" name="nomor_transaksi" value="{{$id}}">
                     <div id="tampil-form-terima"></div>
                  </form>
             </div>
@@ -188,9 +190,8 @@
 						{ data: 'nama_barang' },
 						{ data: 'qty' },
 						{ data: 'satuan' },
-						{ data: 'uang_harga_beli' },
 						{ data: 'uang_harga_jual' },
-						{ data: 'uang_total_beli' },
+						{ data: 'uang_total_jual' },
 						{ data: 'action' },
 						
 					],
@@ -280,6 +281,61 @@
 		}
 
         
+        function proses_enter(e){
+			if(e.keyCode === 13){
+                var form=document.getElementById('mydata');
+            
+                
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ url('kasir/store_stok') }}",
+                        data: new FormData(form),
+                        contentType: false,
+                        cache: false,
+                        processData:false,
+                        beforeSend: function() {
+                            document.getElementById("loadnya").style.width = "100%";
+                        },
+                        success: function(msg){
+                            var bat=msg.split('@');
+                            if(bat[1]=='ok'){
+                                document.getElementById("loadnya").style.width = "0px";
+                                swal({
+                                        title: "Success! berhasil disimpan!",
+                                        icon: "success",
+                                });
+                                $('#tampil-form').load("{{url('kasir/modal')}}?id={{$id}}&ide=0&act=new")
+                                var table=$('#data-table-fixed-header').DataTable();
+                                    table.ajax.url("{{ url('kasir/get_data')}}?nomor_stok={{$id}}").load();    
+                            }else{
+                                document.getElementById("loadnya").style.width = "0px";
+                                swal({
+                                    title: 'Notifikasi',
+                                
+                                    html:true,
+                                    text:'ss',
+                                    icon: 'error',
+                                    buttons: {
+                                        cancel: {
+                                            text: 'Tutup',
+                                            value: null,
+                                            visible: true,
+                                            className: 'btn btn-dangers',
+                                            closeModal: true,
+                                        },
+                                        
+                                    }
+                                });
+                                $('.swal-text').html('<div style="width:100%;background:#f2f2f5;padding:1%;text-align:left;font-size:13px">'+msg+'</div>')
+                                $("#qty").val("");
+                            }
+                            
+                            
+                        }
+                    });
+            }
+        }
+
         function simpan_data(){
             
             var form=document.getElementById('mydata');
@@ -326,6 +382,7 @@
                                 }
                             });
                             $('.swal-text').html('<div style="width:100%;background:#f2f2f5;padding:1%;text-align:left;font-size:13px">'+msg+'</div>')
+                            $("#qty").val("");
                         }
                         
                         

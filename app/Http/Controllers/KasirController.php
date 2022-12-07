@@ -34,12 +34,13 @@ class KasirController extends Controller
         error_reporting(0);
         $template='top';
         $id=$request->id;
+        $data=Kasir::where('nomor_transaksi',$request->id)->first();
         if($request->id==0){
             $disabled='';
         }else{
             $disabled='readonly';
         }
-        return view('kasir.create',compact('template','disabled','id'));
+        return view('kasir.create',compact('template','disabled','id','data'));
     }
     public function view_stok(request $request)
     {
@@ -68,7 +69,7 @@ class KasirController extends Controller
         $ide=$request->ide;
         $act=$request->act;
         $data=Viewstokorder::find($request->ide);
-        $order=Stokorder::where('nomor_stok',$request->id)->first();
+        $order=Kasir::where('nomor_transaksi',$request->id)->first();
         if($request->id==0){
             $disabled='';
         }else{
@@ -164,7 +165,7 @@ class KasirController extends Controller
         error_reporting(0);
         $query = Viewstokorder::query();
         
-        $data = $query->where('nomor_stok',$request->nomor_stok);
+        $data = $query->where('nomor_transaksi',$request->nomor_stok);
         $data = $query->orderBy('id','Asc')->get();
 
         return Datatables::of($data)
@@ -177,8 +178,8 @@ class KasirController extends Controller
                 $btn=uang($row->harga_jual);
                 return $btn;
             })
-            ->addColumn('uang_total_beli', function ($row) {
-                $btn=uang($row->total_beli);
+            ->addColumn('uang_total_jual', function ($row) {
+                $btn=uang($row->total_jual);
                 return $btn;
             })
             ->addColumn('action', function ($row) {
@@ -442,26 +443,26 @@ class KasirController extends Controller
                 $bulan=date('m');
                 $tahun=date('Y');
             }
-                    $odr=Stokorder::where('nomor_stok',$request->nomor_stok)->first();
-                    $data=Stokorder::where('nomor_stok',$request->nomor_stok)->update([
+                    $odr=Kasir::where('nomor_transaksi',$request->nomor_transaksi)->first();
+                    $data=Kasir::where('nomor_transaksi',$request->nomor_transaksi)->update([
                         
                         'status'=>1,
                         'nilai'=>$request->nilai,
                         'waktu'=>date('Y-m-d H:i:s'),
                     ]);
-                    $data=Stok::where('nomor_stok',$request->nomor_stok)->update([
+                    $data=Stok::where('nomor_transaksi',$request->nomor_transaksi)->update([
                         
-                        'status'=>2,
+                        'status'=>3,
                         'proses'=>1,
                         'update'=>date('Y-m-d H:i:s'),
                     ]);
                     $keuangan=Keuangan::create([
                         
-                        'nomor'=>$request->nomor_stok,
+                        'nomor'=>$request->nomor_transaksi,
                         'nilai'=>$request->nilai,
                         'status_keuangan_id'=>$request->status_keuangan_id,
                         'kategori_keuangan_id'=>$request->kategori_keuangan_id,
-                        'keterangan'=>'Pembelian Stok kepada '.$odr->msupplier['supplier'],
+                        'keterangan'=>'Pembayaran pennjualan dari '.$odr->konsumen,
                         'tanggal'=>$tanggal,
                         'bulan'=>$bulan,
                         'tahun'=>$tahun,
@@ -486,17 +487,17 @@ class KasirController extends Controller
         $messages['nomor_stok.required']= 'Buat Order';
         $messages['nomor_stok.not_in']= 'Buat Order';
 
-        $rules['harga_beli']= 'required|min:0|not_in:0';
-        $messages['harga_beli.required']= 'Lengkapi harga beli';
-        $messages['harga_beli.not_in']= 'Lengkapi harga beli';
-
         $rules['harga_jual']= 'required|min:0|not_in:0';
         $messages['harga_jual.required']= 'Lengkapi harga jual';
         $messages['harga_jual.not_in']= 'Lengkapi harga jual';
 
         $rules['qty']= 'required|min:0|not_in:0';
-        $messages['qty.required']= 'Lengkapi jumlah';
-        $messages['qty.not_in']= 'Lengkapi jumlah';
+        $messages['qty.required']= 'Lengkapi Qty';
+        $messages['qty.not_in']= 'Lengkapi Qty';
+
+        $rules['potongan']= 'required|min:0';
+        $messages['potongan.required']= 'Lengkapi diskon';
+        $messages['potongan.min']= 'Lengkapi diskon';
         
        
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -513,186 +514,37 @@ class KasirController extends Controller
                 }
             echo'</div></div>';
         }else{
-            
+                $odr=Stok::where('nomor_stok',$request->nomor_stok)->where('kode',$request->kode)->where('status',2)->first();
+                if(stok_ready($request->kode)>=$request->qty){   
                     $data=Stok::UpdateOrcreate([
                         
+                        'nomor_transaksi'=>$request->nomor_transaksi,
                         'nomor_stok'=>$request->nomor_stok,
                         'kode'=>$request->kode,
                     ],[
-                        'harga_beli'=>ubah_uang($request->harga_beli),
+                        'harga_beli'=>ubah_uang($odr->harga_beli),
                         'harga_jual'=>ubah_uang($request->harga_jual),
                         'qty'=>ubah_uang($request->qty),
                         'total_jual'=>(ubah_uang($request->harga_jual)*ubah_uang($request->qty)),
-                        'total_beli'=>(ubah_uang($request->harga_beli)*ubah_uang($request->qty)),
-                        'expired'=>$request->expired,
+                        'total_beli'=>(ubah_uang($odr->harga_beli)*ubah_uang($request->qty)),
+                        'expired'=>$odr->expired,
                         'status'=>1,
                         'bulan'=>date('m'),
                         'tahun'=>date('Y'),
                         'waktu'=>date('Y-m-d H:i:s'),
                     ]);
 
-                    echo'@ok@'.$nomor;
-                
-            
-        }
-    }
-
-    public function store_retur(request $request){
-        error_reporting(0);
-        $rules = [];
-        $messages = [];
-        
-        $rules['kode']= 'required';
-        $messages['kode.required']= 'Pilih Barang';
-        
-        $rules['nomor_stok']= 'required|min:0|not_in:0';
-        $messages['nomor_stok.required']= 'Pilih Stok ';
-        $messages['nomor_stok.not_in']= 'Pilih Stok ';
-
-        $rules['qty_retur']= 'required|min:0|not_in:0';
-        $messages['qty_retur.required']= 'Lengkapi Jumlah Retur';
-        $messages['qty_retur.not_in']= 'Lengkapi Jumlah Retur';
-
-       
-        $validator = Validator::make($request->all(), $rules, $messages);
-        $val=$validator->Errors();
-
-
-        if ($validator->fails()) {
-            echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
-                foreach(parsing_validator($val) as $value){
-                    
-                    foreach($value as $isi){
-                        echo'-&nbsp;'.$isi.'<br>';
-                    }
-                }
-            echo'</div></div>';
-        }else{
-                $order=Stok::where('nomor_stok',$request->nomor_stok)->where('kode',$request->kode)->first();
-                if($order->qty>=$request->qty_retur){   
-                    $data=Stok::create([
-                        
-                        'nomor_stok'=>$request->nomor_stok,
-                        'kode'=>$request->kode,
-                        'harga_beli'=>ubah_uang($order->harga_beli),
-                        'harga_jual'=>ubah_uang($order->harga_jual),
-                        'qty'=>ubah_uang($request->qty_retur),
-                        'total_jual'=>(ubah_uang($order->harga_jual)*ubah_uang($request->qty_retur)),
-                        'total_beli'=>(ubah_uang($order->harga_beli)*ubah_uang($request->qty_retur)),
-                        'expired'=>$order->expired,
-                        'status'=>4,
-                        'bulan'=>date('m'),
-                        'tahun'=>date('Y'),
-                        'waktu'=>date('Y-m-d H:i:s'),
-                        'update'=>date('Y-m-d H:i:s'),
-                    ]);
-
-                    echo'@ok@'.$nomor;
-                }else{
-                    echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
-                    echo'Permintaan retur melebihi qty yang tersedia';
-                    echo'</div></div>';
-                }
-                
-            
-        }
-    }
-    public function store_tukar(request $request){
-        error_reporting(0);
-        $rules = [];
-        $messages = [];
-        
-        $rules['kode']= 'required';
-        $messages['kode.required']= 'Pilih Barang';
-        
-        $rules['nomor_stok']= 'required|min:0|not_in:0';
-        $messages['nomor_stok.required']= 'Pilih Stok ';
-        $messages['nomor_stok.not_in']= 'Pilih Stok ';
-
-        $rules['qty_keluar']= 'required|min:0|not_in:0';
-        $messages['qty_keluar.required']= 'Lengkapi Jumlah keluar';
-        $messages['qty_keluar.not_in']= 'Lengkapi Jumlah keluar';
-
-        $rules['qty_tukar']= 'required|min:0|not_in:0';
-        $messages['qty_tukar.required']= 'Lengkapi Jumlah tukar';
-        $messages['qty_tukar.not_in']= 'Lengkapi Jumlah tukar';
-
-        $rules['kode_tukar']= 'required|min:0|not_in:0';
-        $messages['kode_tukar.required']= 'Pilih satuan';
-        $messages['kode_tukar.not_in']= 'Pilih satuan';
-
-        $rules['harga_beli']= 'required|min:0|not_in:0';
-        $messages['harga_beli.required']= 'Lengkapi Harga Beli';
-        $messages['harga_beli.not_in']= 'Lengkapi Harga Beli';
-
-        $rules['harga_jual']= 'required|min:0|not_in:0';
-        $messages['harga_jual.required']= 'Lengkapi Harga jual';
-        $messages['harga_jual.not_in']= 'Lengkapi Harga jual';
-
-       
-        $validator = Validator::make($request->all(), $rules, $messages);
-        $val=$validator->Errors();
-
-
-        if ($validator->fails()) {
-            echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
-                foreach(parsing_validator($val) as $value){
-                    
-                    foreach($value as $isi){
-                        echo'-&nbsp;'.$isi.'<br>';
-                    }
-                }
-            echo'</div></div>';
-        }else{
-                $order=Stok::where('nomor_stok',$request->nomor_stok)->where('kode',$request->kode)->first();
-                if($order->qty>=$request->qty_keluar){   
-                    $data=Stok::create([
-                        
-                        'nomor_stok'=>$request->nomor_stok,
-                        'kode'=>$request->kode,
-                        'harga_beli'=>ubah_uang($order->harga_beli),
-                        'harga_jual'=>ubah_uang($order->harga_jual),
-                        'qty'=>ubah_uang($request->qty_keluar),
-                        'total_jual'=>(ubah_uang($order->harga_jual)*ubah_uang($request->qty_keluar)),
-                        'total_beli'=>(ubah_uang($order->harga_beli)*ubah_uang($request->qty_keluar)),
-                        'expired'=>$order->expired,
-                        'status'=>5,
-                        'proses'=>3,
-                        'bulan'=>date('m'),
-                        'tahun'=>date('Y'),
-                        'waktu'=>date('Y-m-d H:i:s'),
-                        'update'=>date('Y-m-d H:i:s'),
-                    ]);
-
-                    $tukar=Stok::create([
-                        
-                        'nomor_stok'=>$request->nomor_stok,
-                        'kode'=>$request->kode_tukar,
-                        'tukar_id'=>$data->id,
-                        'harga_beli'=>ubah_uang($request->harga_beli),
-                        'harga_jual'=>ubah_uang($request->harga_jual),
-                        'qty'=>ubah_uang($request->qty_tukar),
-                        'total_jual'=>(ubah_uang($request->harga_jual)*ubah_uang($request->qty_tukar)),
-                        'total_beli'=>(ubah_uang($request->harga_beli)*ubah_uang($request->qty_tukar)),
-                        'expired'=>$order->expired,
-                        'status'=>2,
-                        'proses'=>3,
-                        'bulan'=>date('m'),
-                        'tahun'=>date('Y'),
-                        'waktu'=>date('Y-m-d H:i:s'),
-                        'update'=>date('Y-m-d H:i:s'),
-                    ]);
-
                     echo'@ok@';
                 }else{
                     echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
-                    echo'Permintaan tukar melebihi qty yang tersedia';
+                    echo'Stok tidak mencukupi';
                     echo'</div></div>';
                 }
                 
             
         }
     }
+
 
     public function cetak(Request $request)
     {

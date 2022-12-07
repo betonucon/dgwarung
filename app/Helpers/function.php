@@ -239,8 +239,16 @@ function total_item_stok($nomor_stok){
     $data=App\Stok::where('nomor_stok',$nomor_stok)->count();
     return $data;
 }
+function total_item_jual($nomor_transaksi){
+    $data=App\Stok::where('nomor_transaksi',$nomor_transaksi)->count();
+    return $data;
+}
 function total_harga_stok($nomor_stok){
     $data=App\Stok::where('nomor_stok',$nomor_stok)->sum('total_beli');
+    return $data;
+}
+function total_harga_jual($nomor_transaksi){
+    $data=App\Stok::where('nomor_transaksi',$nomor_transaksi)->sum('total_jual');
     return $data;
 }
 function sisa($kode){
