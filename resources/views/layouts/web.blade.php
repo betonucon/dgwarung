@@ -110,7 +110,10 @@
 				top: .3125rem
 			}
 		}
-
+		.panel.panel-inverse>.panel-heading {
+			background: #832205;
+			color: #fff;
+		}
 		.timeline-steps .timeline-content {
 			width: 10rem;
 			text-align: center
