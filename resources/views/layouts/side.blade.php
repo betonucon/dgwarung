@@ -1,4 +1,4 @@
-        <div id="sidebar" class="sidebar sidebar-grid" style="background: linear-gradient(to right, #0e0e0d, #55686e);">
+        <div id="sidebar" class="sidebar sidebar-grid" style="background: linear-gradient(to right, #080606, #520e07);">
 			<!-- begin sidebar scrollbar -->
 			<div data-scrollbar="true" data-height="100%">
 				<!-- begin sidebar user -->
