@@ -82,8 +82,8 @@
                         @else
                             <span class="btn btn-primary btn-sm" onclick="simpan_data()"><i class="fas fa-save"></i> Tambah</span>
                         @endif
+                        <span class="btn btn-success btn-sm" onclick="terima_data()"><i class="fas fa-check-circle"></i> Selesai </span>
                     @endif
-                    <span class="btn btn-success btn-sm" onclick="terima_data()"><i class="fas fa-check-circle"></i> Selesai </span>
                     <span class="btn btn-success btn-sm" onclick="cetak_data()"><i class="fas fa-print"></i> Print </span>
                     <span class="btn btn-success btn-sm" onclick="download_data()"><i class="fas fa-print"></i> Download </span>
                 </div>

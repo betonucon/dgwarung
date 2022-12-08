@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 use App\Stokready;
 use App\Stokorder;
+use App\Viewkasir;
 use App\Kasir;
 use App\Stok;
 use App\Viewstokorder;
@@ -196,6 +197,51 @@ class KasirController extends Controller
             ->make(true);
     }
 
+    public function get_order(request $request)
+    {
+        error_reporting(0);
+        $query = Viewkasir::query();
+        
+        $data = $query->orderBy('status','Asc')->get();
+
+        return Datatables::of($data)
+            ->addIndexColumn()
+            
+            ->addColumn('nama_status', function ($row) {
+                $btn=status($row->status);
+                return $btn;
+            })
+            ->addColumn('pembayaran', function ($row) {
+                if($row->status==0){
+                    return 'Null';
+                }else{
+                    $btn=$row->status_transaksi;
+                    return $btn;
+                }
+                
+            })
+            ->addColumn('action', function ($row) {
+                if($row->status==1){
+                    $btn='
+                    <div class="btn-group">
+                        <span class="btn btn-primary btn-xs" onclick="location.assign(`'.url('kasir/create?id='.$row->nomor_transaksi).'`)"><i class="fas fa-pencil-alt text-white"></i> View</span>
+                    </div>
+                    ';
+                }else{
+                    $btn='
+                    <div class="btn-group">
+                        <span class="btn btn-primary btn-xs" onclick="location.assign(`'.url('kasir/create?id='.$row->nomor_transaksi).'`)"><i class="fas fa-pencil-alt text-white"></i></span>
+                        <span class="btn btn-danger btn-xs" onclick="delete_data('.$row->id.')"><i class="fas fa-window-close text-white"></i></span>
+                    </div>
+                    ';
+                }
+                
+                return $btn;
+            })
+            
+            ->rawColumns(['action','nama_status'])
+            ->make(true);
+    }
     public function get_data_stok(request $request)
     {
         error_reporting(0);
@@ -389,6 +435,8 @@ class KasirController extends Controller
                         'nomor_transaksi'=>$nomor,
                         'konsumen'=>$request->konsumen,
                         'tanggal'=>$request->tanggal,
+                        'users_id'=>Auth::user()->id,
+                        'nama_user'=>Auth::user()->name,
                         'bulan'=>date('m'),
                         'tahun'=>date('Y'),
                         'status'=>0,
@@ -454,6 +502,8 @@ class KasirController extends Controller
                         
                         'status'=>3,
                         'proses'=>1,
+                        'users_id'=>Auth::user()->id,
+                        'nama_user'=>Auth::user()->name,
                         'update'=>date('Y-m-d H:i:s'),
                     ]);
                     $keuangan=Keuangan::create([

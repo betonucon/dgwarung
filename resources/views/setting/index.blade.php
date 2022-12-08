@@ -46,6 +46,11 @@
 										<td><a href="javascript:;" onclick="tambah(3,`Setting Ukuran Font Printer`)" data-type="text" data-pk="3" data-title="Enter Username" class="editable editable-click">{{setting_font_print()}}PX</a></td>
 										<td><span class="text-black-lighter">{{first_setting(3)['deskripsi']}}</span></td>
 									</tr>
+                                    <tr>
+										<td class="bg-light">{{first_setting(4)['name']}}</td>
+										<td><a href="javascript:;" onclick="tambah(4,`Aktivasi Transaksi`)" data-type="text" data-pk="4" data-title="Enter Username" class="editable editable-click">@if(aktive_transaksi()==1) Aktif @else Non Aktif @endif</a></td>
+										<td><span class="text-black-lighter">{{first_setting(4)['deskripsi']}}</span></td>
+									</tr>
 									
 								</tbody>
 							</table>

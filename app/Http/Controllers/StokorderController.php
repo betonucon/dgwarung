@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 use App\Stokready;
 use App\Stokorder;
+use App\Vieworder;
 use App\Stok;
 use App\Viewstokorder;
 use App\Barang;
@@ -58,7 +59,8 @@ class StokorderController extends Controller
         }else{
             $disabled='readonly';
         }
-        return view('stokorder.create',compact('template','disabled','id'));
+        $data=Stokorder::where('nomor_stok',$request->id)->first();
+        return view('stokorder.create',compact('template','disabled','id','data'));
     }
     public function view_stok(request $request)
     {
@@ -201,16 +203,71 @@ class StokorderController extends Controller
                 return $btn;
             })
             ->addColumn('action', function ($row) {
-                $btn='
-                    <div class="btn-group">
-                        <span class="btn btn-primary btn-sm" onclick="edit_data('.$row->id.')"><i class="fas fa-pencil-alt text-white"></i></span>
-                        <span class="btn btn-danger btn-sm" onclick="delete_data('.$row->id.')"><i class="fas fa-window-close text-white"></i></span>
-                    </div>
-                ';
+                if($row->status_order==0){
+                    $btn='
+                        <div class="btn-group">
+                            <span class="btn btn-primary btn-sm" onclick="edit_data('.$row->id.')"><i class="fas fa-pencil-alt text-white"></i></span>
+                            <span class="btn btn-danger btn-sm" onclick="delete_data('.$row->id.')"><i class="fas fa-window-close text-white"></i></span>
+                        </div>
+                    ';
+                }else{
+                    $btn='
+                        <div class="btn-group">
+                            <span class="btn btn-white btn-sm"><i class="fas fa-pencil-alt text-aqua"></i></span>
+                            <span class="btn btn-white btn-sm"><i class="fas fa-window-close text-aqua"></i></span>
+                        </div>
+                    ';
+                }
+                
                 return $btn;
             })
             
             ->rawColumns(['action'])
+            ->make(true);
+    }
+    public function get_order(request $request)
+    {
+        error_reporting(0);
+        $query = Vieworder::query();
+        
+        $data = $query->orderBy('status','Asc')->get();
+
+        return Datatables::of($data)
+            ->addIndexColumn()
+            
+            ->addColumn('nama_status', function ($row) {
+                $btn=status($row->status);
+                return $btn;
+            })
+            ->addColumn('pembayaran', function ($row) {
+                if($row->status==0){
+                    return 'Null';
+                }else{
+                    $btn=$row->status_transaksi;
+                    return $btn;
+                }
+                
+            })
+            ->addColumn('action', function ($row) {
+                if($row->status==1){
+                    $btn='
+                    <div class="btn-group">
+                        <span class="btn btn-primary btn-xs" onclick="location.assign(`'.url('stokorder/create?id='.$row->nomor_stok).'`)"><i class="fas fa-pencil-alt text-white"></i> View</span>
+                    </div>
+                    ';
+                }else{
+                    $btn='
+                    <div class="btn-group">
+                        <span class="btn btn-primary btn-xs" onclick="location.assign(`'.url('stokorder/create?id='.$row->nomor_stok).'`)"><i class="fas fa-pencil-alt text-white"></i></span>
+                        <span class="btn btn-danger btn-xs" onclick="delete_data('.$row->id.')"><i class="fas fa-window-close text-white"></i></span>
+                    </div>
+                    ';
+                }
+                
+                return $btn;
+            })
+            
+            ->rawColumns(['action','nama_status'])
             ->make(true);
     }
 
@@ -406,6 +463,9 @@ class StokorderController extends Controller
                         
                         'nomor_stok'=>$nomor,
                         'supplier_id'=>$request->supplier_id,
+                        'tanggal'=>$request->tanggal,
+                        'users_id'=>Auth::user()->id,
+                        'nama_user'=>Auth::user()->name,
                         'bulan'=>date('m'),
                         'tahun'=>date('Y'),
                         'status'=>0,
@@ -464,6 +524,7 @@ class StokorderController extends Controller
                     $data=Stokorder::where('nomor_stok',$request->nomor_stok)->update([
                         
                         'status'=>1,
+                        'status_keuangan_id'=>$request->status_keuangan_id,
                         'nilai'=>$request->nilai,
                         'waktu'=>date('Y-m-d H:i:s'),
                     ]);
@@ -471,6 +532,8 @@ class StokorderController extends Controller
                         
                         'status'=>2,
                         'aktif'=>0,
+                        'users_id'=>Auth::user()->id,
+                        'nama_user'=>Auth::user()->name,
                         'proses'=>1,
                         'update'=>date('Y-m-d H:i:s'),
                     ]);
@@ -721,6 +784,11 @@ class StokorderController extends Controller
         $pdf = PDF::loadView('stokorder.cetak', compact('data','order'));
         $pdf->setPaper('A4', 'Landscape');
         $pdf->stream($request->id.'.pdf');
-        return $pdf->stream();
+        if($request->act==1){
+            return $pdf->download();
+        }else{
+            return $pdf->stream();
+        }
+        
     }
 }

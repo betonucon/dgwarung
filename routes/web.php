@@ -56,6 +56,7 @@ Route::group(['prefix' => 'stokorder','middleware'    => 'auth'],function(){
     Route::get('/retur','StokorderController@index_retur'); 
     Route::get('/tukar','StokorderController@index_tukar'); 
     Route::get('/get_data','StokorderController@get_data');
+    Route::get('/get_order','StokorderController@get_order');
     Route::get('/get_data_retur','StokorderController@get_data_retur');
     Route::get('/get_data_tukar','StokorderController@get_data_tukar');
     Route::get('/delete_data','StokorderController@delete_data');
@@ -85,6 +86,7 @@ Route::group(['prefix' => 'kasir','middleware'    => 'auth'],function(){
     Route::get('/retur','KasirController@index_retur'); 
     Route::get('/tukar','KasirController@index_tukar'); 
     Route::get('/get_data','KasirController@get_data');
+    Route::get('/get_order','KasirController@get_order');
     Route::get('/get_data_retur','KasirController@get_data_retur');
     Route::get('/get_data_tukar','KasirController@get_data_tukar');
     Route::get('/delete_data','KasirController@delete_data');

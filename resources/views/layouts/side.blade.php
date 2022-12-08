@@ -1,11 +1,11 @@
-        <div id="sidebar" class="sidebar sidebar-grid" style="background: linear-gradient(to right, #080606, #520e07);">
+        <div id="sidebar" class="sidebar sidebar-grid" style="background: #0e0e66;">
 			<!-- begin sidebar scrollbar -->
 			<div data-scrollbar="true" data-height="100%">
 				<!-- begin sidebar user -->
 				<ul class="nav">
 					<li class="nav-profile">
 						<a href="javascript:;" data-toggle="nav-profile">
-							<div class="cover with-shadow" style="background:url({{url_plug()}}/img/bg.jpg)"></div>
+							<div class="cover" style="background:url({{url_plug()}}/img/bg.jpg);background-size: 100%;"></div>
 							<div class="image">
 								<img src="{{url_plug()}}/img/akun.png" alt="" />
 							</div>
@@ -26,7 +26,7 @@
 				<!-- end sidebar user -->
 				<!-- begin sidebar nav -->
 				<ul class="nav"><li class="nav-header">Navigation</li>
-					<li>
+					<li class=" @if(Request::is('home')==1 || Request::is('/')==1) active @endif">
 						<a href="{{url('/')}}">
 							<i class="fa fa-home"></i> 
 							<span>Home</span>
@@ -60,13 +60,13 @@
 							<li><a href="{{url('stokorder/tukar')}}">Tukar Satuan</a></li>
 						</ul>
 					</li>
-					<li>
+					<li class=" @if(Request::is('keuangan')==1) active @endif">
 						<a href="{{url('/keuangan')}}">
 							<i class="fas fa-money-bill-alt"></i> 
 							<span>Keuangan</span>
 						</a>
 					</li>
-					<li>
+					<li class=" @if(Request::is('kasir')==1) active @endif">
 						<a href="{{url('/kasir')}}">
 							<i class="fas fa-calculator"></i> 
 							<span>Kasir</span>

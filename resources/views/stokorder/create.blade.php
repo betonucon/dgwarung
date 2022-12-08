@@ -40,11 +40,14 @@
                             <div class="col-md-8">
                                 <div class="form-group row">
                                     <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Nomor Order</label>
-                                    <div class="col-lg-6" style="padding: 0% 1% 0% 0%;">
-                                        {{$id}}
+                                    <div class="col-lg-3" style="padding: 0% 1% 0% 0%;border: solid 1px #f7f7ff; background: #e8e8f3;">
+                                        <p  style="margin-top: 0; margin-left: 3%; margin-bottom: 0px; line-height: 2.1; font-size: 13px;">{{$id}}&nbsp;</p>
+                                    </div>
+                                    <div class="col-lg-3" style="padding: 0% 1% 0% 0%;border: solid 1px #f7f7ff; background: #e8e8f3;">
+                                        <p  style="margin-top: 0; margin-left: 3%; margin-bottom: 0px; line-height: 2.1; font-size: 13px;">{{$data->msupplier['supplier']}}&nbsp;</p>
                                     </div>
                                 </div>
-                             </div>
+                            </div>
                         </div>
                         <div id="tampil-form"></div>
                     </form>
@@ -245,6 +248,9 @@
             $('#modal-cetak .modal-title').text('Konfirmasi ');
             $('#modal-cetak').modal('show');
             $('#tampil-form-cetak').load("{{url('stokorder/modal_cetak')}}?id={{$id}}")
+        }
+        function download_data(){
+            location.assign("{{url('stokorder/cetak')}}?id={{$id}}&act=1")
         }
        
 

@@ -15,31 +15,31 @@
 			<!-- begin row -->
 			<div class="row">
 				<!-- begin col-3 -->
-                
-				<div class="col-xl-4 col-md-6">
+                @foreach(get_statuskeuangan() as $str)
+				<div class="col-xl-3 col-md-6">
 					<div class="widget widget-stats bg-blue">
 						<div class="stats-icon"><i class="fa fa-desktop"></i></div>
 						<div class="stats-info">
-							<h4>ssss</h4>
-							<p>sss</p>	
+							<h4>{{$str->status_keuangan}}</h4>
+							<p>{{uang(keuangan_total($str->id))}}</p>	
 						</div>
 						<div class="stats-link">
-							<a href="javascript:;">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
+							<a href="{{url('keuangan?act='.$str->id)}}">View Detail <i class="fa fa-arrow-alt-circle-right"></i></a>
 						</div>
 					</div>
 				</div>
-				
+				@endforeach
 				
 			</div>
 			<!-- end row -->
 			<!-- begin row -->
 			<div class="row">
 				<!-- begin col-8 -->
-				<div class="col-xl-7">
+				<div class="col-xl-8">
 					<!-- begin panel -->
 					<div class="panel panel-inverse" data-sortable-id="index-1">
 						<div class="panel-heading">
-							<h4 class="panel-title">Grafik Penjualan</h4>
+							<h4 class="panel-title">Grafik</h4>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-redo"></i></a>
@@ -59,7 +59,7 @@
 				</div>
 				<!-- end col-8 -->
 				<!-- begin col-4 -->
-				<div class="col-xl-5">
+				<div class="col-xl-4">
 					<!-- begin panel -->
 					<div class="panel panel-inverse" data-sortable-id="index-6">
 						<div class="panel-heading">

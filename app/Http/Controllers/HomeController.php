@@ -25,11 +25,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        if(Auth::user()->role_id==1){
+       
             return view('home');
-        }else{
-            return view('home_warga',compact('data'));
-        }
+        
        
     }
 }

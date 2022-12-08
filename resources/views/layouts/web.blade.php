@@ -111,8 +111,21 @@
 			}
 		}
 		.panel.panel-inverse>.panel-heading {
-			background: #832205;
+			background: #0e0e66;
 			color: #fff;
+		}
+		.sidebar .nav>li>a {
+			padding: 7px 20px;
+			line-height: 20px;
+			color: rgb(255 255 255);
+			display: block;
+			text-decoration: none;
+		}
+		.sidebar .nav>li.active>a {
+			position: relative;
+			z-index: 10;
+			color: #fff;
+			background: #32668b;
 		}
 		.timeline-steps .timeline-content {
 			width: 10rem;
@@ -128,7 +141,17 @@
 			justify-content: center;
 			background-color: #3b82f6
 		}
-
+		.sidebar .nav>li.nav-profile .info {
+			font-size: 14px;
+			color: #080836;
+			position: relative;
+		}
+		.sidebar .nav>li.nav-profile .info small {
+			display: block;
+			color: #0e0e44;
+			font-size: 12px;
+			margin-bottom: -5px;
+		}
 		.timeline-steps .timeline-content .inner-circle:before {
 			content: "";
 			background-color: #3b82f6;
@@ -146,7 +169,9 @@
 			#hidden-mobile{
 				display:none;
 			}
-			
+			.form-horizontal.form-bordered .form-group .col-form-label+div {
+				padding: 0% 1% 0% 5% !important;
+			}
 			.img-logo-png{
 				width:50%;
 			}
@@ -226,6 +251,22 @@
 		<a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top"><i class="fa fa-angle-up"></i></a>
 		<!-- end scroll to top btn -->
 	</div>
+	<div class="modal fade" id="modal-aktive" style="display: none;" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Notifikasi</h4>
+					<button type="button" class="close" >×</button>
+				</div>
+				<div class="modal-body">
+					
+				</div>
+				<div class="modal-footer">
+					<a  href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="btn btn-red" onclick="location.assign(`{{url('stokorder')}}`)">Logout</a>
+				</div>
+			</div>
+		</div>
+	</div>  
 	<audio id="myAudio">
         <source src="{{url_plug()}}/img/audio.mp3" type="audio/mp3">
     </audio>
@@ -269,7 +310,13 @@
     <script type="text/javascript">
     
      Pusher.logToConsole = true;
+	 @if(Auth::user()->role_id==1)
 
+	 @else
+		@if(aktive_transaksi()==2)
+			$('#modal-aktive').modal({backdrop: 'static', keyboard: false})  
+		@endif
+	@endif
     var pusher = new Pusher('99efd5a3e253906ee0ed', {
         cluster: 'ap1',
         

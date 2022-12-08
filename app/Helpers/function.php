@@ -231,6 +231,10 @@ function setting_provit(){
     $data=App\Setting::where('id',1)->first();
     return $data->setting_int;
 }
+function aktive_transaksi(){
+    $data=App\Setting::where('id',4)->first();
+    return $data->setting_int;
+}
 function setting_provit_value(){
     $data=App\Setting::where('id',1)->first();
     return $data->setting_int_value;
@@ -404,6 +408,16 @@ function keuangan_estimasi($status_keuangan){
         $jual=App\Stok::where('status',2)->where('tukar_id',null)->sum('total_jual');
         return ($jual-$beli);
     }
+    
+}
+function status($id){
+    if($id==0){
+        return '<font color="green">Proses</font>';
+    }
+    if($id==1){
+        return '<font color="blue">Selesai</font>';
+    }
+    
     
 }
 function keuangan_aktual($status_keuangan){

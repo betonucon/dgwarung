@@ -1,5 +1,16 @@
 @extends('layouts.web')
-
+@push('style')
+    <style>
+        th {
+            font-size: 12px !important;
+            font-family: sans-serif;
+        }
+        td {
+            font-size: 12px !important;
+            font-family: sans-serif;
+        }
+    </style>
+@endpush
 @section('content')
 <div id="content" class="content">
     
@@ -29,9 +40,12 @@
                             <thead>
                                 <tr>
                                     <th class="text-nowrap" width="5%">No</th>
-                                    <th class="text-nowrap" width="10%">KD Supplier</th>
+                                    <th class="text-nowrap" width="12%">Nomor</th>
                                     <th class="text-nowrap">Nama Supplier</th>
-                                    <th class="text-nowrap" width="12%">Telepon</th>
+                                    <th class="text-nowrap" width="12%">CreateBy</th>
+                                    <th class="text-nowrap" width="12%">tanggal</th>
+                                    <th class="text-nowrap" width="12%">Status</th>
+                                    <th class="text-nowrap" width="12%">Pembayaran</th>
                                     <th class="text-nowrap" width="8%">Act</th>
                                 </tr>
                             </thead>
@@ -93,17 +107,20 @@
                         header: true,
                         headerOffset: $('#header').height()
                     },
-                    responsive: true,
-                    ajax:"{{ url('supplier/get_data')}}",
+                    responsive: false,
+                    ajax:"{{ url('stokorder/get_order')}}",
 					columns: [
                         { data: 'id', render: function (data, type, row, meta) 
 							{
 								return meta.row + meta.settings._iDisplayStart + 1;
 							} 
 						},
-						{ data: 'kode_supplier' },
+						{ data: 'nomor_stok' },
 						{ data: 'supplier' },
-						{ data: 'no_telepon' },
+						{ data: 'nama_user' },
+						{ data: 'tanggal' },
+						{ data: 'nama_status' },
+						{ data: 'pembayaran' },
 						{ data: 'action' },
 						
 					],
