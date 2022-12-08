@@ -151,7 +151,7 @@
 		});
 
         function tambah(id){
-            location.assign("{{url('stokorder/create')}}?id="+id);
+            location.assign("{{url('kasir/create')}}?id="+id);
         }
 
         function delete_data(id){

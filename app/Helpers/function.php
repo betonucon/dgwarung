@@ -516,7 +516,7 @@ function penomoran_kasir(){
     
     $cek=App\Kasir::where('bulan',date('m'))->where('tahun',date('Y'))->count();
     if($cek>0){
-        $mst=App\Stokorder::where('bulan',date('m'))->where('tahun',date('Y'))->orderBy('nomor_transaksi','Desc')->firstOrfail();
+        $mst=App\Kasir::where('bulan',date('m'))->where('tahun',date('Y'))->orderBy('nomor_transaksi','Desc')->firstOrfail();
         $urutan = (int) substr($mst['nomor_transaksi'], 4, 7);
         $urutan++;
         $nomor=date('ym').sprintf("%07s",  $urutan);
