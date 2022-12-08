@@ -114,10 +114,11 @@
                                 <div class="form-group row">
                                     <div class="col-lg-12"  style="padding: 1% 1% 2% 2%;">
                                         @if($id>0)
-                                            <span class="btn btn-primary btn-sm" onclick="simpan_data()">Update</span>
+                                            <span class="btn btn-primary btn-sm" onclick="simpan_data()"><i class="fas fa-save"></i> Update</span>
                                         @else
-                                            <span class="btn btn-primary btn-sm" onclick="simpan_data()">Tambah</span>
+                                            <span class="btn btn-primary btn-sm" onclick="simpan_data()"><i class="fas fa-save"></i> Tambah</span>
                                         @endif
+                                        <span class="btn btn-danger btn-sm" onclick="delete_data_all()"><i class="fas fa-save"></i> Hapus</span>
                                     </div>
                                 </div>
                                 

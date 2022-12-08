@@ -28,20 +28,24 @@
                 </div>
                 <div class="panel-body">       
                     <div class="table-responsive ">
-                        <table id="data-table-fixed-header" class="table table-striped table-bordered table-td-valign-middle   dt-responsive display nowrap" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th class="text-nowrap" width="5%">No</th>
-                                    <th class="text-nowrap" width="10%">Kode</th>
-                                    <th class="text-nowrap"  width="25%">Nama Barang</th>
-                                    <th class="text-nowrap" >Keterangan</th>
-                                    <th class="text-nowrap"  width="7%">Satuan</th>
-                                    <th class="text-nowrap" width="8%">Act</th>
-                                </tr>
-                            </thead>
+                        <form  id="mydatahapus" method="post" action="{{ url('barang/delete_data_all') }}" enctype="multipart/form-data" >
                             
-                        </table>
-                
+                            @csrf 
+                            <table id="data-table-fixed-header" class="table table-striped table-bordered table-td-valign-middle   dt-responsive display nowrap" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-nowrap" width="5%">No</th>
+                                        <th class="text-nowrap" width="5%"><input id="checkAll" type="checkbox"></th>
+                                        <th class="text-nowrap" width="10%">Kode</th>
+                                        <th class="text-nowrap"  width="25%">Nama Barang</th>
+                                        <th class="text-nowrap" >Keterangan</th>
+                                        <th class="text-nowrap"  width="7%">Satuan</th>
+                                        <th class="text-nowrap" width="8%">Act</th>
+                                    </tr>
+                                </thead>
+                                
+                            </table>
+                        </form>
                     </div>
                 </div>
                 <!-- end panel-body -->
@@ -101,7 +105,7 @@
                         header: true,
                         headerOffset: $('#header').height()
                     },
-                    responsive: true,
+                    responsive: false,
                     ajax:"{{ url('barang/get_data')}}",
 					columns: [
                         { data: 'id', render: function (data, type, row, meta) 
@@ -109,6 +113,7 @@
 								return meta.row + meta.settings._iDisplayStart + 1;
 							} 
 						},
+						{ data: 'checkbox' },
 						{ data: 'kode' },
 						{ data: 'nama_barangnya' },
 						{ data: 'keterangan' },
@@ -116,6 +121,10 @@
 						{ data: 'action' },
 						
 					],
+                    select: {
+                        style: 'os',
+                        selector: 'td:first-child'
+                    },
 					language: {
 						paginate: {
 							// remove previous & next text from pagination
@@ -142,6 +151,11 @@
             $('#tampil-form').load("{{url('barang/modal')}}?id=0")
 		});
 
+        $("#checkAll").click(function(){
+            if (this.checked) {
+                $('.checkbox').not(this).prop('checked', this.checked);
+            }
+        });
         function edit_data(id){
             $('#tampil-form').load("{{url('barang/modal')}}?id="+id)
         }
@@ -163,16 +177,84 @@
 				if (willDelete) {
 						$.ajax({
 							type: 'GET',
-							url: "{{url('pengumuman/delete_data')}}",
+							url: "{{url('barang/delete_data')}}",
 							data: "id="+id,
 							success: function(msg){
 								swal("Success! berhasil terhapus!", {
 									icon: "success",
 								});
 								var table=$('#data-table-fixed-header').DataTable();
-								table.ajax.url("{{ url('pengumuman/get_data')}}").load();
+								table.ajax.url("{{ url('barang/get_data')}}").load();
 							}
 						});
+					
+					
+				} else {
+					
+				}
+			});
+			
+		}
+        function delete_data_all(){
+           
+			swal({
+				title: "Yakin menghapus data ini ?",
+				text: "data akan hilang dari daftar ini",
+				type: "warning",
+				icon: "error",
+				showCancelButton: true,
+				align:"center",
+				confirmButtonClass: "btn-danger",
+				confirmButtonText: "Yes, delete it!",
+				closeOnConfirm: false
+			}).then((willDelete) => {
+				if (willDelete) {
+                    var form=document.getElementById('mydatahapus');
+                        $.ajax({
+                            type: 'POST',
+                            url: "{{ url('barang/delete_data_all') }}",
+                            data: new FormData(form),
+                            contentType: false,
+                            cache: false,
+                            processData:false,
+                            beforeSend: function() {
+                                document.getElementById("loadnya").style.width = "100%";
+                            },
+                            success: function(msg){
+                                var bat=msg.split('@');
+                                if(bat[1]=='ok'){
+                                    document.getElementById("loadnya").style.width = "0px";
+                                    swal({
+                                            title: "Success! berhasil dihapus!",
+                                            icon: "success",
+                                    });
+                                    var table=$('#data-table-fixed-header').DataTable();
+								    table.ajax.url("{{ url('barang/get_data')}}").load();    
+                                }else{
+                                    document.getElementById("loadnya").style.width = "0px";
+                                    swal({
+                                        title: 'Notifikasi',
+                                    
+                                        html:true,
+                                        text:'ss',
+                                        icon: 'error',
+                                        buttons: {
+                                            cancel: {
+                                                text: 'Tutup',
+                                                value: null,
+                                                visible: true,
+                                                className: 'btn btn-dangers',
+                                                closeModal: true,
+                                            },
+                                            
+                                        }
+                                    });
+                                    $('.swal-text').html('<div style="width:100%;background:#f2f2f5;padding:1%;text-align:left;font-size:13px">'+msg+'</div>')
+                                }
+                                
+                                
+                            }
+                        });
 					
 					
 				} else {

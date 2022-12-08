@@ -66,7 +66,7 @@ class BarangController extends Controller
         error_reporting(0);
         $query = Barang::query();
         
-        $data = $query->orderBy('nama_barang','Asc')->get();
+        $data = $query->where('aktive',1)->orderBy('nama_barang','Asc')->get();
 
         return Datatables::of($data)
             ->addIndexColumn()
@@ -79,18 +79,40 @@ class BarangController extends Controller
                 ';
                 return $btn;
             })
+            ->addColumn('checkbox', function ($row) {
+                $btn='<input type="checkbox" class="checkbox" name="id[]" value="'.$row->id.'">';
+                return $btn;
+            })
             ->addColumn('nama_barangnya', function ($row) {
                 $btn=$row->nama_barang.' ('.$row->satuan.')';
                 return $btn;
             })
             
-            ->rawColumns(['action'])
+            ->rawColumns(['action','checkbox'])
             ->make(true);
     }
     
 
     public function delete_data(request $request){
-        $data = Pengumuman::where('id',$request->id)->delete();
+        $data = Barang::where('id',$request->id)->update([
+            'aktive'=>0
+        ]);
+    }
+    public function delete_data_all(request $request){
+        error_reporting(0);
+        if(count($request->id)>0){
+            for($x=0;$x<count($request->id);$x++){
+                $data = Barang::where('id',$request->id[$x])->update([
+                    'aktive'=>0
+                ]);
+            }
+            echo'@ok';
+        }else{
+            echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
+            echo'Ceklis data yang akan dihapus';
+            echo'</div></div>';
+        }
+        
     }
     public function get_barang(request $request){
         $data = Barang::get();

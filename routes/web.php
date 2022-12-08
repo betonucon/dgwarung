@@ -23,6 +23,7 @@ Route::group(['prefix' => 'barang','middleware'    => 'auth'],function(){
     Route::get('/modal','BarangController@modal');
     Route::post('/','BarangController@store');
     Route::post('/import','BarangController@import');
+    Route::post('/delete_data_all','BarangController@delete_data_all');
 });
 Route::group(['prefix' => 'supplier','middleware'    => 'auth'],function(){
     Route::get('/','SupplierController@index');
@@ -32,6 +33,15 @@ Route::group(['prefix' => 'supplier','middleware'    => 'auth'],function(){
     Route::get('/modal','SupplierController@modal');
     Route::post('/','SupplierController@store');
     Route::post('/import','SupplierController@import');
+});
+Route::group(['prefix' => 'employe','middleware'    => 'auth'],function(){
+    Route::get('/','EmployeController@index');
+    Route::get('/get_data','EmployeController@get_data');
+    Route::get('/delete_data','EmployeController@delete_data');
+    Route::get('/create','EmployeController@create');
+    Route::get('/modal','EmployeController@modal');
+    Route::post('/','EmployeController@store');
+    Route::post('/import','EmployeController@import');
 });
 Route::group(['prefix' => 'keuangan','middleware'    => 'auth'],function(){
     Route::get('/','KeuanganController@index');

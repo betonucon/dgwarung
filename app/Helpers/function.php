@@ -231,9 +231,21 @@ function setting_provit(){
     $data=App\Setting::where('id',1)->first();
     return $data->setting_int;
 }
+function sum_gaji(){
+    $data=App\Employe::where('status',1)->sum('gaji');
+    return $data;
+}
 function aktive_transaksi(){
     $data=App\Setting::where('id',4)->first();
     return $data->setting_int;
+}
+function get_katkeuangan(){
+    $data=App\Kategorikeuangan::get();
+    return $data;
+}
+function get_setkeuangan(){
+    $data=App\Statuskeuangan::get();
+    return $data;
 }
 function setting_provit_value(){
     $data=App\Setting::where('id',1)->first();
@@ -457,6 +469,10 @@ function status_aktive_stok($id){
         return 'Pilih Manual';
     }
 }
+function kdk($id){
+    $data=App\Kategorikeuangan::where('id',$id)->first();
+    return $data->kdk;
+}
 function penomoran(){
     
     $cek=App\Barang::count();
@@ -467,6 +483,19 @@ function penomoran(){
         $nomor=sprintf("%05s",  $urutan);
     }else{
         $nomor=sprintf("%05s",  1);
+    }
+    return $nomor;
+}
+function penomoran_keuangan($kategori_keuangan_id){
+    
+    $cek=App\Keuangan::where('kategori_keuangan_id',$kategori_keuangan_id)->count();
+    if($cek>0){
+        $mst=App\Keuangan::where('kategori_keuangan_id',$kategori_keuangan_id)->orderBy('nomor','Desc')->firstOrfail();
+        $urutan = (int) substr($mst['nomor'], 5, 7);
+        $urutan++;
+        $nomor=kdk($kategori_keuangan_id).date('ym').sprintf("%07s",  $urutan);
+    }else{
+        $nomor=kdk($kategori_keuangan_id).date('ym').sprintf("%07s",  1);
     }
     return $nomor;
 }

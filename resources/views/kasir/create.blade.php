@@ -60,10 +60,10 @@
                                     <th class="text-nowrap" width="5%">No</th>
                                     <th class="text-nowrap" width="10%">Kode</th>
                                     <th class="text-nowrap">Nama Barang</th>
-                                    <th class="text-nowrap"  width="7%">Qty</th>
+                                    <th class="text-nowrap"  width="7%" style="text-align:left !important">Qty</th>
                                     <th class="text-nowrap"  width="7%">Satuan</th>
-                                    <th class="text-nowrap"  width="12%">H.Satuan</th>
-                                    <th class="text-nowrap"  width="12%">Total</th>
+                                    <th class="text-nowrap"  width="12%" style="text-align:left !important">H.Satuan</th>
+                                    <th class="text-nowrap"  width="12%" style="text-align:left !important">Total</th>
                                     <th class="text-nowrap" width="8%">Act</th>
                                 </tr>
                             </thead>
@@ -188,10 +188,10 @@
 						},
 						{ data: 'kode' },
 						{ data: 'nama_barang' },
-						{ data: 'qty' },
+						{ data: 'qty'  ,className: "text-right" },
 						{ data: 'satuan' },
-						{ data: 'uang_harga_jual' },
-						{ data: 'uang_total_jual' },
+						{ data: 'uang_harga_jual' ,className: "text-right"  },
+						{ data: 'uang_total_jual' ,className: "text-right"  },
 						{ data: 'action' },
 						
 					],

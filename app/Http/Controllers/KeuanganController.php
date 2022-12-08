@@ -43,14 +43,14 @@ class KeuanganController extends Controller
     {
         error_reporting(0);
         $template='top';
-        $data=Supplier::find($request->id);
+        $data=Keuangan::find($request->id);
         $id=$request->id;
         if($request->id==0){
             $disabled='';
         }else{
             $disabled='readonly';
         }
-        return view('supplier.modal',compact('template','data','disabled','id'));
+        return view('keuangan.modal',compact('template','data','disabled','id'));
     }
 
     
@@ -72,12 +72,22 @@ class KeuanganController extends Controller
                 return uang($row->nilai);
             })
             ->addColumn('action', function ($row) {
-                $btn='
-                    <div class="btn-group">
-                        <span class="btn btn-primary btn-sm" onclick="onclick="tambah('.$row->id.')"><i class="fas fa-pencil-alt text-white"></i></span>
-                        <span class="btn btn-danger btn-sm" onclick="delete_data('.$row->id.')"><i class="fas fa-window-close text-white"></i></span>
-                    </div>
-                ';
+                if(in_array($row->kategori_keuangan_id, array(3,4,5))){
+                    $btn='
+                        <div class="btn-group">
+                            <span class="btn btn-primary btn-xs" onclick="tambah_data('.$row->id.')"><i class="fas fa-pencil-alt text-white"></i></span>
+                            <span class="btn btn-danger btn-xs" onclick="delete_data('.$row->id.')"><i class="fas fa-window-close text-white"></i></span>
+                        </div>
+                    ';
+                }else{
+                    $btn='
+                        <div class="btn-group">
+                            <span class="btn btn-white btn-xs" ><i class="fas fa-pencil-alt text-white"></i></span>
+                            <span class="btn btn-white btn-xs"><i class="fas fa-window-close text-white"></i></span>
+                        </div>
+                    ';
+                }
+                
                 return $btn;
             })
             
@@ -97,30 +107,19 @@ class KeuanganController extends Controller
         $rules = [];
         $messages = [];
         
-        $rules['judul']= 'required';
-        $messages['judul.required']= 'Lengkapi kolom judul';
-        
-        $rules['content']= 'required';
-        $messages['content.required']= 'Lengkapi kolom deskripsi';
-        if($request->id==0){
-            $rules['file']= 'required|mimes:jpg,jpeg,png,gif';
-            $messages['file.required']= 'Lengkapi kolom thumbnail';
-            
-            $rules['lampiran']= 'required|mimes:pdf,jpg,jpeg,png,gif';
-            $messages['lampiran.required']= 'Lengkapi kolom lampiran';
-        }else{
-            if($request->file!=""){
-                $rules['file']= 'required|mimes:jpg,jpeg,png,gif';
-                $messages['file.required']= 'Lengkapi kolom thumbnail';
-            }
-            if($request->lampiran!=""){
-                $rules['lampiran']= 'required|mimes:pdf,jpg,jpeg,png,gif';
-                $messages['lampiran.required']= 'Lengkapi kolom lampiran';
-            }
-        }
-        
-        
-       
+        $rules['kategori_keuangan_id']= 'required';
+        $messages['kategori_keuangan_id.required']= 'Pilih kategori pembayaran';
+
+        $rules['status_keuangan_id']= 'required';
+        $messages['status_keuangan_id.required']= 'Pilih status pembayaran';
+
+        $rules['keterangan']= 'required';
+        $messages['keterangan.required']= 'Masukan keterangan';
+
+        $rules['nilai']= 'required|min:0|not_in:0';
+        $messages['nilai.required']= 'Lengkapi Nilai';
+        $messages['nilai.not_in']= 'Lengkapi Nilai';
+
         $validator = Validator::make($request->all(), $rules, $messages);
         $val=$validator->Errors();
 
@@ -135,71 +134,44 @@ class KeuanganController extends Controller
                 }
             echo'</div></div>';
         }else{
+            $bulan=date('m',strtotime($request->tanggal));
+            $tahun=date('Y',strtotime($request->tanggal));
+            
             if($request->id==0){
-                $thumbnail = $request->file;
-                $thumbnailFileName ='thumbnail'.date('ymdhis').'.'.$thumbnail->getClientOriginalExtension();
-                $thumbnailPath =$thumbnailFileName;
-
-                $lampiran = $request->lampiran;
-                $lampiranFileName ='lampiran'.date('ymdhis').'.'.$lampiran->getClientOriginalExtension();
-                $lampiranPath =$lampiranFileName;
-
-
-                $file =\Storage::disk('public_photo');
-                if($file->put($thumbnailPath, file_get_contents($thumbnail)) && $file->put($lampiranPath, file_get_contents($lampiran))){
-                    $data=Pengumuman::create([
-                        
-                        'judul'=>$request->judul,
-                        'deskripsi'=>$request->content,
-                        'background'=>$thumbnailPath,
-                        'lampiran'=>$lampiranPath,
-                        'waktu'=>date('Y-m-d H:i:s'),
-                    ]);
-
-                    echo'@ok';
-                }
-                
-            }else{
-                $data=Pengumuman::UpdateOrcreate([
-                    'id'=>$request->id,
-                ],
-                [
-                    'judul'=>$request->judul,
-                    'deskripsi'=>$request->content,
+                $nomor=penomoran_keuangan($request->kategori_keuangan_id);
+                $keuangan=Keuangan::Updateorcreate([
+                    
+                    'nomor'=>$nomor,
+                ],[
+                    'nilai'=>ubah_uang($request->nilai),
+                    'status_keuangan_id'=>$request->status_keuangan_id,
+                    'kategori_keuangan_id'=>$request->kategori_keuangan_id,
+                    'keterangan'=>$request->keterangan,
+                    'tanggal'=>$request->tanggal,
+                    'bulan'=>$bulan,
+                    'tahun'=>$tahun,
                     'waktu'=>date('Y-m-d H:i:s'),
                 ]);
 
-                if($request->file!=""){
-                    $thumbnail = $request->file;
-                    $thumbnailFileName ='thumbnail'.date('ymdhis').'.'.$thumbnail->getClientOriginalExtension();
-                    $thumbnailPath =$thumbnailFileName;
-                    $file =\Storage::disk('public_photo');
-                    if($file->put($thumbnailPath, file_get_contents($thumbnail))){
-                        $data=Pengumuman::UpdateOrcreate([
-                            'id'=>$request->id,
-                        ],
-                        [
-                            'background'=>$thumbnailPath,
-                        ]);
-                    }
-                }
+                echo'@ok@';
+            }else{
+                $nomor=$request->nomor;
+            
+                $keuangan=Keuangan::where('id',$request->id)->update([
+                   
+                    'nilai'=>ubah_uang($request->nilai),
+                    'status_keuangan_id'=>$request->status_keuangan_id,
+                    'keterangan'=>$request->keterangan,
+                    'tanggal'=>$request->tanggal,
+                    'bulan'=>$bulan,
+                    'tahun'=>$tahun,
+                    'waktu'=>date('Y-m-d H:i:s'),
+                ]);
 
-                if($request->lampiran!=""){
-                    $lampiran = $request->lampiran;
-                    $lampiranFileName ='lampiran'.date('ymdhis').'.'.$lampiran->getClientOriginalExtension();
-                    $lampiranPath =$lampiranFileName;
-                    $file =\Storage::disk('public_photo');
-                    if($file->put($lampiranPath, file_get_contents($lampiran))){
-                        $data=Pengumuman::UpdateOrcreate([
-                            'id'=>$request->id,
-                        ],
-                        [
-                            'lampiran'=>$lampiranPath,
-                        ]);
-                    }
-                }
-                echo'@ok';
+                echo'@ok@';
             }
+                
+            
         }
     }
 }

@@ -43,6 +43,7 @@
 							
 							<li><a href="{{url('supplier')}}">Supplier</a></li>
 							<li><a href="{{url('barang')}}">Barang</a></li>
+							<li><a href="{{url('employe')}}">Pegawai</a></li>
 							
 						</ul>
 					</li>

@@ -32,7 +32,7 @@
                 <!-- end panel-heading -->
                 <!-- begin panel-body -->
                 <div class="panel-body panel-form">
-                    <form class="form-horizontal form-bordered" style="padding:1%;background: #c1c1c5;" id="mydata" method="post" action="{{ url('warga') }}" enctype="multipart/form-data" >
+                    <form class="form-horizontal form-bordered" style="padding:1%;background: #c1c1c5;"  method="post" action="{{ url('warga') }}" enctype="multipart/form-data" >
                         @csrf 
                         <input type="hidden" name="id" value="{{$id}}">
                         <div class="row" style="background:#fff;margin-left:0.1%;margin-right:0.1%;margin-bottom:2%;padding: 1% 1% 1% 0%; border-radius: 5px;">
@@ -97,8 +97,7 @@
         
                             <div class="col-md-12" style="padding:0px">
                                 <div class="btn-group btn-group-justified">
-                                    <a class="btn btn-blue text-white" onclick="retur_data()"><i class="fas fa-backward"></i> Retur</a>
-                                    <a class="btn btn-green text-white" onclick="tukar_data()"><i class="fas fa-backward"></i> Tukar</a>
+                                    <a class="btn btn-blue text-white" onclick="tambah_data(0)"><i class="fas fa-plus"></i> Tambah</a>
                                 </div>
                             </div>
                         </div>
@@ -136,6 +135,7 @@
                                                     <th class="text-nowrap"  width="10%">Satus</th>
                                                     <th class="text-nowrap"  width="13%" style="text-align:left !important">Nilai</th>
                                                     <th class="text-nowrap"  width="14%">Waktu</th>
+                                                    <th class="text-nowrap"  width="5%"></th>
                                                 </tr>
                                             </thead>
                                             
@@ -171,15 +171,14 @@
                     <div id="notifikasi-import"></div>
                     
                 </div> -->
-                <form class="form-horizontal form-bordered" style="margin-bottom: 1%; padding: 1% 0 1% 0;" id="mydataretur" method="post" action="{{ url('stokorder/store_retur') }}" enctype="multipart/form-data" >
+                <form class="form-horizontal form-bordered" style="margin-bottom: 1%; padding: 1% 0 1% 0;" id="mydata" method="post" action="{{ url('keuangan') }}" enctype="multipart/form-data" >
                     @csrf 
-                    <input type="text" name="kode" value="{{$kode}}">
                     <div id="tampil-form-retur"></div>
                  </form>
             </div>
             <div class="modal-footer">
                 <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Tutup</a>
-                <a href="javascript:;" class="btn btn-danger" onclick="simpan_retur()" >Proses</a>
+                <a href="javascript:;" class="btn btn-danger" onclick="simpan_data()" >Proses</a>
             </div>
         </div>
     </div>
@@ -241,6 +240,7 @@
                     { data: 'status_keuangan' },
                     { data: 'uang_nilai' ,className: "text-right"  },
                     { data: 'waktu' },
+                    { data: 'action' },
                     
                 ],
                 columnDefs: [
@@ -251,25 +251,21 @@
                 ]
             });
 
-            function retur_data(){
-                $('#modal-retur .modal-title').text('Retur Barang ');
+            function tambah_data(id){
+                $('#modal-retur .modal-title').text('Form Keuangan ');
                 $('#modal-retur').modal('show');
-                $('#tampil-form-retur').load("{{url('stokorder/modal_retur')}}?kode={{$kode}}")
+                $('#tampil-form-retur').load("{{url('keuangan/modal')}}?id="+id)
             }
-            function tukar_data(){
-                $('#modal-tukar .modal-title').text('Tukar Satuan Barang ');
-                $('#modal-tukar').modal('show');
-                $('#tampil-form-tukar').load("{{url('stokorder/modal_tukar')}}?kode={{$kode}}")
-            }
-
-            function simpan_retur(){
             
-                var form=document.getElementById('mydataretur');
+
+            function simpan_data(){
+            
+                var form=document.getElementById('mydata');
                 
                     
                     $.ajax({
                         type: 'POST',
-                        url: "{{ url('stokorder/store_retur') }}",
+                        url: "{{ url('keuangan') }}",
                         data: new FormData(form),
                         contentType: false,
                         cache: false,
