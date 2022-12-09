@@ -60,11 +60,12 @@
                                     <th class="text-nowrap" width="5%">No</th>
                                     <th class="text-nowrap" width="10%">Kode</th>
                                     <th class="text-nowrap">Nama Barang</th>
-                                    <th class="text-nowrap"  width="7%" style="text-align:left !important">Qty</th>
-                                    <th class="text-nowrap"  width="7%">Satuan</th>
-                                    <th class="text-nowrap"  width="12%" style="text-align:left !important">H.Satuan</th>
-                                    <th class="text-nowrap"  width="12%" style="text-align:left !important">Total</th>
-                                    <th class="text-nowrap" width="8%">Act</th>
+                                    <th class="text-nowrap"  width="5%" style="text-align:left !important">Qty</th>
+                                    <th class="text-nowrap"  width="8%">Satuan</th>
+                                    <th class="text-nowrap"  width="10%" style="text-align:left !important">H.Satuan</th>
+                                    <th class="text-nowrap"  width="10%" style="text-align:left !important">Diskon</th>
+                                    <th class="text-nowrap"  width="10%" style="text-align:left !important">Total</th>
+                                    <th class="text-nowrap" width="3%">Act</th>
                                 </tr>
                             </thead>
                             
@@ -99,7 +100,7 @@
                     </div>
                     <div class="form-group">
                         <label>Tanggal</label>
-                        <input type="text" id="tanggaldate" name="tanggal" class="form-control" />
+                        <input type="text" id="tanggaldate"  value="{{date('Y-m-d')}}"  name="tanggal" class="form-control" />
                     </div>
                 </form>
             </div>
@@ -112,7 +113,7 @@
 </div>   
 
 <div class="modal fade" id="modal-terima" style="display: none;" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title"></h4>
@@ -191,6 +192,7 @@
 						{ data: 'qty'  ,className: "text-right" },
 						{ data: 'satuan' },
 						{ data: 'uang_harga_jual' ,className: "text-right"  },
+						{ data: 'uang_discon_jual' ,className: "text-right"  },
 						{ data: 'uang_total_jual' ,className: "text-right"  },
 						{ data: 'action' },
 						
@@ -226,7 +228,11 @@
 
         $(document).ready(function() {
 			TableManageFixedHeader.init();
+            @if($id==0)
+
+            @else
             $('#tampil-form').load("{{url('kasir/modal')}}?id={{$id}}&ide=0&act=new")
+            @endif
 		});
 
         function edit_data(id){
@@ -261,14 +267,14 @@
 				if (willDelete) {
 						$.ajax({
 							type: 'GET',
-							url: "{{url('pengumuman/delete_data')}}",
+							url: "{{url('kasir/delete_data_stok')}}",
 							data: "id="+id,
 							success: function(msg){
-								swal("Success! berhasil terhapus!", {
-									icon: "success",
-								});
-								var table=$('#data-table-fixed-header').DataTable();
-								table.ajax.url("{{ url('pengumuman/get_data')}}").load();
+								document.getElementById("loadnya").style.width = "0px";
+                                
+                                $('#tampil-form').load("{{url('kasir/modal')}}?id={{$id}}&ide=0&act=new")
+                                var table=$('#data-table-fixed-header').DataTable();
+                                    table.ajax.url("{{ url('kasir/get_data')}}?nomor_stok={{$id}}").load();    
 							}
 						});
 					
@@ -300,10 +306,7 @@
                             var bat=msg.split('@');
                             if(bat[1]=='ok'){
                                 document.getElementById("loadnya").style.width = "0px";
-                                swal({
-                                        title: "Success! berhasil disimpan!",
-                                        icon: "success",
-                                });
+                                
                                 $('#tampil-form').load("{{url('kasir/modal')}}?id={{$id}}&ide=0&act=new")
                                 var table=$('#data-table-fixed-header').DataTable();
                                     table.ajax.url("{{ url('kasir/get_data')}}?nomor_stok={{$id}}").load();    
@@ -362,6 +365,7 @@
                             $('#tampil-form').load("{{url('kasir/modal')}}?id={{$id}}&ide=0&act=new")
                             var table=$('#data-table-fixed-header').DataTable();
 			                    table.ajax.url("{{ url('kasir/get_data')}}?nomor_stok={{$id}}").load();    
+                                
                         }else{
                             document.getElementById("loadnya").style.width = "0px";
                             swal({

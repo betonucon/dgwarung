@@ -12,9 +12,9 @@ class Stokorder extends Model
     function msupplier(){
         return $this->belongsTo('App\Supplier','supplier_id','id');
     }
-    // function mgroup(){
-    //     return $this->belongsTo('App\Models\Group','group_id','id');
-    // }
+    function mstatuskeuangan(){
+        return $this->belongsTo('App\Statuskeuangan','status_keuangan_id','id');
+    }
     // function mpendidikan(){
     //     return $this->belongsTo('App\Models\Pendidikan','pendidikan_id','id');
     // }

@@ -62,6 +62,9 @@ class EmployeController extends Controller
             ->addColumn('uang_gaji', function ($row) {
                 return uang($row->gaji);
             })
+            ->addColumn('uang_uang_makan', function ($row) {
+                return uang($row->uang_makan);
+            })
             ->addColumn('action', function ($row) {
                 $btn='
                     <div class="btn-group">
@@ -98,7 +101,9 @@ class EmployeController extends Controller
         $rules['no_telepon']= 'required';
         $messages['no_telepon.required']= 'Lengkapi kolom no telepon';
         $rules['gaji']= 'required';
-        $messages['gaji.required']= 'Lengkapi kolom pendapatan bulanan';
+        $messages['gaji.required']= 'Lengkapi kolom uang harian';
+        $rules['uang_makan']= 'required';
+        $messages['uang_makan.required']= 'Lengkapi kolom uang makan';
         
        
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -125,6 +130,7 @@ class EmployeController extends Controller
                 'alamat'=>$request->alamat,
                 'no_telepon'=>$request->no_telepon,
                 'gaji'=>ubah_uang($request->gaji),
+                'uang_makan'=>ubah_uang($request->uang_makan),
                 'status'=>1,
                 'waktu'=>date('Y-m-d H:i:s'),
             ]);

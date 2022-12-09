@@ -76,6 +76,29 @@
                 
             </div>
         @endif
+        @if($id==6)  
+            <div class="row">
+                
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label style="padding: 0% 1% 0% 3%;" class="col-lg-5 col-form-label">Penentuan Harga Jual</label>
+                        <div class="col-lg-7" style="padding: 0% 1% 0% 0%;">
+                            <div class="input-group input-group-sm">
+                                <select  name="setting_int"  class="form-control form-control-sm" placeholder="Ketik disini....">
+                                    <option value="1" @if($data->setting_int==1) selected @endif >Master Barang</option>
+                                    <option value="2" @if($data->setting_int==2) selected @endif >Stok Barang</option>
+                                </select>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                </div>
+                
+            </div>
+        @endif
         @if($id==3)  
             <div class="row">
                 
@@ -87,6 +110,30 @@
                                 <select  name="setting_int"  class="form-control form-control-sm" placeholder="Ketik disini....">
                                     @for($x=11;$x<24;$x++)
                                         <option value="{{$x}}" @if($data->setting_int==$x) selected @endif >{{$x}}PX</option>
+                                    @endfor
+                                </select>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                </div>
+                
+            </div>
+        @endif
+        @if($id==5)  
+            <div class="row">
+                
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label style="padding: 0% 1% 0% 3%;" class="col-lg-5 col-form-label">Item perhalaman cetak</label>
+                        <div class="col-lg-7" style="padding: 0% 1% 0% 0%;">
+                            <div class="input-group input-group-sm">
+                                <select  name="setting_int"  class="form-control form-control-sm" placeholder="Ketik disini....">
+                                    @for($x=10;$x<24;$x++)
+                                        <option value="{{$x}}" @if($data->setting_int==$x) selected @endif >{{$x}} Item</option>
                                     @endfor
                                 </select>
                                 

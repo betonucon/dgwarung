@@ -11,6 +11,7 @@ use Validator;
 use App\Stokready;
 use App\Stokorder;
 use App\Vieworder;
+use App\Stokup;
 use App\Stok;
 use App\Viewstokorder;
 use App\Barang;
@@ -111,6 +112,19 @@ class StokorderController extends Controller
         }
         return view('stokorder.modal_terima',compact('template','disabled','id','data'));
     }
+    public function modal_ubah(request $request)
+    {
+        error_reporting(0);
+        $template='top';
+        $id=$request->id;
+        $data=Stokup::where('id',$request->id)->first();
+        if($request->id==0){
+            $disabled='';
+        }else{
+            $disabled='readonly';
+        }
+        return view('stokorder.modal_ubah',compact('template','disabled','id','data'));
+    }
     public function modal_retur(request $request)
     {
         error_reporting(0);
@@ -185,7 +199,7 @@ class StokorderController extends Controller
         error_reporting(0);
         $query = Viewstokorder::query();
         
-        $data = $query->where('nomor_stok',$request->nomor_stok);
+        $data = $query->where('nomor_stok',$request->nomor_stok)->where('nomor_transaksi',null);
         $data = $query->orderBy('id','Asc')->get();
 
         return Datatables::of($data)
@@ -309,6 +323,68 @@ class StokorderController extends Controller
             ->make(true);
     }
     
+    public function get_data_tersedia(request $request)
+    {
+        error_reporting(0);
+        
+        
+        $query = Stokup::query();
+        $data = $query->where('kode',$request->kode)->where('status','!=',1)->orderBy('sisa','Desc')->get();
+        
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('supplier', function ($row) {
+                return $row->supplier;
+                
+            })
+            ->addColumn('nama_barang_lengkap', function ($row) {
+                return $row->nama_barang.' ('.$row->keterangan.')';
+                
+            })
+            ->addColumn('sisanya', function ($row) {
+                return $row->sisa.' '.$row->kd_satuan;
+                
+            })
+            ->addColumn('u_harga_beli', function ($row) {
+                return uang($row->harga_beli);
+                
+            })
+            ->addColumn('u_harga_jual', function ($row) {
+                return uang($row->harga_jual);
+                
+            })
+            ->addColumn('status_data', function ($row) {
+                if($row->sisa>0){
+                    if(nomor_stok_ready($row->kode)==$row->nomor_stok){
+                        return '<font color="blue">Aktive</font>';
+                    }else{
+                        return '<font color="red">Proses</font>';
+                    }
+                }else{
+                    return '<font color="red">Habis</font>';
+                }
+                
+            })
+            ->addColumn('action', function ($row) {
+                if($row->sisa>0){
+                    $btn='
+                        <div class="btn-group">
+                            <span class="btn btn-primary btn-xs" onclick="ubah_data('.$row->id.')"><i class="fas fa-pencil-alt text-white"></i></span>
+                        </div>
+                    ';
+                }else{
+                    $btn='
+                        <div class="btn-group">
+                            <span class="btn btn-white btn-xs" ><i class="fas fa-pencil-alt text-white"></i></span>
+                        </div>
+                    '; 
+                }
+                return $btn;
+            })
+            ->rawColumns(['action','status_data'])
+            ->make(true);
+    }
+
     public function get_data_even(request $request)
     {
         error_reporting(0);
@@ -322,6 +398,9 @@ class StokorderController extends Controller
 
         return Datatables::of($data)
             ->addIndexColumn()
+            ->addColumn('supplier', function ($row) {
+                return $row->msupplier['supplier'];
+            })
             ->addColumn('status_data', function ($row) {
                 if($row->tukar_id>0){
                     $btn='Masuk/tukar';
@@ -480,6 +559,43 @@ class StokorderController extends Controller
         }
     }
 
+    public function store_ubah(request $request){
+        error_reporting(0);
+        $rules = [];
+        $messages = [];
+        
+        $rules['harga_jual']= 'required|min:0|not_in:0';
+        $messages['harga_jual.required']= 'Lengkapi harga jual';
+        $messages['harga_jual.not_in']= 'Lengkapi harga jual';
+        
+       
+        $validator = Validator::make($request->all(), $rules, $messages);
+        $val=$validator->Errors();
+
+
+        if ($validator->fails()) {
+            echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
+                foreach(parsing_validator($val) as $value){
+                    
+                    foreach($value as $isi){
+                        echo'-&nbsp;'.$isi.'<br>';
+                    }
+                }
+            echo'</div></div>';
+        }else{
+            
+                    $data=Stok::where('id',$request->id)->update([
+                        
+                        'harga_jual'=>ubah_uang($request->harga_jual),
+                        'update'=>date('Y-m-d H:i:s'),
+                    ]);
+
+                    echo'@ok@';
+                
+            
+        }
+    }
+
     public function store_selesai(request $request){
         error_reporting(0);
         $rules = [];
@@ -520,7 +636,8 @@ class StokorderController extends Controller
                 $bulan=date('m');
                 $tahun=date('Y');
             }
-                    $odr=Stokorder::where('nomor_stok',$request->nomor_stok)->first();
+                $get=Viewstokorder::where('nomor_stok',$request->nomor_stok)->where('nomor_transaksi',null)->get();
+                $odr=Stokorder::where('nomor_stok',$request->nomor_stok)->first();
                     $data=Stokorder::where('nomor_stok',$request->nomor_stok)->update([
                         
                         'status'=>1,
@@ -528,18 +645,37 @@ class StokorderController extends Controller
                         'nilai'=>$request->nilai,
                         'waktu'=>date('Y-m-d H:i:s'),
                     ]);
-                    $data=Stok::where('nomor_stok',$request->nomor_stok)->update([
-                        
-                        'status'=>2,
-                        'aktif'=>0,
-                        'users_id'=>Auth::user()->id,
-                        'nama_user'=>Auth::user()->name,
-                        'proses'=>1,
-                        'update'=>date('Y-m-d H:i:s'),
-                    ]);
-                    $keuangan=Keuangan::create([
+                    foreach($get as $no=>$gt){
+                        if($gt->harga_jual>harga_jual($gt->kode)){
+                            $harga_jual=$gt->harga_jual;
+                        }else{
+                            $harga_jual=harga_jual($gt->kode);
+                        }
+                        if($gt->harga_beli>harga_beli($gt->kode)){
+                            $harga_beli=$gt->harga_beli;
+                        }else{
+                            $harga_beli=harga_beli($gt->kode);
+                        }
+                        $hdiscon=$harga_jual-(($harga_jual*discon_barang($gt->kode))/100);
+                        $bar=Barang::where('kode',$gt->kode)->update([ 
+                            'harga_jual'=>$harga_jual,
+                            'harga_beli'=>$harga_beli,
+                            'harga_discon'=>$hdiscon,
+                        ]);
+                        $data=Stok::where('id',$gt->id)->update([     
+                            'urut'=>($no+1),
+                            'status'=>2,
+                            'aktif'=>0,
+                            'users_id'=>Auth::user()->id,
+                            'nama_user'=>Auth::user()->name,
+                            'proses'=>1,
+                            'update'=>date('Y-m-d H:i:s'),
+                        ]);
+                    }
+                    $keuangan=Keuangan::UpdateOrcreate([
                         
                         'nomor'=>kdk($request->kategori_keuangan_id).$request->nomor_stok,
+                    ],[
                         'nilai'=>$request->nilai,
                         'status_keuangan_id'=>$request->status_keuangan_id,
                         'kategori_keuangan_id'=>$request->kategori_keuangan_id,
@@ -547,6 +683,7 @@ class StokorderController extends Controller
                         'tanggal'=>$tanggal,
                         'bulan'=>$bulan,
                         'tahun'=>$tahun,
+                        'kat'=>2,
                         'waktu'=>date('Y-m-d H:i:s'),
                     ]);
 
@@ -607,6 +744,7 @@ class StokorderController extends Controller
                         'total_jual'=>(ubah_uang($request->harga_jual)*ubah_uang($request->qty)),
                         'total_beli'=>(ubah_uang($request->harga_beli)*ubah_uang($request->qty)),
                         'expired'=>$request->expired,
+                        'discon'=>$request->discon,
                         'status'=>1,
                         'bulan'=>date('m'),
                         'tahun'=>date('Y'),
@@ -780,9 +918,10 @@ class StokorderController extends Controller
     {
         error_reporting(0);
         $order=Stokorder::where('nomor_stok',$request->id)->first();
-        $data=Viewstokorder::where('nomor_stok',$request->id)->get();
-        $pdf = PDF::loadView('stokorder.cetak', compact('data','order'));
-        $pdf->setPaper('A4', 'Landscape');
+        $count=jumlah_item_order($request->id);
+        $ford=ceil(jumlah_item_order($request->id)/18);
+        $pdf = PDF::loadView('stokorder.cetak', compact('data','order','ford','count'));
+        $pdf->setPaper('A4', 'Potrait');
         $pdf->stream($request->id.'.pdf');
         if($request->act==1){
             return $pdf->download();

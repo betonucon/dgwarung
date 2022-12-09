@@ -16,6 +16,7 @@ use App\Stok;
 use App\Viewstokorder;
 use App\Barang;
 use App\Keuangan;
+use App\Viewstokkasir;
 use App\User;
 use PDF;
 
@@ -84,13 +85,15 @@ class KasirController extends Controller
         error_reporting(0);
         $template='top';
         $id=$request->id;
-        $data=Stokorder::where('nomor_stok',$request->id)->first();
+        $data=Kasir::where('nomor_transaksi',$request->id)->first();
+        $get=Viewstokkasir::where('nomor_transaksi',$request->id)->get();
+        $count=Viewstokkasir::where('nomor_transaksi',$request->id)->count();
         if($request->id==0){
             $disabled='';
         }else{
             $disabled='readonly';
         }
-        return view('kasir.modal_terima',compact('template','disabled','id','data'));
+        return view('kasir.modal_terima',compact('template','disabled','id','data','get','count'));
     }
     public function modal_retur(request $request)
     {
@@ -143,7 +146,7 @@ class KasirController extends Controller
         error_reporting(0);
         $template='top';
         $id=$request->id;
-        $data=Stokorder::where('nomor_stok',$request->id)->first();
+        $data=Kasir::where('nomor_transaksi',$request->id)->first();
         if($request->id==0){
             $disabled='';
         }else{
@@ -179,6 +182,10 @@ class KasirController extends Controller
                 $btn=uang($row->harga_jual);
                 return $btn;
             })
+            ->addColumn('uang_discon_jual', function ($row) {
+                $btn=uang($row->discon_jual);
+                return $btn;
+            })
             ->addColumn('uang_total_jual', function ($row) {
                 $btn=uang($row->total_jual);
                 return $btn;
@@ -186,8 +193,7 @@ class KasirController extends Controller
             ->addColumn('action', function ($row) {
                 $btn='
                     <div class="btn-group">
-                        <span class="btn btn-primary btn-sm" onclick="edit_data('.$row->id.')"><i class="fas fa-pencil-alt text-white"></i></span>
-                        <span class="btn btn-danger btn-sm" onclick="delete_data('.$row->id.')"><i class="fas fa-window-close text-white"></i></span>
+                        <span class="btn btn-danger btn-xs" onclick="delete_data('.$row->id.')"><i class="fas fa-window-close text-white"></i></span>
                     </div>
                 ';
                 return $btn;
@@ -382,6 +388,9 @@ class KasirController extends Controller
     public function delete_data(request $request){
         $data = Supplier::where('id',$request->id)->delete();
     }
+    public function delete_data_stok(request $request){
+        $data = Stok::where('id',$request->id)->delete();
+    }
     public function delete_retur(request $request){
         $data = Stok::where('id',$request->id)->delete();
     }
@@ -480,48 +489,72 @@ class KasirController extends Controller
                 }
             echo'</div></div>';
         }else{
+            $odr=Kasir::where('nomor_transaksi',$request->nomor_transaksi)->first();
             if($request->status_keuangan_id==3){
-                $tanggal=$request->tanggal;
+                $tanggal=$odr->tanggal;
                 $dibayarkan=null;
-                $bulan=date('m',strtotime($request->tanggal));
-                $tahun=date('Y',strtotime($request->tanggal));
+                $bulan=date('m',strtotime($tanggal));
+                $tahun=date('Y',strtotime($tanggal));
             }else{
-                $tanggal=date('Y-m-d');
+                $tanggal=$odr->tanggal;
                 $dibayarkan=date('Y-m-d');
-                $bulan=date('m');
-                $tahun=date('Y');
+                $bulan=date('m',strtotime($tanggal));
+                $tahun=date('Y',strtotime($tanggal));
             }
-                    $odr=Kasir::where('nomor_transaksi',$request->nomor_transaksi)->first();
+            if($request->ready==$request->count){
+                    
+                    $get=Viewstokkasir::where('nomor_transaksi',$request->nomor_transaksi)->get();
                     $data=Kasir::where('nomor_transaksi',$request->nomor_transaksi)->update([
                         
                         'status'=>1,
                         'nilai'=>$request->nilai,
                         'waktu'=>date('Y-m-d H:i:s'),
                     ]);
-                    $data=Stok::where('nomor_transaksi',$request->nomor_transaksi)->update([
-                        
-                        'status'=>3,
-                        'proses'=>1,
-                        'users_id'=>Auth::user()->id,
-                        'nama_user'=>Auth::user()->name,
-                        'update'=>date('Y-m-d H:i:s'),
-                    ]);
+                    foreach($get as $no=>$gt){
+                        $data=Stok::where('id',$gt->id)->update([
+                            
+                            'urut'=>($no+1),
+                            'status'=>3,
+                            'proses'=>1,
+                            'users_id'=>Auth::user()->id,
+                            'nama_user'=>Auth::user()->name,
+                            'update'=>date('Y-m-d H:i:s'),
+                        ]);
+                    }
                     $keuangan=Keuangan::create([
                         
                         'nomor'=>kdk($request->kategori_keuangan_id).$request->nomor_transaksi,
-                        'nilai'=>$request->nilai,
+                        'nilai'=>$request->nilai_beli,
                         'status_keuangan_id'=>$request->status_keuangan_id,
                         'kategori_keuangan_id'=>$request->kategori_keuangan_id,
                         'keterangan'=>'Pembayaran pennjualan dari '.$odr->konsumen,
                         'tanggal'=>$tanggal,
                         'bulan'=>$bulan,
                         'tahun'=>$tahun,
+                        'kat'=>2,
+                        'waktu'=>date('Y-m-d H:i:s'),
+                    ]);
+                    $provit=Keuangan::create([
+                        
+                        'nomor'=>kdk(6).$request->nomor_transaksi,
+                        'nilai'=>$request->provite,
+                        'status_keuangan_id'=>$request->status_keuangan_id,
+                        'kategori_keuangan_id'=>6,
+                        'keterangan'=>'Pembayaran pennjualan dari '.$odr->konsumen,
+                        'tanggal'=>$tanggal,
+                        'bulan'=>$bulan,
+                        'tahun'=>$tahun,
+                        'kat'=>2,
                         'waktu'=>date('Y-m-d H:i:s'),
                     ]);
 
                     echo'@ok@'.$nomor;
                 
-            
+            }else{
+                echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
+                echo'Sebagian barang qty melebihi stok';
+                echo'</div></div>';
+            }
         }
     }
 
@@ -545,10 +578,7 @@ class KasirController extends Controller
         $messages['qty.required']= 'Lengkapi Qty';
         $messages['qty.not_in']= 'Lengkapi Qty';
 
-        $rules['potongan']= 'required|min:0';
-        $messages['potongan.required']= 'Lengkapi diskon';
-        $messages['potongan.min']= 'Lengkapi diskon';
-        
+       
        
         $validator = Validator::make($request->all(), $rules, $messages);
         $val=$validator->Errors();
@@ -565,7 +595,15 @@ class KasirController extends Controller
             echo'</div></div>';
         }else{
                 $odr=Stok::where('nomor_stok',$request->nomor_stok)->where('kode',$request->kode)->where('status',2)->first();
-                if(stok_ready($request->kode)>=$request->qty){   
+                if(stok_ready($request->kode)>=$request->qty){  
+                    if(ubah_uang($request->discon_jual)>0){
+                        $dicon=ubah_uang($request->discon_jual);
+                    }else{
+                        $dicon=0;
+                    }
+                    $jualh=ubah_uang($request->harga_jual)-$dicon; 
+                    $totaljual=($jualh*ubah_uang($request->qty));
+                    $totalbeli=(ubah_uang($odr->harga_beli)*ubah_uang($request->qty));
                     $data=Stok::UpdateOrcreate([
                         
                         'nomor_transaksi'=>$request->nomor_transaksi,
@@ -573,12 +611,14 @@ class KasirController extends Controller
                         'kode'=>$request->kode,
                     ],[
                         'harga_beli'=>ubah_uang($odr->harga_beli),
-                        'harga_jual'=>ubah_uang($request->harga_jual),
+                        'discon_jual'=>$dicon,
+                        'harga_jual'=>$jualh,
                         'qty'=>ubah_uang($request->qty),
-                        'total_jual'=>(ubah_uang($request->harga_jual)*ubah_uang($request->qty)),
-                        'total_beli'=>(ubah_uang($odr->harga_beli)*ubah_uang($request->qty)),
+                        'total_jual'=>$totaljual,
+                        'total_beli'=>$totalbeli,
+                        'provite'=>($totaljual-$totalbeli),
                         'expired'=>$odr->expired,
-                        'status'=>1,
+                        'status'=>6,
                         'bulan'=>date('m'),
                         'tahun'=>date('Y'),
                         'waktu'=>date('Y-m-d H:i:s'),
@@ -599,10 +639,11 @@ class KasirController extends Controller
     public function cetak(Request $request)
     {
         error_reporting(0);
-        $order=Stokorder::where('nomor_stok',$request->id)->first();
-        $data=Viewstokorder::where('nomor_stok',$request->id)->get();
-        $pdf = PDF::loadView('kasir.cetak', compact('data','order'));
-        $pdf->setPaper('A4', 'Landscape');
+        $order=Kasir::where('nomor_transaksi',$request->id)->first();
+        $count=jumlah_item_order_kasir($request->id);
+        $ford=ceil(jumlah_item_order_kasir($request->id)/18);
+        $pdf = PDF::loadView('kasir.cetak', compact('data','order','ford','count'));
+        $pdf->setPaper('A4', 'Potrait');
         $pdf->stream($request->id.'.pdf');
         return $pdf->stream();
     }

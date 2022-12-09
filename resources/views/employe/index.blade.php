@@ -44,7 +44,8 @@
                                     <th class="text-nowrap" width="20%">Nama</th>
                                     <th class="text-nowrap">Alamat</th>
                                     <th class="text-nowrap" width="12%">Telepon</th>
-                                    <th class="text-nowrap" width="12%" style="text-align:left !important">Gaji</th>
+                                    <th class="text-nowrap" width="12%" style="text-align:left !important">Harian</th>
+                                    <th class="text-nowrap" width="12%" style="text-align:left !important">U.Makan</th>
                                     <th class="text-nowrap" width="8%">Act</th>
                                 </tr>
                             </thead>
@@ -119,6 +120,7 @@
 						{ data: 'alamat' },
 						{ data: 'no_telepon' },
 						{ data: 'uang_gaji' ,className: "text-right"  },
+						{ data: 'uang_uang_makan' ,className: "text-right"  },
 						{ data: 'action' },
 						
 					],

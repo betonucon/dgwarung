@@ -39,7 +39,7 @@
         
                             <div class="col-md-8">
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Nomor Order</label>
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Nomor Order</label>
                                     <div class="col-lg-3" style="padding: 0% 1% 0% 0%;border: solid 1px #f7f7ff; background: #e8e8f3;">
                                         <p  style="margin-top: 0; margin-left: 3%; margin-bottom: 0px; line-height: 2.1; font-size: 13px;">{{$id}}&nbsp;</p>
                                     </div>
@@ -62,9 +62,9 @@
                                     <th class="text-nowrap">Nama Barang</th>
                                     <th class="text-nowrap"  width="7%" style="text-align:left !important">Qty</th>
                                     <th class="text-nowrap"  width="7%">Satuan</th>
-                                    <th class="text-nowrap"  width="12%" style="text-align:left !important">Beli</th>
-                                    <th class="text-nowrap"  width="12%" style="text-align:left !important">Jual</th>
-                                    <th class="text-nowrap"  width="12%" style="text-align:left !important">Total</th>
+                                    <th class="text-nowrap"  width="10%" style="text-align:left !important">Beli</th>
+                                    <th class="text-nowrap"  width="10%" style="text-align:left !important">Jual</th>
+                                    <th class="text-nowrap"  width="10%" style="text-align:left !important">Total</th>
                                     <th class="text-nowrap" width="8%">Act</th>
                                 </tr>
                             </thead>
@@ -95,7 +95,7 @@
                     <!-- <input type="submit"> -->
                     <div class="form-group">
                         <label>Supplier</label>
-                        <select name="supplier_id" class="form-control form-control-sm " id="default-select3" placeholder="Ketik disini....">
+                        <select name="supplier_id" class="form-control form-control-sm " id="defaultselect3" placeholder="Ketik disini....">
                             <option value="">Pilih Supplier</option>
                             @foreach(get_supplier() as $sat)
                                 <option value="{{$sat->id}}" @if($data->supplier_id==$sat->id) selected @endif >{{$sat->supplier}}</option>
@@ -104,7 +104,7 @@
                     </div>
                     <div class="form-group">
                         <label>Tanggal</label>
-                        <input type="text" id="tanggaldate" name="tanggal" class="form-control" />
+                        <input type="text" id="tanggaldate" value="{{date('Y-m-d')}}" onkeypress="proses_enter_order(event)"   name="tanggal" class="form-control" />
                     </div>
                 </form>
             </div>
@@ -222,17 +222,23 @@
             };
         }();
 
-        $("#default-select3").select2();
+        $("#defaultselect3").select2();
+        $("#defaultselect3").select2('open');
         $("#tanggaldate").datepicker({
             format:'yyyy-mm-dd'
         });
         @if($id==0)
-            $('#modal-form').modal({backdrop: 'static', keyboard: false})  
+            $('#modal-form').modal({backdrop: 'static', keyboard: false});
+             
         @endif
 
         $(document).ready(function() {
 			TableManageFixedHeader.init();
+            @if($id==0)
+                
+            @else
             $('#tampil-form').load("{{url('stokorder/modal')}}?id={{$id}}&ide=0&act=new")
+            @endif
 		});
 
         function edit_data(id){
@@ -288,7 +294,104 @@
 			});
 			
 		}
-
+        function proses_enter_order(e){
+			if(e.keyCode === 13){
+                var form=document.getElementById('mydataorder');
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ url('stokorder') }}",
+                        data: new FormData(form),
+                        contentType: false,
+                        cache: false,
+                        processData:false,
+                        beforeSend: function() {
+                            document.getElementById("loadnya").style.width = "100%";
+                        },
+                        success: function(msg){
+                            var bat=msg.split('@');
+                            if(bat[1]=='ok'){
+                                document.getElementById("loadnya").style.width = "0px";
+                                swal({
+                                        title: "Success! berhasil disimpan!",
+                                        icon: "success",
+                                });
+                                location.assign("{{url('stokorder/create')}}?id="+bat[2])   
+                            }else{
+                                document.getElementById("loadnya").style.width = "0px";
+                                swal({
+                                    title: 'Notifikasi',
+                                
+                                    html:true,
+                                    text:'ss',
+                                    icon: 'error',
+                                    buttons: {
+                                        cancel: {
+                                            text: 'Tutup',
+                                            value: null,
+                                            visible: true,
+                                            className: 'btn btn-dangers',
+                                            closeModal: true,
+                                        },
+                                        
+                                    }
+                                });
+                                $('.swal-text').html('<div style="width:100%;background:#f2f2f5;padding:1%;text-align:left;font-size:13px">'+msg+'</div>')
+                            }
+                            
+                            
+                        }
+                    });
+            }
+        }
+        function proses_enter(e){
+			if(e.keyCode === 13){
+                var form=document.getElementById('mydata');
+            
+                
+            $.ajax({
+                type: 'POST',
+                url: "{{ url('stokorder/store_stok') }}",
+                data: new FormData(form),
+                contentType: false,
+                cache: false,
+                processData:false,
+                beforeSend: function() {
+                    document.getElementById("loadnya").style.width = "100%";
+                },
+                success: function(msg){
+                    var bat=msg.split('@');
+                    if(bat[1]=='ok'){
+                        document.getElementById("loadnya").style.width = "0px";
+                        $('#tampil-form').load("{{url('stokorder/modal')}}?id={{$id}}&ide=0&act=new")
+                        var table=$('#data-table-fixed-header').DataTable();
+                            table.ajax.url("{{ url('stokorder/get_data')}}?nomor_stok={{$id}}").load();    
+                    }else{
+                        document.getElementById("loadnya").style.width = "0px";
+                        swal({
+                            title: 'Notifikasi',
+                           
+                            html:true,
+                            text:'ss',
+                            icon: 'error',
+                            buttons: {
+                                cancel: {
+                                    text: 'Tutup',
+                                    value: null,
+                                    visible: true,
+                                    className: 'btn btn-dangers',
+                                    closeModal: true,
+                                },
+                                
+                            }
+                        });
+                        $('.swal-text').html('<div style="width:100%;background:#f2f2f5;padding:1%;text-align:left;font-size:13px">'+msg+'</div>')
+                    }
+                    
+                    
+                }
+            });
+            }
+        }
         
         function simpan_data(){
             
@@ -309,10 +412,6 @@
                         var bat=msg.split('@');
                         if(bat[1]=='ok'){
                             document.getElementById("loadnya").style.width = "0px";
-                            swal({
-									title: "Success! berhasil disimpan!",
-									icon: "success",
-                            });
                             $('#tampil-form').load("{{url('stokorder/modal')}}?id={{$id}}&ide=0&act=new")
                             var table=$('#data-table-fixed-header').DataTable();
 			                    table.ajax.url("{{ url('stokorder/get_data')}}?nomor_stok={{$id}}").load();    
@@ -417,7 +516,7 @@
 									title: "Success! berhasil diproses!",
 									icon: "success",
                             });
-                            location.assign("{{url('stokorder/create')}}?id=0")   
+                            location.reload();  
                         }else{
                             document.getElementById("loadnya").style.width = "0px";
                             swal({

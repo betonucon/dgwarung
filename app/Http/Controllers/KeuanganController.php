@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 use App\Keuangan;
+use App\Stokorder;
 use App\Viewkeuangan;
 use App\User;
 
@@ -24,7 +25,10 @@ class KeuanganController extends Controller
         }else{
             $act=$request->act;
         }
-        return view('keuangan.index',compact('template','act'));
+        $bulan=date('m');
+        $tahun=date('Y');
+        $tanggal=date('Y-m-d');
+        return view('keuangan.index',compact('template','act','bulan','tahun','tanggal'));
     }
     public function create(request $request)
     {
@@ -52,6 +56,20 @@ class KeuanganController extends Controller
         }
         return view('keuangan.modal',compact('template','data','disabled','id'));
     }
+    public function modal_bayar(request $request)
+    {
+        error_reporting(0);
+        $template='top';
+        $data=Keuangan::find($request->id);
+        $riwayat=Keuangan::where('nomor_bayar',$data->nomor)->orderBy('id','Asc')->get();
+        $id=$request->id;
+        if($request->id==0){
+            $disabled='';
+        }else{
+            $disabled='readonly';
+        }
+        return view('keuangan.modal_bayar',compact('template','data','disabled','id','riwayat'));
+    }
 
     
 
@@ -72,20 +90,37 @@ class KeuanganController extends Controller
                 return uang($row->nilai);
             })
             ->addColumn('action', function ($row) {
-                if(in_array($row->kategori_keuangan_id, array(3,4,5))){
-                    $btn='
-                        <div class="btn-group">
-                            <span class="btn btn-primary btn-xs" onclick="tambah_data('.$row->id.')"><i class="fas fa-pencil-alt text-white"></i></span>
-                            <span class="btn btn-danger btn-xs" onclick="delete_data('.$row->id.')"><i class="fas fa-window-close text-white"></i></span>
-                        </div>
-                    ';
+                if($row->kat==1){
+                    if($row->kategori_keuangan_id==1){
+                        $btn='
+                            <div class="btn-group">
+                               <span class="btn btn-danger btn-xs" onclick="delete_data_bayar('.$row->id.')"><i class="fas fa-window-close text-white"></i></span>
+                            </div>
+                        ';
+                    }else{
+                        $btn='
+                            <div class="btn-group">
+                                <span class="btn btn-primary btn-xs" onclick="tambah_data('.$row->id.')"><i class="fas fa-pencil-alt text-white"></i></span>
+                                <span class="btn btn-danger btn-xs" onclick="delete_data('.$row->id.')"><i class="fas fa-window-close text-white"></i></span>
+                            </div>
+                        ';
+                    }
                 }else{
-                    $btn='
-                        <div class="btn-group">
-                            <span class="btn btn-white btn-xs" ><i class="fas fa-pencil-alt text-white"></i></span>
-                            <span class="btn btn-white btn-xs"><i class="fas fa-window-close text-white"></i></span>
-                        </div>
-                    ';
+                    if($row->status_keuangan_id==3){
+                        $btn='
+                            <div class="btn-group">
+                                <span class="btn btn-primary btn-xs" onclick="pembayaran_data('.$row->id.')">Bayar</span>
+                            </div>
+                        ';
+                    }else{
+                        $btn='
+                            <div class="btn-group">
+                                <span class="btn btn-white btn-xs" ><i class="fas fa-pencil-alt text-white"></i></span>
+                                <span class="btn btn-white btn-xs"><i class="fas fa-window-close text-white"></i></span>
+                            </div>
+                        ';
+                    }
+                    
                 }
                 
                 return $btn;
@@ -97,7 +132,18 @@ class KeuanganController extends Controller
     
 
     public function delete_data(request $request){
-        $data = Supplier::where('id',$request->id)->delete();
+        $data = Keuangan::where('id',$request->id)->delete();
+    }
+    public function delete_data_bayar(request $request){
+        $find = Keuangan::where('id',$request->id)->first();
+        $utg = Keuangan::where('nomor',$find->nomor_bayar)->where('status_keuangan_id',3)->first();
+        $byrt=Keuangan::where('nomor',$find->nomor_bayar)->where('status_keuangan_id',3)->update([
+        
+            'nilai'=>($utg->nilai+$find->nilai),
+            'nilai_dibayar'=>($utg->nilai_dibayar-$find->nilai),
+            'waktu'=>date('Y-m-d H:i:s'),
+        ]);
+        $data = Keuangan::where('id',$request->id)->delete();
     }
 
     
@@ -144,12 +190,14 @@ class KeuanganController extends Controller
                     'nomor'=>$nomor,
                 ],[
                     'nilai'=>ubah_uang($request->nilai),
+                    'nilai_dibayar'=>ubah_uang($request->nilai),
                     'status_keuangan_id'=>$request->status_keuangan_id,
                     'kategori_keuangan_id'=>$request->kategori_keuangan_id,
                     'keterangan'=>$request->keterangan,
                     'tanggal'=>$request->tanggal,
                     'bulan'=>$bulan,
                     'tahun'=>$tahun,
+                    'kat'=>1,
                     'waktu'=>date('Y-m-d H:i:s'),
                 ]);
 
@@ -160,6 +208,7 @@ class KeuanganController extends Controller
                 $keuangan=Keuangan::where('id',$request->id)->update([
                    
                     'nilai'=>ubah_uang($request->nilai),
+                    'nilai_dibayar'=>ubah_uang($request->nilai),
                     'status_keuangan_id'=>$request->status_keuangan_id,
                     'keterangan'=>$request->keterangan,
                     'tanggal'=>$request->tanggal,
@@ -172,6 +221,66 @@ class KeuanganController extends Controller
             }
                 
             
+        }
+    }
+
+    public function store_bayar(request $request){
+        error_reporting(0);
+        $rules = [];
+        $messages = [];
+        
+        $rules['nilai_dibayarkan']= 'required|min:0|not_in:0';
+        $messages['nilai_dibayarkan.required']= 'Lengkapi nilai dibayarkan';
+        $messages['nilai_dibayarkan.not_in']= 'Lengkapi Nilai dibayarkan';
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        $val=$validator->Errors();
+
+
+        if ($validator->fails()) {
+            echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
+                foreach(parsing_validator($val) as $value){
+                    
+                    foreach($value as $isi){
+                        echo'-&nbsp;'.$isi.'<br>';
+                    }
+                }
+            echo'</div></div>';
+        }else{
+            $tanggal=date('Y-m-d');
+            $bulan=date('m');
+            $tahun=date('Y');
+            $odr=Stokorder::where('nomor_stok',$request->nomor_stok)->first();
+            
+                $nomor=penomoran_keuangan(1);
+                $keuangan=Keuangan::UpdateOrcreate([
+                        
+                    'nomor'=>$nomor,
+                ],[
+                    'nilai'=>ubah_uang($request->nilai_dibayarkan),
+                    'status_keuangan_id'=>2,
+                    'kategori_keuangan_id'=>1,
+                    'keterangan'=>'Pembayaran Nomor Order '.$request->nomor_stok.' '.$odr->msupplier['supplier'],
+                    'tanggal'=>$tanggal,
+                    'nomor_bayar'=>$request->nomor,
+                    'bulan'=>$bulan,
+                    'tahun'=>$tahun,
+                    'nilai_dibayar'=>ubah_uang($request->nilai_dibayarkan),
+                    'kat'=>1,
+                    'waktu'=>date('Y-m-d H:i:s'),
+                ]);
+
+                $byrt=Keuangan::Updateorcreate([
+                    
+                    'id'=>$request->id,
+                ],[
+                    'nilai'=>(ubah_uang($request->nilai)-ubah_uang($request->nilai_dibayarkan)),
+                    'nilai_dibayar'=>(ubah_uang($request->nilai_dibayarkan)+$request->uangmasuk),
+                    'waktu'=>date('Y-m-d H:i:s'),
+                ]);
+
+                echo'@ok@';
+           
         }
     }
 }

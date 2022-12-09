@@ -42,9 +42,19 @@
 										<td><span class="text-black-lighter">{{first_setting(2)['deskripsi']}}</span></td>
 									</tr>
                                     <tr>
+										<td class="bg-light">{{first_setting(6)['name']}}</td>
+										<td><a href="javascript:;" onclick="tambah(6,`Setting Penggunaan Stok`)" data-type="text" data-pk="6" data-title="Enter Username" class="editable editable-click">@if(setting_harga_jual()==1) Master Barang @else Stok Barang @endif</a></td>
+										<td><span class="text-black-lighter">{{first_setting(6)['deskripsi']}}</span></td>
+									</tr>
+                                    <tr>
 										<td class="bg-light">{{first_setting(3)['name']}}</td>
 										<td><a href="javascript:;" onclick="tambah(3,`Setting Ukuran Font Printer`)" data-type="text" data-pk="3" data-title="Enter Username" class="editable editable-click">{{setting_font_print()}}PX</a></td>
 										<td><span class="text-black-lighter">{{first_setting(3)['deskripsi']}}</span></td>
+									</tr>
+                                    <tr>
+										<td class="bg-light">{{first_setting(5)['name']}}</td>
+										<td><a href="javascript:;" onclick="tambah(5,`Setting item perhalaman`)" data-type="text" data-pk="5" data-title="Enter Username" class="editable editable-click">{{setting_page_print()}} Item</a></td>
+										<td><span class="text-black-lighter">{{first_setting(5)['deskripsi']}}</span></td>
 									</tr>
                                     <tr>
 										<td class="bg-light">{{first_setting(4)['name']}}</td>

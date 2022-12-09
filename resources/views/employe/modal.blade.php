@@ -38,10 +38,19 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Gaji</label>
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Harian</label>
                                     <div class="col-lg-4" style="padding: 0% 1% 0% 0%;">
                                         <div class="input-group input-group-sm">
                                             <input type="text"  name="gaji" value="{{$data->gaji}}" id="gaji" class="form-control form-control-sm" placeholder="Ketik disini...." />
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Uang Makan</label>
+                                    <div class="col-lg-4" style="padding: 0% 1% 0% 0%;">
+                                        <div class="input-group input-group-sm">
+                                            <input type="text"  name="uang_makan" value="{{$data->uang_makan}}" id="uang_makan" class="form-control form-control-sm" placeholder="Ketik disini...." />
                                             
                                         </div>
                                     </div>
@@ -53,4 +62,5 @@
                         </div>
                         <script>
                             $("#gaji").inputmask({ alias : "currency", prefix: '','groupSeparator': ',', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
+                            $("#uang_makan").inputmask({ alias : "currency", prefix: '','groupSeparator': ',', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
                         </script>

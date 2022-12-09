@@ -231,6 +231,14 @@ function setting_provit(){
     $data=App\Setting::where('id',1)->first();
     return $data->setting_int;
 }
+function setting_harga_jual(){
+    $data=App\Setting::where('id',6)->first();
+    return $data->setting_int;
+}
+function setting_page_print(){
+    $data=App\Setting::where('id',5)->first();
+    return $data->setting_int;
+}
 function sum_gaji(){
     $data=App\Employe::where('status',1)->sum('gaji');
     return $data;
@@ -259,12 +267,90 @@ function total_item_jual($nomor_transaksi){
     $data=App\Stok::where('nomor_transaksi',$nomor_transaksi)->count();
     return $data;
 }
+function cetak_item($nomor_stok,$x){
+    if($x==1){
+        $data=App\Viewstokorder::where('nomor_stok',$nomor_stok)->where('status',2)->whereBetween('urut',[1,18])->orderBy('urut','Asc')->get();
+    }
+    if($x==2){
+        $data=App\Viewstokorder::where('nomor_stok',$nomor_stok)->where('status',2)->whereBetween('urut',[19,37])->orderBy('urut','Asc')->get();
+    }
+    if($x==3){
+        $data=App\Viewstokorder::where('nomor_stok',$nomor_stok)->where('status',2)->whereBetween('urut',[37,56])->orderBy('urut','Asc')->get();
+    }
+    if($x==4){
+        $data=App\Viewstokorder::where('nomor_stok',$nomor_stok)->where('status',2)->whereBetween('urut',[56,75])->orderBy('urut','Asc')->get();
+    }
+    if($x==5){
+        $data=App\Viewstokorder::where('nomor_stok',$nomor_stok)->where('status',2)->whereBetween('urut',[75,94])->orderBy('urut','Asc')->get();
+    }
+    
+    return $data;
+}
+function cetak_item_kasir($nomor_transaksi,$x){
+    if($x==1){
+        $data=App\Viewstokkasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[1,18])->orderBy('urut','Asc')->get();
+    }
+    if($x==2){
+        $data=App\Viewstokkasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[19,37])->orderBy('urut','Asc')->get();
+    }
+    if($x==3){
+        $data=App\Viewstokkasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[37,56])->orderBy('urut','Asc')->get();
+    }
+    if($x==4){
+        $data=App\Viewstokkasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[56,75])->orderBy('urut','Asc')->get();
+    }
+    if($x==5){
+        $data=App\Viewstokkasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[75,94])->orderBy('urut','Asc')->get();
+    }
+    
+    return $data;
+}
 function total_harga_stok($nomor_stok){
     $data=App\Stok::where('nomor_stok',$nomor_stok)->sum('total_beli');
     return $data;
 }
+function jumlah_item_order($nomor_stok){
+    $data=App\Stok::where('nomor_stok',$nomor_stok)->count();
+    return $data;
+}
+function sum_item_order($nomor_stok){
+    $data=App\Stok::where('nomor_stok',$nomor_stok)->sum('total_beli');
+    return $data;
+}
+function jumlah_item_order_kasir($nomor_transaksi){
+    $data=App\Stok::where('nomor_transaksi',$nomor_transaksi)->count();
+    return $data;
+}
+function sum_item_order_kasir($nomor_transaksi){
+    $data=App\Stok::where('nomor_transaksi',$nomor_transaksi)->sum('total_jual');
+    return $data;
+}
+function harga_jual($kode){
+    $data=App\Barang::where('kode',$kode)->first();
+    return $data->harga_jual;
+}
+function harga_discon($kode){
+    $data=App\Barang::where('kode',$kode)->first();
+    return $data->harga_discon;
+}
+function discon_barang($kode){
+    $data=App\Barang::where('kode',$kode)->first();
+    return $data->discon;
+}
+function harga_beli($kode){
+    $data=App\Barang::where('kode',$kode)->first();
+    return $data->harga_beli;
+}
 function total_harga_jual($nomor_transaksi){
     $data=App\Stok::where('nomor_transaksi',$nomor_transaksi)->sum('total_jual');
+    return $data;
+}
+function total_harga_provite($nomor_transaksi){
+    $data=App\Stok::where('nomor_transaksi',$nomor_transaksi)->sum('provite');
+    return $data;
+}
+function total_harga_beli($nomor_transaksi){
+    $data=App\Stok::where('nomor_transaksi',$nomor_transaksi)->sum('total_beli');
     return $data;
 }
 function sisa($kode){
@@ -289,7 +375,7 @@ function setting_aktive_stok_value(){
     return $data->setting_int_value;
 }
 function get_satuan(){
-    $data=App\Satuan::orderBy('id','Asc')->get();
+    $data=App\Satuan::whereIn('id',array(1,2))->orderBy('id','Asc')->get();
     return $data;
 }
 function get_statuskeuangan(){
@@ -300,17 +386,27 @@ function first_setting($id){
     $data=App\Setting::where('id',$id)->first();
     return $data;
 }
+
+function pembulatan($uang)
+{
+    $ratusan = substr($uang, -3);
+    if($ratusan<500)
+    $akhir = $uang - $ratusan;
+    else
+    $akhir = $uang + (1000-$ratusan);
+    return $akhir;
+}
 function get_supplier(){
     $data=App\Supplier::orderBy('supplier','Asc')->get();
     return $data;
 }
 function get_barang(){
-    $data=App\Barang::orderBy('nama_barang','Asc')->get();
+    $data=App\Barang::where('aktive',1)->orderBy('nama_barang','Asc')->get();
     return $data;
 }
 function get_stokready(){
     if(setting_aktive_stok()==1){
-        $data=App\Stokup::where('sisa','>',0)->orderBy('nama_barang','Asc')->get();
+        $data=App\Stokup::select('kode','nama_barang')->where('sisa','>',0)->groupBy('kode','nama_barang')->orderBy('nama_barang','Asc')->get();
     }else{
         $data=App\Stokup::where('aktif','>',1)->orderBy('nama_barang','Asc')->get();
     }
@@ -343,6 +439,25 @@ function nomor_stok_ready($kode){
         if($cek>0){
             $data=App\Stokup::where('kode',$kode)->where('status',2)->where('sisa','>',0)->orderBy('id','Asc')->firstOrfail();
             return $data['nomor_stok'];
+        }else{
+            return 0;
+        }
+    }else{
+        $cek=App\Stokup::where('kode',$kode)->where('status',2)->where('aktif',1)->count();
+        if($cek>0){
+            $data=App\Stokup::where('kode',$kode)->where('status',2)->where('aktif',1)->first();
+            return $data['nomor_stok'];
+        }else{
+            return 0;
+        }
+    }
+}
+function supplier_stok_ready($kode){
+    if(setting_aktive_stok()==1){
+        $cek=App\Stokup::where('kode',$kode)->where('status',2)->where('sisa','>',0)->count();
+        if($cek>0){
+            $data=App\Stokup::where('kode',$kode)->where('status',2)->where('sisa','>',0)->orderBy('id','Asc')->firstOrfail();
+            return $data->mstokorder->msupplier['supplier'];
         }else{
             return 0;
         }
@@ -405,6 +520,58 @@ function first_join_kode($join_kode){
 function keuangan_total($status_keuangan){
     $data=App\Keuangan::where('status_keuangan_id',$status_keuangan)->sum('nilai');
     return $data;
+}
+function total_keluar($id){
+    $saldo=App\Keuangan::whereIn('status_keuangan_id',array(2,3))->where('tahun',$id)->where('kategori_keuangan_id',1)->sum('nilai');
+    return $saldo;
+}
+function total_keluar_bulan($bulan,$tahun){
+    $saldo=App\Keuangan::whereIn('status_keuangan_id',array(2,3))->where('bulan',$bulan)->where('tahun',$tahun)->where('kategori_keuangan_id',1)->sum('nilai');
+    return $saldo;
+}
+function total_keluar_tanggal($tanggal){
+    $saldo=App\Keuangan::whereIn('status_keuangan_id',array(2,3))->where('tanggal',$tanggal)->where('kategori_keuangan_id',1)->sum('nilai');
+    return $saldo;
+}
+function total_provit_keluar($id){
+    $saldo=App\Keuangan::where('status_keuangan_id',2)->where('tahun',$id)->whereNotIn('kategori_keuangan_id',array(1,2))->sum('nilai');
+    return $saldo;
+}
+function total_provit_keluar_bulan($bulan,$tahun){
+    $saldo=App\Keuangan::where('status_keuangan_id',2)->where('bulan',$bulan)->where('tahun',$tahun)->whereNotIn('kategori_keuangan_id',array(1,2))->sum('nilai');
+    return $saldo;
+}
+function total_provit_keluar_tanggal($tanggal){
+    $saldo=App\Keuangan::where('status_keuangan_id',2)->where('tanggal',$tanggal)->whereNotIn('kategori_keuangan_id',array(1,2))->sum('nilai');
+    return $saldo;
+}
+
+
+function total_saldo($id){
+    $saldo=App\Keuangan::where('status_keuangan_id',1)->where('tahun',$id)->where('kategori_keuangan_id',2)->sum('nilai');
+    return ($saldo-total_keluar($id));
+}
+function total_saldo_bulan($bulan,$tahun){
+    $saldo=App\Keuangan::where('status_keuangan_id',1)->where('kategori_keuangan_id',2)->where('bulan',$bulan)->where('tahun',$tahun)->sum('nilai');
+    return ($saldo-total_keluar_bulan($bulan,$tahun));
+}
+function total_saldo_tanggal($tanggal){
+    $saldo=App\Keuangan::where('status_keuangan_id',1)->where('kategori_keuangan_id',2)->where('tanggal',$tanggal)->sum('nilai');
+    return ($saldo-total_keluar_tanggal($tanggal));
+    
+}
+function total_provit($id){
+    $saldo=App\Keuangan::where('status_keuangan_id',1)->where('tahun',$id)->where('kategori_keuangan_id',6)->sum('nilai');
+    return ($saldo-total_provit_keluar($id));
+}
+function total_provit_bulan($bulan,$tahun){
+    
+    $saldo=App\Keuangan::where('status_keuangan_id',1)->where('kategori_keuangan_id',6)->where('bulan',$bulan)->where('tahun',$tahun)->sum('nilai');
+    return ($saldo-total_provit_keluar_bulan($bulan,$tahun));
+}
+function total_provit_tanggal($tanggal){
+    $saldo=App\Keuangan::where('status_keuangan_id',1)->where('kategori_keuangan_id',6)->where('tanggal',$tanggal)->sum('nilai');
+    return ($saldo-total_provit_keluar_tanggal($tanggal));
 }
 function keuangan_estimasi($status_keuangan){
     if($status_keuangan==1){

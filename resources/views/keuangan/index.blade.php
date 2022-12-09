@@ -39,58 +39,59 @@
         
                             <div class="col-md-4">
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 1%;" class="col-lg-12 col-form-label">REKAPAN KEUANGAN</label>
+                                    <label style="padding: 0% 1% 0% 1%;" class="col-lg-12 col-form-label">REKAPAN KEUANGAN {{$tahun}}</label>
                                 </div>
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Pemasukan</label>
-                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(keuangan_total(1))}}</div>
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Saldo</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_saldo($tahun))}}</div>
                                 </div>
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Pengeluaran</label>
-                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(keuangan_total(2))}}</div>
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Pembelian</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_keluar($tahun))}}</div>
                                 </div>
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Piutang</label>
-                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(keuangan_total(3))}}</div>
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Provit</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_provit($tahun))}}</div>
                                 </div>
                                
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 1%;" class="col-lg-12 col-form-label">ESTIMASI PENJUALAN</label>
+                                    <label style="padding: 0% 1% 0% 1%;" class="col-lg-12 col-form-label">REKAPAN KEUANGAN {{date('F Y',strtotime($tanggal))}}</label>
                                 </div>
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Modal</label>
-                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(keuangan_estimasi(1))}}</div>
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Saldo</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_saldo_bulan($bulan,$tahun))}}</div>
                                 </div>
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Sub Penjualan</label>
-                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(keuangan_estimasi(2))}}</div>
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Pembelian</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_keluar_bulan($bulan,$tahun))}}</div>
                                 </div>
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Provite</label>
-                                    <div class="col-lg-2" style="padding: 0% 1% 0% 1%;">{{uang(keuangan_estimasi(3))}}</div>
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Provit</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_provit_bulan($bulan,$tahun))}}</div>
                                 </div>
                                
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 1%;" class="col-lg-12 col-form-label">AKTUAL PENJUALAN</label>
+                                    <label style="padding: 0% 1% 0% 1%;" class="col-lg-12 col-form-label">REKAPAN KEUANGAN {{date('d F Y')}}</label>
                                 </div>
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Modal</label>
-                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(keuangan_aktual(1))}}</div>
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Saldo</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_saldo_tanggal($tanggal))}}</div>
                                 </div>
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Sub Penjualan</label>
-                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(keuangan_aktual(2))}}</div>
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Pembelian</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_keluar_tanggal($tanggal))}}</div>
                                 </div>
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Provite</label>
-                                    <div class="col-lg-2" style="padding: 0% 1% 0% 1%;">{{uang(keuangan_aktual(3))}}</div>
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Provit</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_provit_tanggal($tanggal))}}</div>
                                 </div>
                                
                             </div>
+                            
                         </div>
                         <div class="row" style="margin-left:0.1%;margin-right:0.1%;margin-bottom:2%;">
 
@@ -184,7 +185,7 @@
     </div>
 </div>  
 
-<div class="modal fade" id="modal-tukar" style="display: none;" aria-hidden="true">
+<div class="modal fade" id="modal-bayar" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -196,15 +197,14 @@
                     <div id="notifikasi-import"></div>
                     
                 </div> -->
-                <form class="form-horizontal form-bordered" style="margin-bottom: 1%; padding: 1% 0 1% 0;" id="mydatatukar" method="post" action="{{ url('stokorder/store_tukar') }}" enctype="multipart/form-data" >
+                <form class="form-horizontal form-bordered" style="margin-bottom: 1%; padding: 1% 0 1% 0;" id="mydatabayar" method="post" action="{{ url('keuangan/store_bayar') }}" enctype="multipart/form-data" >
                     @csrf 
-                    <input type="text" name="kode" value="{{$kode}}">
-                    <div id="tampil-form-tukar"></div>
+                    <div id="tampil-form-bayar"></div>
                  </form>
             </div>
             <div class="modal-footer">
                 <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Tutup</a>
-                <a href="javascript:;" class="btn btn-danger" onclick="simpan_tukar()" >Proses</a>
+                <a href="javascript:;" class="btn btn-danger" onclick="simpan_bayar()" >Proses</a>
             </div>
         </div>
     </div>
@@ -256,6 +256,11 @@
                 $('#modal-retur').modal('show');
                 $('#tampil-form-retur').load("{{url('keuangan/modal')}}?id="+id)
             }
+            function pembayaran_data(id){
+                $('#modal-bayar .modal-title').text('Form Pembayaran Piutang ');
+                $('#modal-bayar').modal('show');
+                $('#tampil-form-bayar').load("{{url('keuangan/modal_bayar')}}?id="+id)
+            }
             
 
             function simpan_data(){
@@ -266,6 +271,122 @@
                     $.ajax({
                         type: 'POST',
                         url: "{{ url('keuangan') }}",
+                        data: new FormData(form),
+                        contentType: false,
+                        cache: false,
+                        processData:false,
+                        beforeSend: function() {
+                            document.getElementById("loadnya").style.width = "100%";
+                        },
+                        success: function(msg){
+                            var bat=msg.split('@');
+                            if(bat[1]=='ok'){
+                                document.getElementById("loadnya").style.width = "0px";
+                                swal({
+                                        title: "Success! berhasil disimpan!",
+                                        icon: "success",
+                                });
+                                location.reload();    
+                            }else{
+                                document.getElementById("loadnya").style.width = "0px";
+                                swal({
+                                    title: 'Notifikasi',
+                                
+                                    html:true,
+                                    text:'ss',
+                                    icon: 'error',
+                                    buttons: {
+                                        cancel: {
+                                            text: 'Tutup',
+                                            value: null,
+                                            visible: true,
+                                            className: 'btn btn-dangers',
+                                            closeModal: true,
+                                        },
+                                        
+                                    }
+                                });
+                                $('.swal-text').html('<div style="width:100%;background:#f2f2f5;padding:1%;text-align:left;font-size:13px">'+msg+'</div>')
+                            }
+                            
+                            
+                        }
+                    });
+            }; 
+            function delete_data(id){
+           
+                swal({
+                    title: "Yakin menghapus data ini ?",
+                    text: "data akan hilang dari daftar ini",
+                    type: "warning",
+                    icon: "error",
+                    showCancelButton: true,
+                    align:"center",
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }).then((willDelete) => {
+                    if (willDelete) {
+                            $.ajax({
+                                type: 'GET',
+                                url: "{{url('keuangan/delete_data')}}",
+                                data: "id="+id,
+                                success: function(msg){
+                                    swal("Success! berhasil terhapus!", {
+                                        icon: "success",
+                                    });
+                                    location.reload();
+                                }
+                            });
+                        
+                        
+                    } else {
+                        
+                    }
+                });
+                
+            }      
+            function delete_data_bayar(id){
+           
+                swal({
+                    title: "Yakin menghapus data ini ?",
+                    text: "data akan hilang dari daftar ini",
+                    type: "warning",
+                    icon: "error",
+                    showCancelButton: true,
+                    align:"center",
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }).then((willDelete) => {
+                    if (willDelete) {
+                            $.ajax({
+                                type: 'GET',
+                                url: "{{url('keuangan/delete_data_bayar')}}",
+                                data: "id="+id,
+                                success: function(msg){
+                                    swal("Success! berhasil terhapus!", {
+                                        icon: "success",
+                                    });
+                                    location.reload();
+                                }
+                            });
+                        
+                        
+                    } else {
+                        
+                    }
+                });
+                
+            }      
+            function simpan_bayar(){
+            
+                var form=document.getElementById('mydatabayar');
+                
+                    
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ url('keuangan/store_bayar') }}",
                         data: new FormData(form),
                         contentType: false,
                         cache: false,

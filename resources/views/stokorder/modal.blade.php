@@ -4,7 +4,7 @@
         
         <div class="col-md-8">
             <div class="form-group row">
-                <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Kode BR/Nama Barang</label>
+                <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Kode BR/Nama Barang</label>
                 <div class="col-lg-6" style="padding: 0% 1% 0% 0%;">
                     <div class="input-group input-group-sm">
                         <select name="kode" onchange="cari_barang(this.value)" class="form-control form-control-sm " id="default-select2" placeholder="Ketik disini....">
@@ -26,10 +26,10 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Harga Beli & Jual</label>
+                <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Harga Beli / Jual / Discon</label>
                 <div class="col-lg-3" style="padding: 0% 1% 0% 0%;">
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" name="harga_beli" value="{{$data->harga_beli}}" onkeyup="tentukan_provit(this.value)" id="currency1" placeholder="999/99/9999">
+                        <input type="text" class="form-control" name="harga_beli" value="{{$data->harga_beli}}"  onkeyup="tentukan_provit(this.value)" id="currency1" placeholder="999/99/9999">
                     </div>
                 </div>
                 <div class="col-lg-3" style="padding: 0% 1% 0% 0%;">
@@ -37,18 +37,23 @@
                         <input type="text" class="form-control" name="harga_jual" value="{{$data->harga_jual}}" @if(setting_provit()==1) readonly @endif id="currency2" placeholder="999/99/9999">
                     </div>
                 </div>
+                <div class="col-lg-2" style="padding: 0% 1% 0% 0%;">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" name="discon" id="discon" value="{{$data->discon}}"  placeholder="%">
+                    </div>
+                </div>
                 
             </div>
             <div class="form-group row">
-                <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Qty & Expired</label>
+                <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Qty & Expired</label>
                 <div class="col-lg-2" style="padding: 0% 1% 0% 0%;">
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" name="qty" value="{{$data->qty}}" id="currency3" placeholder="0">
+                        <input type="text" class="form-control" name="qty" value="{{$data->qty}}" id="currency3"  @if($order->status==0) onkeypress="proses_enter(event)" @endif placeholder="0">
                     </div>
                 </div>
                 <div class="col-lg-3" style="padding: 0% 1% 0% 0%;">
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" name="expired" readonly value="{{$data->expired}}" id="tanggal" placeholder="yyyy-mm-dd">
+                        <input type="text" class="form-control" name="expired" readonly value="{{$data->expired}}"  @if($order->status==0) onkeypress="proses_enter(event)" @endif id="tanggal" placeholder="yyyy-mm-dd">
                     </div>
                 </div>
                 
@@ -84,10 +89,12 @@
                             <span class="btn btn-primary btn-sm" onclick="simpan_data()"><i class="fas fa-save"></i> Tambah</span>
                         @endif
                         <span class="btn btn-success btn-sm" onclick="terima_data()"><i class="fas fa-check-circle"></i> Selesai </span>
-                    @endif
+                    @else
                     
+                    <span class="btn btn-success btn-sm" onclick="data_baru()"><i class="fas fa-plus"></i> Buat Baru </span>
                     <span class="btn btn-success btn-sm" onclick="cetak_data()"><i class="fas fa-print"></i> Print </span>
                     <span class="btn btn-success btn-sm" onclick="download_data()"><i class="fas fa-print"></i> Download </span>
+                    @endif
                 </div>
             </div>
             
@@ -98,9 +105,13 @@
 
     <script>
         $("#default-select2").select2();
+        @if($order->status==0)
+        $("#default-select2").select2('open');
+        @endif
         $("#currency1").inputmask({ alias : "currency", prefix: '','groupSeparator': ',', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
         $("#currency2").inputmask({ alias : "currency", prefix: '','groupSeparator': ',', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
         $("#currency3").inputmask({ alias : "currency", prefix: '', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
+        $("#diskon").inputmask({ alias : "currency", prefix: '', 'autoGroup': true, 'digits': 1, 'digitsOptional': false });
         
         $('#tanggal').datepicker({
             format:"yyyy-mm-dd",
@@ -110,11 +121,14 @@
             $.ajax({
                 type: 'GET',
                 url: "{{url('barang/cari_barang')}}",
-                data: "kode="+text,
+                data: "supplier_id={{$order->supplier_id}}&kode="+text,
                 success: function(msg){
                     var bat=msg.split('@');
         
                         $('#satuan').val(bat[1]);
+                        $('#currency1').val(bat[3]);
+                        $('#currency2').val(bat[2]);
+                        $('#discon').val(bat[4]);
                 }
             });
         }

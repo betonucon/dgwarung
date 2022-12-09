@@ -4,12 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Stokup extends Model
+class Viewstokkasir extends Model
 {
-    protected $table = 'view_stok_up';
+    protected $table = 'view_stok_kasir';
+    protected $guarded = ['id'];
     public $timestamps = false;
-    function mstokorder(){
-        return $this->belongsTo('App\Stokorder','nomor_stok','nomor_stok');
+    function msupplier(){
+        return $this->belongsTo('App\Supplier','supplier_id','id');
     }
     // function mgroup(){
     //     return $this->belongsTo('App\Models\Group','group_id','id');

@@ -6,7 +6,7 @@
             font-family: sans-serif;
         }
         td {
-            font-size: 11px !important;
+            font-size: 12px !important;
             font-family: sans-serif;
         }
     </style>
@@ -32,71 +32,91 @@
                 <!-- end panel-heading -->
                 <!-- begin panel-body -->
                 <div class="panel-body panel-form">
-                    <form class="form-horizontal form-bordered" style="padding:1%;background: #c1c1c5;" id="mydata" method="post" action="{{ url('warga') }}" enctype="multipart/form-data" >
+                    <form class="form-horizontal form-bordered" style="padding:1%;background: #c1c1c5;"  method="post" action="{{ url('warga') }}" enctype="multipart/form-data" >
                         @csrf 
                         <input type="hidden" name="id" value="{{$id}}">
                         <div class="row" style="background:#fff;margin-left:0.1%;margin-right:0.1%;margin-bottom:2%;padding: 1% 1% 1% 0%; border-radius: 5px;">
         
-                            <div class="col-md-12">
+                            <div class="col-md-4">
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 1%;" class="col-lg-2 col-form-label">Kode BR</label>
-                                    <div class="col-lg-2" style="padding: 0% 1% 0% 1%;">{{$data->kode}}</div>
+                                    <label style="padding: 0% 1% 0% 1%;" class="col-lg-12 col-form-label">REKAPAN KEUANGAN {{$tahun}}</label>
                                 </div>
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 1%;" class="col-lg-2 col-form-label">Nama Barang</label>
-                                    <div class="col-lg-2" style="padding: 0% 1% 0% 1%;">{{$data->nama_barang}}</div>
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Saldo</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_saldo($tahun))}}</div>
                                 </div>
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 1%;" class="col-lg-2 col-form-label">Satuan</label>
-                                    <div class="col-lg-2" style="padding: 0% 1% 0% 1%;">{{$data->satuan}}/{{$data->kd_satuan}}</div>
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Pembelian</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_keluar($tahun))}}</div>
                                 </div>
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 1%;" class="col-lg-2 col-form-label">Keterangan</label>
-                                    <div class="col-lg-2" style="padding: 0% 1% 0% 1%;">{{$data->keterangan}}</div>
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Provit</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_provit($tahun))}}</div>
                                 </div>
+                               
                             </div>
+                            <div class="col-md-4">
+                                <div class="form-group row">
+                                    <label style="padding: 0% 1% 0% 1%;" class="col-lg-12 col-form-label">REKAPAN KEUANGAN {{date('F Y',strtotime($tanggal))}}</label>
+                                </div>
+                                <div class="form-group row">
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Saldo</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_saldo_bulan($bulan,$tahun))}}</div>
+                                </div>
+                                <div class="form-group row">
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Pembelian</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_keluar_bulan($bulan,$tahun))}}</div>
+                                </div>
+                                <div class="form-group row">
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Provit</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_provit_bulan($bulan,$tahun))}}</div>
+                                </div>
+                               
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group row">
+                                    <label style="padding: 0% 1% 0% 1%;" class="col-lg-12 col-form-label">REKAPAN KEUANGAN {{date('d F Y')}}</label>
+                                </div>
+                                <div class="form-group row">
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Saldo</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_saldo_tanggal($tanggal))}}</div>
+                                </div>
+                                <div class="form-group row">
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Pembelian</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_keluar_tanggal($tanggal))}}</div>
+                                </div>
+                                <div class="form-group row">
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Provit</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_provit_tanggal($tanggal))}}</div>
+                                </div>
+                               
+                            </div>
+                            
                         </div>
                         <div class="row" style="margin-left:0.1%;margin-right:0.1%;margin-bottom:2%;">
 
         
                             <div class="col-md-12" style="padding:0px">
                                 <div class="btn-group btn-group-justified">
-                                    <a class="btn btn-blue text-white" onclick="retur_data()"><i class="fas fa-backward"></i> Retur</a>
-                                    <a class="btn btn-green text-white" onclick="tukar_data()"><i class="fas fa-object-ungroup"></i> Tukar Satuan</a>
+                                    <a class="btn btn-blue text-white" onclick="tambah_data(0)"><i class="fas fa-plus"></i> Tambah</a>
                                 </div>
                             </div>
                         </div>
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
-                                <a href="{{url('stok/view')}}?kode={{$kode}}" class="nav-link @if($act==0) active @endif">
-                                    <span class="d-sm-none">Tersedia</span>
-                                    <span class="d-sm-block d-none">Stok Tersedia</span>
+                                <a href="{{url('keuangan')}}?act=0" class="nav-link @if($act==0) active @endif">
+                                    <span class="d-sm-none">All Transaksi</span>
+                                    <span class="d-sm-block d-none">All Transaksi</span>
                                 </a>
                             </li>
+                            @foreach(get_statuskeuangan() as $get)
                             <li class="nav-item">
-                                <a  href="{{url('stok/view')}}?kode={{$kode}}&act=2"  class="nav-link  @if($act==2) active @endif">
-                                    <span class="d-sm-none">Order</span>
-                                    <span class="d-sm-block d-none">Order</span>
+                                <a  href="{{url('keuangan')}}?act={{$get->id}}"  class="nav-link  @if($act==$get->id) active @endif">
+                                    <span class="d-sm-none">{{$get->status_keuangan}}</span>
+                                    <span class="d-sm-block d-none">{{$get->status_keuangan}}</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a  href="{{url('stok/view')}}?kode={{$kode}}&act=3"  class="nav-link  @if($act==3) active @endif">
-                                    <span class="d-sm-none">Terjual</span>
-                                    <span class="d-sm-block d-none">Terjual</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a  href="{{url('stok/view')}}?kode={{$kode}}&act=4"  class="nav-link  @if($act==4) active @endif">
-                                    <span class="d-sm-none">Retur</span>
-                                    <span class="d-sm-block d-none">Retur</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a  href="{{url('stok/view')}}?kode={{$kode}}&act=5"  class="nav-link  @if($act==5) active @endif">
-                                    <span class="d-sm-none">Tukar</span>
-                                    <span class="d-sm-block d-none">Tukar</span>
-                                </a>
-                            </li>
+                            @endforeach
                             
                         </ul>
                         <!-- end nav-tabs -->
@@ -105,41 +125,22 @@
                            
                                 <div class="tab-pane fade active show " id="default-tab-1">
                                     <div class="table-responsive ">
-                                    @if($act==0)
-                                        <table id="data-table-fixed-sisa" class="table table-striped table-bordered table-td-valign-middle   dt-responsive display nowrap" cellspacing="0">
+                                        
+                                        <table id="data-table-fixed-sisa" class="table table-striped table-bordered table-td-valign-middle hover   dt-responsive display nowrap" cellspacing="0">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-nowrap" width="3%">No</th>
-                                                    <th class="text-nowrap" width="7%">Kode</th>
-                                                    <th class="text-nowrap">Nama Barang</th>
-                                                    <th class="text-nowrap">Supplier</th>
-                                                    <th class="text-nowrap"  width="7%">Sisa</th>
-                                                    <th class="text-nowrap"  width="9%" style="text-align:left !important">H.Jual</th>
-                                                    <th class="text-nowrap"  width="9%" style="text-align:left !important">H.Beli</th>
-                                                    <th class="text-nowrap"  width="6%">Status</th>
-                                                    <th class="text-nowrap"  width="12%">Waktu</th>
-                                                    <th class="text-nowrap"  width="3%"></th>
+                                                    <th class="text-nowrap" width="6%">No</th>
+                                                    <th class="text-nowrap" width="10%">Transaksi</th>
+                                                    <th class="text-nowrap" width="15%">Kategori</th>
+                                                    <th class="text-nowrap">Keterangan</th>
+                                                    <th class="text-nowrap"  width="10%">Satus</th>
+                                                    <th class="text-nowrap"  width="13%" style="text-align:left !important">Nilai</th>
+                                                    <th class="text-nowrap"  width="14%">Waktu</th>
+                                                    <th class="text-nowrap"  width="5%"></th>
                                                 </tr>
                                             </thead>
                                             
                                         </table>
-                                    @else
-                                        <table id="data-table-fixed-sisa" class="table table-striped table-bordered table-td-valign-middle   dt-responsive display nowrap" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-nowrap" width="3%">No</th>
-                                                    <th class="text-nowrap" width="10%">Kode</th>
-                                                    <th class="text-nowrap">Nama Barang</th>
-                                                    <th class="text-nowrap">Supplier</th>
-                                                    <th class="text-nowrap"  width="7%">Satuan</th>
-                                                    <th class="text-nowrap"  width="7%">Qty</th>
-                                                    <th class="text-nowrap"  width="11%">Status</th>
-                                                    <th class="text-nowrap"  width="12%">Waktu</th>
-                                                </tr>
-                                            </thead>
-                                            
-                                        </table>
-                                    @endif
                                     </div>
                                     
                                 </div>
@@ -171,21 +172,20 @@
                     <div id="notifikasi-import"></div>
                     
                 </div> -->
-                <form class="form-horizontal form-bordered" style="margin-bottom: 1%; padding: 1% 0 1% 0;" id="mydataretur" method="post" action="{{ url('stokorder/store_retur') }}" enctype="multipart/form-data" >
+                <form class="form-horizontal form-bordered" style="margin-bottom: 1%; padding: 1% 0 1% 0;" id="mydata" method="post" action="{{ url('keuangan') }}" enctype="multipart/form-data" >
                     @csrf 
-                    <input type="text" name="kode" value="{{$kode}}">
                     <div id="tampil-form-retur"></div>
                  </form>
             </div>
             <div class="modal-footer">
                 <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Tutup</a>
-                <a href="javascript:;" class="btn btn-danger" onclick="simpan_retur()" >Proses</a>
+                <a href="javascript:;" class="btn btn-danger" onclick="simpan_data()" >Proses</a>
             </div>
         </div>
     </div>
 </div>  
 
-<div class="modal fade" id="modal-tukar" style="display: none;" aria-hidden="true">
+<div class="modal fade" id="modal-bayar" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -197,40 +197,14 @@
                     <div id="notifikasi-import"></div>
                     
                 </div> -->
-                <form class="form-horizontal form-bordered" style="margin-bottom: 1%; padding: 1% 0 1% 0;" id="mydatatukar" method="post" action="{{ url('stokorder/store_tukar') }}" enctype="multipart/form-data" >
+                <form class="form-horizontal form-bordered" style="margin-bottom: 1%; padding: 1% 0 1% 0;" id="mydatabayar" method="post" action="{{ url('keuangan/store_bayar') }}" enctype="multipart/form-data" >
                     @csrf 
-                    <input type="text" name="kode" value="{{$kode}}">
-                    <div id="tampil-form-tukar"></div>
+                    <div id="tampil-form-bayar"></div>
                  </form>
             </div>
             <div class="modal-footer">
                 <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Tutup</a>
-                <a href="javascript:;" class="btn btn-danger" onclick="simpan_tukar()" >Proses</a>
-            </div>
-        </div>
-    </div>
-</div>   
-<div class="modal fade" id="modal-ubah" style="display: none;" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title"></h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <div class="modal-body">
-                <!-- <div class="alert alert-danger m-b-0" id="notifikasiimport">
-                    <div id="notifikasi-import"></div>
-                    
-                </div> -->
-                <form class="form-horizontal form-bordered" style="margin-bottom: 1%; padding: 1% 0 1% 0;" id="mydataubah" method="post" action="{{ url('stokorder/store_ubah') }}" enctype="multipart/form-data" >
-                    @csrf 
-                    <input type="hidden" name="kode" value="{{$kode}}">
-                    <div id="tampil-form-ubah"></div>
-                 </form>
-            </div>
-            <div class="modal-footer">
-                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Tutup</a>
-                <a href="javascript:;" class="btn btn-danger" onclick="simpan_ubah()" >Proses</a>
+                <a href="javascript:;" class="btn btn-danger" onclick="simpan_bayar()" >Proses</a>
             </div>
         </div>
     </div>
@@ -245,84 +219,58 @@
         Author: Sean Ngu
         Website: http://www.seantheme.com/color-admin/admin/
         */
-            @if($act==0)
-                $('#data-table-fixed-sisa').DataTable({
-                    lengthMenu: [20],
-                    fixedHeader: {
-                        header: true,
-                        headerOffset: $('#header').height()
+        
+            $('#data-table-fixed-sisa').DataTable({
+                lengthMenu: [20],
+                fixedHeader: {
+                    header: true,
+                    headerOffset: $('#header').height()
+                },
+                responsive: false,
+                ajax:"{{ url('keuangan/get_data')}}?even={{$act}}",
+                columns: [
+                    { data: 'kode', render: function (data, type, row, meta) 
+                        {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        } 
                     },
-                    responsive: false,
-                    ajax:"{{ url('stok/get_data_tersedia')}}?kode={{$kode}}",
-                    columns: [
-                        { data: 'kode', render: function (data, type, row, meta) 
-                            {
-                                return meta.row + meta.settings._iDisplayStart + 1;
-                            } 
-                        },
-                        { data: 'kode' },
-                        { data: 'nama_barang_lengkap' },
-                        { data: 'supplier' },
-                        { data: 'sisanya' },
-                        { data: 'u_harga_jual' ,className: "text-right"  },
-                        { data: 'u_harga_beli' ,className: "text-right"  },
-                        { data: 'status_data' },
-                        { data: 'update' },
-                        { data: 'action' },
-                        
-                    ]
-                });
+                    { data: 'nomor' },
+                    { data: 'kategori_keuangan' },
+                    { data: 'keterangan' },
+                    { data: 'status_keuangan' },
+                    { data: 'uang_nilai' ,className: "text-right"  },
+                    { data: 'waktu' },
+                    { data: 'action' },
+                    
+                ],
+                columnDefs: [
+                    {
+                        targets: 6,
+                        className: 'dt-body-right'
+                    }
+                ]
+            });
 
-            @else
-                $('#data-table-fixed-sisa').DataTable({
-                    lengthMenu: [20],
-                    fixedHeader: {
-                        header: true,
-                        headerOffset: $('#header').height()
-                    },
-                    responsive: false,
-                    ajax:"{{ url('stok/get_data_even')}}?kode={{$kode}}&even={{$act}}",
-                    columns: [
-                        { data: 'kode', render: function (data, type, row, meta) 
-                            {
-                                return meta.row + meta.settings._iDisplayStart + 1;
-                            } 
-                        },
-                        { data: 'kode' },
-                        { data: 'nama_barang' },
-                        { data: 'supplier' },
-                        { data: 'satuan' },
-                        { data: 'qty' },
-                        { data: 'status_data' },
-                        { data: 'update' },
-                        
-                    ]
-                });
-            @endif
-            function retur_data(){
-                $('#modal-retur .modal-title').text('Retur Barang ');
+            function tambah_data(id){
+                $('#modal-retur .modal-title').text('Form Keuangan ');
                 $('#modal-retur').modal('show');
-                $('#tampil-form-retur').load("{{url('stokorder/modal_retur')}}?kode={{$kode}}")
+                $('#tampil-form-retur').load("{{url('keuangan/modal')}}?id="+id)
             }
-            function ubah_data(id){
-                $('#modal-ubah .modal-title').text('Ubah Harga Jual ');
-                $('#modal-ubah').modal('show');
-                $('#tampil-form-ubah').load("{{url('stokorder/modal_ubah')}}?id="+id)
+            function pembayaran_data(id){
+                $('#modal-bayar .modal-title').text('Form Pembayaran Piutang ');
+                $('#modal-bayar').modal('show');
+                $('#tampil-form-bayar').load("{{url('keuangan/modal_bayar')}}?id="+id)
             }
-            function tukar_data(){
-                $('#modal-tukar .modal-title').text('Tukar Satuan Barang ');
-                $('#modal-tukar').modal('show');
-                $('#tampil-form-tukar').load("{{url('stokorder/modal_tukar')}}?kode={{$kode}}")
-            }
-
-            function simpan_retur(){
             
-                var form=document.getElementById('mydataretur');
+
+            function simpan_data(){
+            
+                var form=document.getElementById('mydata');
                 
                     
                     $.ajax({
                         type: 'POST',
-                        url: "{{ url('stokorder/store_retur') }}",
+                        url: "{{ url('keuangan') }}",
                         data: new FormData(form),
                         contentType: false,
                         cache: false,
@@ -364,16 +312,15 @@
                             
                         }
                     });
-            };   
-
-            function simpan_ubah(){
+            };       
+            function simpan_bayar(){
             
-                var form=document.getElementById('mydataubah');
+                var form=document.getElementById('mydatabayar');
                 
                     
                     $.ajax({
                         type: 'POST',
-                        url: "{{ url('stokorder/store_ubah') }}",
+                        url: "{{ url('keuangan/store_bayar') }}",
                         data: new FormData(form),
                         contentType: false,
                         cache: false,
@@ -389,7 +336,7 @@
                                         title: "Success! berhasil disimpan!",
                                         icon: "success",
                                 });
-                                location.assign("{{url('stok/view')}}?kode={{$kode}}");    
+                                location.reload();    
                             }else{
                                 document.getElementById("loadnya").style.width = "0px";
                                 swal({

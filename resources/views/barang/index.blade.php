@@ -40,6 +40,9 @@
                                         <th class="text-nowrap"  width="25%">Nama Barang</th>
                                         <th class="text-nowrap" >Keterangan</th>
                                         <th class="text-nowrap"  width="7%">Satuan</th>
+                                        <th class="text-nowrap"  width="10%" style="text-align:left !important">H.Jual</th>
+                                        <th class="text-nowrap"  width="10%" style="text-align:left !important">H.Beli</th>
+                                        <th class="text-nowrap"  width="6%"">Discon</th>
                                         <th class="text-nowrap" width="8%">Act</th>
                                     </tr>
                                 </thead>
@@ -56,30 +59,32 @@
     </div>
     <!-- end row -->
 </div>
-<div class="modal fade" id="modal-import" style="display: none;" aria-hidden="true">
+<div class="modal fade" id="modal-kalkulator" style="display: none;" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Alert Header</h4>
+                <h4 class="modal-title">Perhitungan Rupiah Ke %</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
-                <div class="alert alert-danger m-b-0" id="notifikasiimport">
-                    <div id="notifikasi-import"></div>
-                    
+               
+                <div class="form-group">
+                    <label>Harga Jual</label>
+                    <input type="text" id="harga_jual_nya" class="form-control" />
                 </div>
-                <form class="form-horizontal form-bordered" id="mydataimport" method="post" action="{{ url('pengumuman/import') }}" enctype="multipart/form-data" >
-                    @csrf 
-                    <!-- <input type="submit"> -->
-                    <div class="form-group">
-                        <label>Upload File Excel</label>
-                        <input type="file" name="file" class="form-control" />
-                    </div>
-                </form>
+                <div class="form-group">
+                    <label>Potongan</label>
+                    <input type="text" id="potongannya" onkeyup="tentukan_persen(this.value)" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Hasil</label>
+                    <input type="text" id="hasilnya" class="form-control" />
+                </div>
+                
             </div>
             <div class="modal-footer">
-                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Tutup</a>
-                <a href="javascript:;" class="btn btn-danger" id="import-data" >Proses</a>
+                <a href="javascript:;" class="btn btn-danger" data-dismiss="modal">Tutup</a>
+                <a href="javascript:;" class="btn btn-primary"  >Gunakan</a>
             </div>
         </div>
     </div>
@@ -118,6 +123,9 @@
 						{ data: 'nama_barangnya' },
 						{ data: 'keterangan' },
 						{ data: 'satuan' },
+						{ data: 'uang_harga_jual',className: "text-right"  },
+						{ data: 'uang_harga_beli',className: "text-right"  },
+						{ data: 'diskonnya' },
 						{ data: 'action' },
 						
 					],
@@ -156,6 +164,19 @@
                 $('.checkbox').not(this).prop('checked', this.checked);
             }
         });
+        function buat_baru(){
+            $('#tampil-form').load("{{url('barang/modal')}}?id=0")
+        }
+        function tampil_kalkulator(){
+            var jual=$('#harga_jual_int').val();
+            $('#harga_jual_nya').val(jual);
+            $('#modal-kalkulator').modal("show");
+        }
+        function tentukan_persen(nilai){
+            var jual=$('#harga_jual_nya').val();
+            var hasil=Math.ceil((nilai/jual)*100);
+                $('#hasilnya').val(hasil);
+        }
         function edit_data(id){
             $('#tampil-form').load("{{url('barang/modal')}}?id="+id)
         }

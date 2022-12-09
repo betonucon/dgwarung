@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 use App\Barang;
+use App\Viewstokorder;
 use App\User;
 
 class BarangController extends Controller
@@ -52,13 +53,32 @@ class BarangController extends Controller
 
     public function cari_barang(request $request)
     {
+        error_reporting(0);
+        $cek=Viewstokorder::where('kode',$request->kode)->where('status',2)->where('supplier_id',$request->supplier_id)->count();
+        if($cek>0){
+            $data=Viewstokorder::where('kode',$request->kode)->where('status',2)->where('supplier_id',$request->supplier_id)->orderBy('id','Desc')->firstOrfail();
+            $harga_jual=$data->harga_jual;
+            $harga_beli=$data->harga_beli;
+            $discon=$data->discon;
+        }else{
+            $harga_jual=0;
+            $harga_beli=0;
+            $discon=0;
+        }
         $dT=Barang::where('kode',$request->kode)->first();
-        return '@'.$dT->satuan;
+        return '@'.$dT->satuan.'@'.$harga_jual.'@'.$harga_beli.'@'.$discon;
     }
     public function cari_barang_jual(request $request)
     {
         $dT=Barang::where('kode',$request->kode)->first();
-        return '@'.$dT->satuan.'@'.stok_ready($request->kode).'@'.nomor_stok_ready($request->kode).'@'.jual_stok_ready($request->kode);
+        if(setting_harga_jual()==1){
+            $discon=(harga_jual($request->kode)-harga_discon($request->kode));
+            return '@'.$dT->satuan.'@'.stok_ready($request->kode).'@'.nomor_stok_ready($request->kode).'@'.harga_jual($request->kode).'@'.supplier_stok_ready($request->kode).'@'.$discon;
+        }else{
+            $discon=0;
+            return '@'.$dT->satuan.'@'.stok_ready($request->kode).'@'.nomor_stok_ready($request->kode).'@'.jual_stok_ready($request->kode).'@'.supplier_stok_ready($request->kode).'@'.$discon;
+        }
+        
     }
 
     public function get_data(request $request)
@@ -87,6 +107,18 @@ class BarangController extends Controller
                 $btn=$row->nama_barang.' ('.$row->satuan.')';
                 return $btn;
             })
+            ->addColumn('uang_harga_jual', function ($row) {
+                $btn=uang($row->harga_jual);
+                return $btn;
+            })
+            ->addColumn('uang_harga_beli', function ($row) {
+                $btn=uang($row->harga_beli);
+                return $btn;
+            })
+            ->addColumn('diskonnya', function ($row) {
+                $btn=$row->discon.' %';
+                return $btn;
+            })
             
             ->rawColumns(['action','checkbox'])
             ->make(true);
@@ -98,6 +130,7 @@ class BarangController extends Controller
             'aktive'=>0
         ]);
     }
+    
     public function delete_data_all(request $request){
         error_reporting(0);
         if(count($request->id)>0){
@@ -115,11 +148,22 @@ class BarangController extends Controller
         
     }
     public function get_barang(request $request){
-        $data = Barang::get();
+        $data = Barang::where('kd_satuan','D')->get();
         foreach($data as $o){
            
-                $bar=Barang::where('id',$o->id)->update([
-                    'join_kode'=>substr($o->kode,3,7),
+                $bar=Barang::UpdateOrcreate([
+                    'kode'=>'BRP'.$o->join_kode,
+                ],[
+                    'nama_barang'=>$o->nama_barang,
+                    'satuan'=>'Pack',
+                    'kd_satuan'=>'P',
+                    'aktive'=>'1',
+                    'join_kode'=>$o->join_kode,
+                    'waktu'=>$o->waktu,
+                    'harga_beli'=>0,
+                    'harga_jual'=>0,
+                    'harga_discon'=>0,
+                    'discon'=>0,
                 ]);
             
         }
@@ -148,8 +192,14 @@ class BarangController extends Controller
         }else{
             $rules['nama_barang']= 'required';
             $messages['nama_barang.required']= 'Lengkapi nama barang';
-            $rules['satuannya']= 'required';
-            $messages['satuannya.required']= 'Pilih satuan';
+            
+            $rules['harga_jual']= 'required|min:0|not_in:0';
+            $messages['harga_jual.required']= 'Lengkapi harga jual';
+            $messages['harga_jual.not_in']= 'Lengkapi harga jual';
+            
+            $rules['harga_beli']= 'required|min:0|not_in:0';
+            $messages['harga_beli.required']= 'Lengkapi harga jual';
+            $messages['harga_beli.not_in']= 'Lengkapi harga jual';
         }
         
         
@@ -185,8 +235,13 @@ class BarangController extends Controller
                         $data->join_kode  = $kodebarang;
                         $data->kode  = 'BR'.$request->satuan[$x].$kodebarang;
                         $data->nama_barang  = $request->nama_barang;
-                        $data->keterangan  = $request->keterangan;
+                        $data->keterangan  = $request->keterangan[$x];
                         $data->kd_satuan  = $request->satuan[$x];
+                        $data->aktive  = 1;
+                        $data->discon  = 0;
+                        $data->harga_jual  = 0;
+                        $data->harga_beli  = 0;
+                        $data->harga_discon  = 0;
                         $data->satuan  = satuan($request->satuan[$x]);
                         $data->save();
                     }
@@ -230,6 +285,11 @@ class BarangController extends Controller
                 echo'@ok';
             }else{
                 $data       = Barang::find($request->id);
+                $data->keterangan  = $request->keterangan;
+                $data->harga_jual  = ubah_uang($request->harga_jual);
+                $data->harga_beli  = ubah_uang($request->harga_beli);
+                $data->discon  = ubah_uang($request->discon);
+                $data->harga_discon  = ubah_uang($request->harga_jual)-pembulatan((ubah_uang($request->harga_jual)*ubah_uang($request->discon))/100);
                 $data->keterangan  = $request->keterangan;
                 $data->save();
 
