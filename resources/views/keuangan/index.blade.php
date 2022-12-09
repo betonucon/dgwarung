@@ -109,6 +109,12 @@
                                     <span class="d-sm-block d-none">All Transaksi</span>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{url('keuangan')}}?act=8" class="nav-link @if($act==8) active @endif">
+                                    <span class="d-sm-none">Provit</span>
+                                    <span class="d-sm-block d-none">Provit</span>
+                                </a>
+                            </li>
                             @foreach(get_statuskeuangan() as $get)
                             <li class="nav-item">
                                 <a  href="{{url('keuangan')}}?act={{$get->id}}"  class="nav-link  @if($act==$get->id) active @endif">

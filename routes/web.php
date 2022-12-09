@@ -48,6 +48,7 @@ Route::group(['prefix' => 'keuangan','middleware'    => 'auth'],function(){
     Route::get('/get_data','KeuanganController@get_data');
     Route::get('/delete_data','KeuanganController@delete_data');
     Route::get('/delete_data_bayar','KeuanganController@delete_data_bayar');
+    Route::get('/tentukan_status','KeuanganController@tentukan_status');
     Route::get('/create','KeuanganController@create');
     Route::get('/modal','KeuanganController@modal');
     Route::get('/modal_bayar','KeuanganController@modal_bayar');

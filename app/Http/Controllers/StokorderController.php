@@ -584,12 +584,23 @@ class StokorderController extends Controller
             echo'</div></div>';
         }else{
             
+                    $gt=Stok::where('id',$request->id)->first();
                     $data=Stok::where('id',$request->id)->update([
                         
                         'harga_jual'=>ubah_uang($request->harga_jual),
                         'update'=>date('Y-m-d H:i:s'),
                     ]);
-
+                    if($gt->harga_jual>harga_jual($gt->kode)){
+                        $harga_jual=$gt->harga_jual;
+                    }else{
+                        $harga_jual=harga_jual($gt->kode);
+                    }
+                    
+                    $hdiscon=$harga_jual-(($harga_jual*discon_barang($gt->kode))/100);
+                    $bar=Barang::where('kode',$gt->kode)->update([ 
+                        'harga_jual'=>$harga_jual,
+                        'harga_discon'=>$hdiscon,
+                    ]);
                     echo'@ok@';
                 
             

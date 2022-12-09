@@ -148,22 +148,13 @@ class BarangController extends Controller
         
     }
     public function get_barang(request $request){
-        $data = Barang::where('kd_satuan','D')->get();
+        $data = Barang::where('harga_beli','>',0)->get();
         foreach($data as $o){
            
                 $bar=Barang::UpdateOrcreate([
-                    'kode'=>'BRP'.$o->join_kode,
+                    'id'=>$o->id,
                 ],[
-                    'nama_barang'=>$o->nama_barang,
-                    'satuan'=>'Pack',
-                    'kd_satuan'=>'P',
-                    'aktive'=>'1',
-                    'join_kode'=>$o->join_kode,
-                    'waktu'=>$o->waktu,
-                    'harga_beli'=>0,
-                    'harga_jual'=>0,
-                    'harga_discon'=>0,
-                    'discon'=>0,
+                    'harga_beli'=>$o->harga_beli-pembulatan((($o->harga_beli*5)/100)),
                 ]);
             
         }

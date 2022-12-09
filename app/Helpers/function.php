@@ -243,6 +243,10 @@ function sum_gaji(){
     $data=App\Employe::where('status',1)->sum('gaji');
     return $data;
 }
+function get_employe(){
+    $data=App\Employe::where('status',1)->get();
+    return $data;
+}
 function aktive_transaksi(){
     $data=App\Setting::where('id',4)->first();
     return $data->setting_int;
@@ -516,6 +520,14 @@ function get_join_kode(){
 function first_join_kode($join_kode){
     $data=App\Barang::where('join_kode',$join_kode)->orderBy('id','Asc')->firstOrfail();
     return $data['nama_barang'];
+}
+function bulan_gaji($nomor){
+    $data=App\Gaji::where('nomor',$nomor)->orderBy('id','Desc')->firstOrfail();
+    return $data['bulan'];
+}
+function tahun_gaji($nomor){
+    $data=App\Gaji::where('nomor',$nomor)->orderBy('id','Desc')->firstOrfail();
+    return $data['tahun'];
 }
 function keuangan_total($status_keuangan){
     $data=App\Keuangan::where('status_keuangan_id',$status_keuangan)->sum('nilai');

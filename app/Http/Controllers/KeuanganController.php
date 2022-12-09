@@ -10,7 +10,9 @@ use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 use App\Keuangan;
 use App\Stokorder;
+use App\Viewstatuskategori;
 use App\Viewkeuangan;
+use App\Gaji;
 use App\User;
 
 class KeuanganController extends Controller
@@ -73,6 +75,15 @@ class KeuanganController extends Controller
 
     
 
+    public function tentukan_status(request $request)
+    {
+        $data=Viewstatuskategori::where('kategori_keuangan_id',$request->kategori_keuangan_id)->get();
+        $btn='<option value="">Pilih Status</option>';
+        foreach($data as $o){
+            $btn.='<option value="'.$o->status_keuangan_id.'">'.$o->status_keuangan.'</option>';
+        }
+        return $btn;
+    }
     public function get_data(request $request)
     {
         error_reporting(0);
@@ -80,7 +91,12 @@ class KeuanganController extends Controller
         if($request->even==0){
 
         }else{
-            $data=$query->where('status_keuangan_id',$request->even);
+            if($request->even==8){
+                $data=$query->where('kategori_keuangan_id',6);
+            }else{
+                $data=$query->where('status_keuangan_id',$request->even);
+            }
+            
         }
         $data = $query->orderBy('id','Desc')->get();
 
@@ -152,19 +168,38 @@ class KeuanganController extends Controller
         error_reporting(0);
         $rules = [];
         $messages = [];
-        
-        $rules['kategori_keuangan_id']= 'required';
-        $messages['kategori_keuangan_id.required']= 'Pilih kategori pembayaran';
+        if($request->id==0){
+            $rules['kategori_keuangan_id']= 'required';
+            $messages['kategori_keuangan_id.required']= 'Pilih kategori pembayaran';
 
-        $rules['status_keuangan_id']= 'required';
-        $messages['status_keuangan_id.required']= 'Pilih status pembayaran';
+            $rules['status_keuangan_id']= 'required';
+            $messages['status_keuangan_id.required']= 'Pilih status pembayaran';
+            if($request->kategori_keuangan_id==5){
+                $rules['bulan_gaji']= 'required';
+                $messages['bulan_gaji.required']= 'Pilih bulan';
+                $rules['tahun_gaji']= 'required';
+                $messages['tahun_gaji.required']= 'Pilih tahun';
+    
+                $totalgaji=0;
+                foreach(get_employe() as $no=>$g){
+                    $totalgaji+=$_POST['total'.$g->id];
+                }
+            }else{
+                $rules['nilai']= 'required|min:0|not_in:0';
+                $messages['nilai.required']= 'Lengkapi Nilai';
+                $messages['nilai.not_in']= 'Lengkapi Nilai';
+            }
+        }else{
+            $rules['nilai']= 'required|min:0|not_in:0';
+            $messages['nilai.required']= 'Lengkapi Nilai';
+            $messages['nilai.not_in']= 'Lengkapi Nilai';
+        }
+        
 
         $rules['keterangan']= 'required';
         $messages['keterangan.required']= 'Masukan keterangan';
-
-        $rules['nilai']= 'required|min:0|not_in:0';
-        $messages['nilai.required']= 'Lengkapi Nilai';
-        $messages['nilai.not_in']= 'Lengkapi Nilai';
+        
+        
 
         $validator = Validator::make($request->all(), $rules, $messages);
         $val=$validator->Errors();
@@ -185,23 +220,60 @@ class KeuanganController extends Controller
             
             if($request->id==0){
                 $nomor=penomoran_keuangan($request->kategori_keuangan_id);
-                $keuangan=Keuangan::Updateorcreate([
-                    
-                    'nomor'=>$nomor,
-                ],[
-                    'nilai'=>ubah_uang($request->nilai),
-                    'nilai_dibayar'=>ubah_uang($request->nilai),
-                    'status_keuangan_id'=>$request->status_keuangan_id,
-                    'kategori_keuangan_id'=>$request->kategori_keuangan_id,
-                    'keterangan'=>$request->keterangan,
-                    'tanggal'=>$request->tanggal,
-                    'bulan'=>$bulan,
-                    'tahun'=>$tahun,
-                    'kat'=>1,
-                    'waktu'=>date('Y-m-d H:i:s'),
-                ]);
+                if($request->kategori_keuangan_id==5){
+                    foreach(get_employe() as $no=>$g){
+                        $gaji=Gaji::Updateorcreate([
+                        
+                            'nomor'=>$nomor,
+                            'nik'=>$_POST['nik'.$g->id],
+                            'bulan'=>$_POST['bulan_gaji'],
+                            'tahun'=>$_POST['tahun_gaji'],
+                            
+                        ],[
+                            'hari'=>$_POST['hari'.$g->id],
+                            'total_gaji'=>$_POST['total'.$g->id],
+                            'gaji'=>$_POST['gaji'.$g->id],
+                            'waktu'=>date('Y-m-d H:i:s'),
+                        ]);
+                    }
 
-                echo'@ok@';
+                    $keuangan=Keuangan::Updateorcreate([
+                        
+                        'nomor'=>$nomor,
+                        'kat'=>1,
+                    ],[
+                        'nilai'=>$totalgaji,
+                        'nilai_dibayar'=>$totalgaji,
+                        'status_keuangan_id'=>$request->status_keuangan_id,
+                        'kategori_keuangan_id'=>$request->kategori_keuangan_id,
+                        'keterangan'=>$request->keterangan,
+                        'tanggal'=>$request->tanggal,
+                        'bulan'=>$bulan,
+                        'tahun'=>$tahun,
+                        'kat'=>1,
+                        'waktu'=>date('Y-m-d H:i:s'),
+                    ]);
+                    echo'@ok@';
+                }else{
+                    $keuangan=Keuangan::Updateorcreate([
+                        
+                        'nomor'=>$nomor,
+                        'kat'=>1,
+                    ],[
+                        'nilai'=>ubah_uang($request->nilai),
+                        'nilai_dibayar'=>ubah_uang($request->nilai),
+                        'status_keuangan_id'=>$request->status_keuangan_id,
+                        'kategori_keuangan_id'=>$request->kategori_keuangan_id,
+                        'keterangan'=>$request->keterangan,
+                        'tanggal'=>$request->tanggal,
+                        'bulan'=>$bulan,
+                        'tahun'=>$tahun,
+                        'kat'=>1,
+                        'waktu'=>date('Y-m-d H:i:s'),
+                    ]);
+
+                    echo'@ok@';
+                }
             }else{
                 $nomor=$request->nomor;
             
@@ -209,11 +281,7 @@ class KeuanganController extends Controller
                    
                     'nilai'=>ubah_uang($request->nilai),
                     'nilai_dibayar'=>ubah_uang($request->nilai),
-                    'status_keuangan_id'=>$request->status_keuangan_id,
                     'keterangan'=>$request->keterangan,
-                    'tanggal'=>$request->tanggal,
-                    'bulan'=>$bulan,
-                    'tahun'=>$tahun,
                     'waktu'=>date('Y-m-d H:i:s'),
                 ]);
 
