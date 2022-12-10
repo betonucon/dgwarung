@@ -266,8 +266,13 @@
                 $('#modal-retur').modal('show');
                 $('#tampil-form-retur').load("{{url('keuangan/modal')}}?id="+id)
             }
-            function pembayaran_data(id){
-                $('#modal-bayar .modal-title').text('Form Pembayaran Piutang ');
+            function pembayaran_data(id,kategori_keuangan_id){
+                if(kategori_keuangan_id==1){
+                    $('#modal-bayar .modal-title').text('Form Pembayaran Piutang Supplier');
+                }else{
+                    $('#modal-bayar .modal-title').text('Form Pembayaran Piutang Konsumen');
+                }
+                
                 $('#modal-bayar').modal('show');
                 $('#tampil-form-bayar').load("{{url('keuangan/modal_bayar')}}?id="+id)
             }

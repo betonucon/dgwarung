@@ -524,29 +524,31 @@ class KasirController extends Controller
                     $keuangan=Keuangan::create([
                         
                         'nomor'=>kdk($request->kategori_keuangan_id).$request->nomor_transaksi,
-                        'nilai'=>$request->nilai_beli,
+                        'nilai'=>$request->nilai,
                         'status_keuangan_id'=>$request->status_keuangan_id,
                         'kategori_keuangan_id'=>$request->kategori_keuangan_id,
-                        'keterangan'=>'Pembayaran pennjualan dari '.$odr->konsumen,
+                        'keterangan'=>'Pembayaran penjualan dari '.$odr->konsumen,
                         'tanggal'=>$tanggal,
                         'bulan'=>$bulan,
                         'tahun'=>$tahun,
                         'kat'=>2,
                         'waktu'=>date('Y-m-d H:i:s'),
                     ]);
-                    $provit=Keuangan::create([
-                        
-                        'nomor'=>kdk(6).$request->nomor_transaksi,
-                        'nilai'=>$request->provite,
-                        'status_keuangan_id'=>$request->status_keuangan_id,
-                        'kategori_keuangan_id'=>6,
-                        'keterangan'=>'Pembayaran pennjualan dari '.$odr->konsumen,
-                        'tanggal'=>$tanggal,
-                        'bulan'=>$bulan,
-                        'tahun'=>$tahun,
-                        'kat'=>2,
-                        'waktu'=>date('Y-m-d H:i:s'),
-                    ]);
+                    if($request->status_keuangan_id==1){
+                        $provit=Keuangan::create([
+                            
+                            'nomor'=>kdk(6).$request->nomor_transaksi,
+                            'nilai'=>$request->provite,
+                            'status_keuangan_id'=>$request->status_keuangan_id,
+                            'kategori_keuangan_id'=>6,
+                            'keterangan'=>'Pembayaran pennjualan dari '.$odr->konsumen,
+                            'tanggal'=>$tanggal,
+                            'bulan'=>$bulan,
+                            'tahun'=>$tahun,
+                            'kat'=>2,
+                            'waktu'=>date('Y-m-d H:i:s'),
+                        ]);
+                    }
 
                     echo'@ok@'.$nomor;
                 

@@ -105,7 +105,7 @@
             
             if ($('#data-table-fixed-header').length !== 0) {
                 var table=$('#data-table-fixed-header').DataTable({
-                    lengthMenu: [20],
+                    lengthMenu: [20,50,100],
                     fixedHeader: {
                         header: true,
                         headerOffset: $('#header').height()

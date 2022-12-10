@@ -15,7 +15,7 @@
             
             
             <div class="form-group row">
-                <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Nomor Tagihan & Order</label>
+                <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Nomor Tagihan & Order </label>
                 
                 <div class="col-lg-4" style="padding: 0% 1% 0% 0%;">
                     <div class="input-group input-group-sm">
@@ -87,6 +87,7 @@
                     </table>
                 </div>
                 <input type="text" name="uangmasuk" value="{{$uangmasuk}}">
+                <input type="text" name="kategori_keuangan_id" value="{{$data->kategori_keuangan_id}}">
             </div>
             
             

@@ -12,6 +12,8 @@ use App\Keuangan;
 use App\Stokorder;
 use App\Viewstatuskategori;
 use App\Viewkeuangan;
+use App\Viewstokkasir;
+use App\Kasir;
 use App\Gaji;
 use App\User;
 
@@ -107,7 +109,7 @@ class KeuanganController extends Controller
             })
             ->addColumn('action', function ($row) {
                 if($row->kat==1){
-                    if($row->kategori_keuangan_id==1){
+                    if($row->kategori_keuangan_id==1 || $row->kategori_keuangan_id==2){
                         $btn='
                             <div class="btn-group">
                                <span class="btn btn-danger btn-xs" onclick="delete_data_bayar('.$row->id.')"><i class="fas fa-window-close text-white"></i></span>
@@ -122,10 +124,10 @@ class KeuanganController extends Controller
                         ';
                     }
                 }else{
-                    if($row->status_keuangan_id==3){
+                    if($row->status_keuangan_id==3 || ($row->status_keuangan_id==4 && $row->kategori_keuangan_id==2)){
                         $btn='
                             <div class="btn-group">
-                                <span class="btn btn-primary btn-xs" onclick="pembayaran_data('.$row->id.')">Bayar</span>
+                                <span class="btn btn-primary btn-xs" onclick="pembayaran_data('.$row->id.','.$row->kategori_keuangan_id.')">Bayar</span>
                             </div>
                         ';
                     }else{
@@ -318,36 +320,101 @@ class KeuanganController extends Controller
             $tanggal=date('Y-m-d');
             $bulan=date('m');
             $tahun=date('Y');
-            $odr=Stokorder::where('nomor_stok',$request->nomor_stok)->first();
-            
-                $nomor=penomoran_keuangan(1);
-                $keuangan=Keuangan::UpdateOrcreate([
-                        
-                    'nomor'=>$nomor,
-                ],[
-                    'nilai'=>ubah_uang($request->nilai_dibayarkan),
-                    'status_keuangan_id'=>2,
-                    'kategori_keuangan_id'=>1,
-                    'keterangan'=>'Pembayaran Nomor Order '.$request->nomor_stok.' '.$odr->msupplier['supplier'],
-                    'tanggal'=>$tanggal,
-                    'nomor_bayar'=>$request->nomor,
-                    'bulan'=>$bulan,
-                    'tahun'=>$tahun,
-                    'nilai_dibayar'=>ubah_uang($request->nilai_dibayarkan),
-                    'kat'=>1,
-                    'waktu'=>date('Y-m-d H:i:s'),
-                ]);
+            if($request->kategori_keuangan_id==1){
+                    $odr=Stokorder::where('nomor_stok',$request->nomor_stok)->first();
+                    if((ubah_uang($request->nilai_dibayarkan)+$request->uangmasuk)>ubah_uang($request->nilai)){
+                        echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
+                        echo'Pembayaran melebihi tagihan';
+                        echo'</div></div>';
+                    }else{
+                        $nomor=penomoran_keuangan(1);
+                        $keuangan=Keuangan::UpdateOrcreate([
+                                
+                            'nomor'=>$nomor,
+                        ],[
+                            'nilai'=>ubah_uang($request->nilai_dibayarkan),
+                            'status_keuangan_id'=>2,
+                            'kategori_keuangan_id'=>1,
+                            'keterangan'=>'Pembayaran Nomor Order '.$request->nomor_stok.' '.$odr->msupplier['supplier'],
+                            'tanggal'=>$tanggal,
+                            'nomor_bayar'=>$request->nomor,
+                            'bulan'=>$bulan,
+                            'tahun'=>$tahun,
+                            'nilai_dibayar'=>ubah_uang($request->nilai_dibayarkan),
+                            'kat'=>1,
+                            'waktu'=>date('Y-m-d H:i:s'),
+                        ]);
 
-                $byrt=Keuangan::Updateorcreate([
-                    
-                    'id'=>$request->id,
-                ],[
-                    'nilai'=>(ubah_uang($request->nilai)-ubah_uang($request->nilai_dibayarkan)),
-                    'nilai_dibayar'=>(ubah_uang($request->nilai_dibayarkan)+$request->uangmasuk),
-                    'waktu'=>date('Y-m-d H:i:s'),
-                ]);
+                        $byrt=Keuangan::Updateorcreate([
+                            
+                            'id'=>$request->id,
+                        ],[
+                            'nilai'=>(ubah_uang($request->nilai)-ubah_uang($request->nilai_dibayarkan)),
+                            'nilai_dibayar'=>(ubah_uang($request->nilai_dibayarkan)+$request->uangmasuk),
+                            'waktu'=>date('Y-m-d H:i:s'),
+                        ]);
 
-                echo'@ok@';
+                        echo'@ok@';
+                    }
+
+            }else{
+                $odr=Kasir::where('nomor_transaksi',$request->nomor_stok)->first();
+                $provite=Viewstokkasir::where('nomor_transaksi',$request->nomor_stok)->where('status',3)->sum('provite');
+                    if(ubah_uang($request->nilai_dibayarkan)>ubah_uang($request->nilai)){
+                        echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
+                        echo'Pembayaran melebihi tagihan';
+                        echo'</div></div>';
+                    }else{
+
+                        $nomor=penomoran_keuangan(2);
+                        $keuangan=Keuangan::UpdateOrcreate([
+                                
+                            'nomor'=>$nomor,
+                        ],[
+                            'nilai'=>ubah_uang($request->nilai_dibayarkan),
+                            'status_keuangan_id'=>1,
+                            'kategori_keuangan_id'=>2,
+                            'keterangan'=>'Pembayaran Penjualan Nomor '.$request->nomor_stok.' '.$odr->konsumen,
+                            'tanggal'=>$tanggal,
+                            'nomor_bayar'=>$request->nomor,
+                            'bulan'=>$bulan,
+                            'tahun'=>$tahun,
+                            'nilai_dibayar'=>ubah_uang($request->nilai_dibayarkan),
+                            'kat'=>1,
+                            'waktu'=>date('Y-m-d H:i:s'),
+                        ]);
+
+                        $byrt=Keuangan::Updateorcreate([
+                            
+                            'id'=>$request->id,
+                        ],[
+                            'nilai'=>(ubah_uang($request->nilai)-ubah_uang($request->nilai_dibayarkan)),
+                            'nilai_dibayar'=>(ubah_uang($request->nilai_dibayarkan)+$request->uangmasuk),
+                            'waktu'=>date('Y-m-d H:i:s'),
+                        ]);
+
+                        $kugn=Keuangan::where('id',$request->id)->first();
+
+                        if(ubah_uang($request->nilai_dibayarkan)==ubah_uang($request->nilai)){
+                            $nomortrs=penomoran_keuangan(6);
+                            $provit=Keuangan::create([
+                            
+                                'nomor'=>$nomortrs,
+                                'nilai'=>$provite,
+                                'status_keuangan_id'=>1,
+                                'kategori_keuangan_id'=>6,
+                                'keterangan'=>$kugn->keterangan,
+                                'tanggal'=>$tanggal,
+                                'bulan'=>$bulan,
+                                'tahun'=>$tahun,
+                                'kat'=>2,
+                                'waktu'=>date('Y-m-d H:i:s'),
+                            ]);
+                        }
+
+                        echo'@ok@';
+                    }
+            }
            
         }
     }

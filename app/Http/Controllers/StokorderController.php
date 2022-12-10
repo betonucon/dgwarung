@@ -656,11 +656,12 @@ class StokorderController extends Controller
                         'waktu'=>date('Y-m-d H:i:s'),
                     ]);
                     foreach($get as $no=>$gt){
-                        if($gt->harga_jual>harga_jual($gt->kode)){
-                            $harga_jual=$gt->harga_jual;
-                        }else{
-                            $harga_jual=harga_jual($gt->kode);
-                        }
+                        // if($gt->harga_jual>harga_jual($gt->kode)){
+                        //     $harga_jual=$gt->harga_jual;
+                        // }else{
+                        //     $harga_jual=harga_jual($gt->kode);
+                        // }
+                        $harga_jual=$gt->harga_jual;
                         if($gt->harga_beli>harga_beli($gt->kode)){
                             $harga_beli=$gt->harga_beli;
                         }else{
