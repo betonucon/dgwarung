@@ -16,6 +16,7 @@ Route::group(['prefix' => 'barang','middleware'    => 'auth'],function(){
     Route::get('/','BarangController@index');
     Route::get('/get_data','BarangController@get_data');
     Route::get('/cari_barang','BarangController@cari_barang');
+    Route::get('/cari_harga_barang','BarangController@cari_harga_barang');
     Route::get('/cari_barang_jual','BarangController@cari_barang_jual');
     Route::get('/get_barang','BarangController@get_barang');
     Route::get('/delete_data','BarangController@delete_data');

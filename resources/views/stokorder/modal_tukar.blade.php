@@ -72,7 +72,7 @@
                 
                 <div class="col-lg-3" style="padding: 0% 1% 0% 0%;">
                     <div class="input-group input-group-sm">
-                        <select name="kode_tukar"  class="form-control form-control-sm " id="defaulttukar" placeholder="Ketik disini....">
+                        <select name="kode_tukar" onchange="cari_harga_barang(this.value)" class="form-control form-control-sm " id="defaulttukar" placeholder="Ketik disini....">
                            
                            <option value="">Pilih Satuan</option>
                            
@@ -130,6 +130,19 @@
                         $('#qty').val(bat[2]);
                         $('#supplier').val(bat[3]);
                         $('#defaulttukar').html(bat[4]);
+                }
+            });
+        }
+        function cari_harga_barang(text){
+            $.ajax({
+                type: 'GET',
+                url: "{{url('barang/cari_harga_barang')}}",
+                data: "kode="+text,
+                success: function(msg){
+                    var bat=msg.split('@');
+        
+                        $('#harga_jual').val(bat[1]);
+                        $('#harga_beli').val(bat[2]);
                 }
             });
         }

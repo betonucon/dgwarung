@@ -80,6 +80,13 @@ class BarangController extends Controller
         }
         
     }
+    public function cari_harga_barang(request $request)
+    {
+        $jual=harga_jual($request->kode);
+        $beli=harga_beli($request->kode);
+       
+        return '@'.$jual.'@'.$beli;
+    }
 
     public function get_data(request $request)
     {

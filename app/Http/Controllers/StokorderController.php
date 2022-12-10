@@ -162,7 +162,8 @@ class StokorderController extends Controller
     {
         error_reporting(0);
         $data=Viewstokorder::where('nomor_stok',$request->nomor_stok)->where('kode',$request->kode)->first();
-        $sum=Viewstokorder::where('nomor_stok',$request->nomor_stok)->where('kode',$request->kode)->whereIn('status',array(6,4,5,3))->sum('qty');
+        
+        
         $barang=Barang::where('join_kode',$data->join_kode)->where('kd_satuan','!=',$data->kd_satuan)->get();
         $option='<option value="">Pilih Satuan</option>';
         foreach($barang as $o){
@@ -891,6 +892,19 @@ class StokorderController extends Controller
                         'tahun'=>date('Y'),
                         'waktu'=>date('Y-m-d H:i:s'),
                         'update'=>date('Y-m-d H:i:s'),
+                    ]);
+
+                    if(ubah_uang($request->harga_jual)>harga_jual($request->kode_tukar)){
+                        $harga_jual=ubah_uang($request->harga_jual);
+                    }else{
+                        $harga_jual=harga_jual($request->kode_tukar);
+                    }
+                   
+                    $hdiscon=$harga_jual-(($harga_jual*discon_barang($request->kode_tukar))/100);
+                    $bar=Barang::where('kode',$request->kode_tukar)->update([ 
+                        'harga_jual'=>$harga_jual,
+                        'harga_beli'=>$harga_beli,
+                        'harga_discon'=>$hdiscon,
                     ]);
 
                     $tukar=Stok::create([
