@@ -108,7 +108,7 @@
                         <div class="col-lg-7" style="padding: 0% 1% 0% 0%;">
                             <div class="input-group input-group-sm">
                                 <select  name="setting_int"  class="form-control form-control-sm" placeholder="Ketik disini....">
-                                    @for($x=11;$x<24;$x++)
+                                    @for($x=8;$x<18;$x++)
                                         <option value="{{$x}}" @if($data->setting_int==$x) selected @endif >{{$x}}PX</option>
                                     @endfor
                                 </select>

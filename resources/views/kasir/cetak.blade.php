@@ -5,6 +5,7 @@
             html{
                 color:#000;
                 margin:5px 5px 5px 5px;
+                font-family: monospace;
             }
             
             table{
@@ -72,11 +73,11 @@
     <body>
         @for($x=1;$x<=$ford;$x++)
         <div class="boody">
-            <table width="100%">
+            <table width="97%" style="margin-left:3%">
                 <tr>
                     <td class="tth" rowspan="2" style="text-align:center;font-size:17px"><b>BP SUPPLIER</b></td>
                     <td class="tthlg" width="15%">NOMOR</td>
-                    <td class="tthlb"  width="20%">: {{$order->nomor_transaksi}}</td>
+                    <td class="tthlb"  width="27%">: {{$order->nomor_transaksi}}</td>
                 </tr>
                 <tr>
                     <td class="tthlg">KONSUMEN</td>
@@ -104,7 +105,7 @@
                 </tr> -->
                 
             </table>
-            <table width="100%" >
+            <table width="97%" style="margin-left:3%" >
                 <tr>
                     <td class="ttdh" width="5%">No</td>
                     <td class="ttdh">Barang</td>
