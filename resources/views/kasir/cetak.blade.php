@@ -53,7 +53,6 @@
                 text-align:center;
             }
             .ttdh{
-                font-weight:bold;
                 text-align:center;
                 text-transform:uppercase;
                 border:solid 1px #000;
@@ -77,7 +76,7 @@
                 <tr>
                     <td class="tth" rowspan="2" style="text-align:center;font-size:17px"><b>BINTANG PERMEN SUPPLIER</b></td>
                     <td class="tthlg" width="15%">NOMOR</td>
-                    <td class="tthlb"  width="27%">: {{$order->nomor_transaksi}}</td>
+                    <td class="tthlb"  width="24%">: {{$order->nomor_transaksi}}</td>
                 </tr>
                 <tr>
                     <td class="tthlg">KONSUMEN</td>

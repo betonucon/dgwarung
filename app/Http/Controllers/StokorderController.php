@@ -162,13 +162,13 @@ class StokorderController extends Controller
     {
         error_reporting(0);
         $data=Viewstokorder::where('nomor_stok',$request->nomor_stok)->where('kode',$request->kode)->first();
-        $sum=Viewstokorder::where('nomor_stok',$request->nomor_stok)->where('kode',$request->kode)->whereIn('status',array(4,5,3))->sum('qty');
+        $sum=Viewstokorder::where('nomor_stok',$request->nomor_stok)->where('kode',$request->kode)->whereIn('status',array(6,4,5,3))->sum('qty');
         $barang=Barang::where('join_kode',$data->join_kode)->where('kd_satuan','!=',$data->kd_satuan)->get();
         $option='<option value="">Pilih Satuan</option>';
         foreach($barang as $o){
             $option.='<option value="'.$o->kode.'">'.$o->satuan.'</option>';
         }
-        return '@'.$data->satuan.'@'.($data->qty-$sum).'@'.$data->msupplier['supplier'].'@'.$option;
+        return '@'.$data->satuan.'@'.($data->sisa).'@'.$data->msupplier['supplier'].'@'.$option;
     }
 
     public function modal_cetak(request $request)
@@ -436,7 +436,6 @@ class StokorderController extends Controller
                     $btn='
                         <div class="btn-group">
                             <span class="btn btn-blue btn-xs text-with" onclick="proses_retur('.$row->id.')"><i class="fas fa-check-square text-white"></i></span>
-                            <span class="btn btn-green btn-xs text-with" onclick="cetak_data('.$row->id.')"><i class="fas fa-print text-white"></i></span>
                             <span class="btn btn-danger btn-xs text-with" onclick="delete_data('.$row->id.')"><i class="fas fa-window-close text-white"></i></span>
                         </div>
                     ';
@@ -473,7 +472,6 @@ class StokorderController extends Controller
                     $btn='
                         <div class="btn-group">
                             <span class="btn btn-blue btn-xs text-with" onclick="proses_tukar('.$row->id.')"><i class="fas fa-check-square text-white"></i></span>
-                            <span class="btn btn-green btn-xs text-with" onclick="cetak_data('.$row->id.')"><i class="fas fa-print text-white"></i></span>
                             <span class="btn btn-danger btn-xs text-with" onclick="delete_data('.$row->id.')"><i class="fas fa-window-close text-white"></i></span>
                         </div>
                     ';

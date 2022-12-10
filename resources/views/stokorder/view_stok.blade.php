@@ -173,7 +173,7 @@
                 </div> -->
                 <form class="form-horizontal form-bordered" style="margin-bottom: 1%; padding: 1% 0 1% 0;" id="mydataretur" method="post" action="{{ url('stokorder/store_retur') }}" enctype="multipart/form-data" >
                     @csrf 
-                    <input type="text" name="kode" value="{{$kode}}">
+                    <input type="hidden" name="kode" value="{{$kode}}">
                     <div id="tampil-form-retur"></div>
                  </form>
             </div>
