@@ -50,6 +50,10 @@
                                     <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_keluar($tahun))}}</div>
                                 </div>
                                 <div class="form-group row">
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Piutang</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_piutang($tahun))}}</div>
+                                </div>
+                                <div class="form-group row">
                                     <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Provit</label>
                                     <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_provit($tahun))}}</div>
                                 </div>

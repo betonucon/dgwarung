@@ -87,6 +87,12 @@
 							<span>Barang</span>
 						</a>
 					</li>
+					<li class=" @if(Request::is('supplier')==1) active @endif">
+						<a href="{{url('/supplier')}}">
+							<i class="fas fa-users"></i> 
+							<span>Supplier</span>
+						</a>
+					</li>
 					<li class="has-sub @if(Request::is('stokorder/*')==1 || Request::is('stokorder')==1 || Request::is('stok')==1 || Request::is('stok/*')==1) active @endif">
 						<a href="javascript:;">
 							<b class="caret"></b>

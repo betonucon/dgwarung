@@ -534,15 +534,27 @@ function keuangan_total($status_keuangan){
     return $data;
 }
 function total_keluar($id){
-    $saldo=App\Keuangan::whereIn('status_keuangan_id',array(2,3))->where('tahun',$id)->where('kategori_keuangan_id',1)->sum('nilai');
+    $saldo=App\Keuangan::whereIn('status_keuangan_id',array(2))->where('tahun',$id)->where('kategori_keuangan_id',1)->sum('nilai');
+    return $saldo;
+}
+function total_piutang($id){
+    $saldo=App\Keuangan::whereIn('status_keuangan_id',array(3))->where('tahun',$id)->where('kategori_keuangan_id',1)->sum('nilai');
     return $saldo;
 }
 function total_keluar_bulan($bulan,$tahun){
-    $saldo=App\Keuangan::whereIn('status_keuangan_id',array(2,3))->where('bulan',$bulan)->where('tahun',$tahun)->where('kategori_keuangan_id',1)->sum('nilai');
+    $saldo=App\Keuangan::whereIn('status_keuangan_id',array(2))->where('bulan',$bulan)->where('tahun',$tahun)->where('kategori_keuangan_id',1)->sum('nilai');
+    return $saldo;
+}
+function total_piutang_bulan($bulan,$tahun){
+    $saldo=App\Keuangan::whereIn('status_keuangan_id',array(3))->where('bulan',$bulan)->where('tahun',$tahun)->where('kategori_keuangan_id',1)->sum('nilai');
+    return $saldo;
+}
+function total_piutang_tanggal($tanggal){
+    $saldo=App\Keuangan::whereIn('status_keuangan_id',array(3))->where('tanggal',$tanggal)->where('kategori_keuangan_id',1)->sum('nilai');
     return $saldo;
 }
 function total_keluar_tanggal($tanggal){
-    $saldo=App\Keuangan::whereIn('status_keuangan_id',array(2,3))->where('tanggal',$tanggal)->where('kategori_keuangan_id',1)->sum('nilai');
+    $saldo=App\Keuangan::whereIn('status_keuangan_id',array(2))->where('tanggal',$tanggal)->where('kategori_keuangan_id',1)->sum('nilai');
     return $saldo;
 }
 function total_provit_keluar($id){
