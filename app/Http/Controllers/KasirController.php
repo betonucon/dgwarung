@@ -644,8 +644,8 @@ class KasirController extends Controller
         $ford=ceil(jumlah_item_order_kasir($request->id)/18);
         // $ford=3;
         $pdf = PDF::loadView('kasir.cetak', compact('data','order','ford','count'));
-        $custom=array(0,0,500,400);
-        $pdf->setPaper($custom,'portrait');
+        // $custom=array(0,0,500,400);
+        $pdf->setPaper('A4','portrait');
         $pdf->stream($request->id.'.pdf');
         return $pdf->stream();
     }
