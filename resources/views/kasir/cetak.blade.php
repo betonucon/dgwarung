@@ -5,7 +5,7 @@
             html{
                 color:#000;
                 margin:5px 5px 5px 5px;
-                font-family: monospace;
+                font-family: sans-serif;
             }
             
             table{
