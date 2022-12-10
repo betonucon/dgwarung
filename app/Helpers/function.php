@@ -326,7 +326,7 @@ function jumlah_item_order_kasir($nomor_transaksi){
     return $data;
 }
 function sum_item_order_kasir($nomor_transaksi){
-    $data=App\Stok::where('nomor_transaksi',$nomor_transaksi)->sum('total_jual');
+    $data=App\Stok::where('nomor_transaksi',$nomor_transaksi)->where('status',3)->sum('total_jual');
     return $data;
 }
 function harga_jual($kode){

@@ -75,7 +75,7 @@
         <div class="boody">
             <table width="97%" style="margin-left:3%">
                 <tr>
-                    <td class="tth" rowspan="2" style="text-align:center;font-size:17px"><b>BP SUPPLIER</b></td>
+                    <td class="tth" rowspan="2" style="text-align:center;font-size:17px"><b>BINTANG PERMEN SUPPLIER</b></td>
                     <td class="tthlg" width="15%">NOMOR</td>
                     <td class="tthlb"  width="27%">: {{$order->nomor_transaksi}}</td>
                 </tr>
@@ -119,15 +119,15 @@
                 ?>
                 @foreach(cetak_item_kasir($order->nomor_transaksi,$x) as $no=>$o)
                 <?php
-                    $csum+=$o->total_beli;
+                    $csum+=$o->total_jual;
                 ?>
                 <tr>
                     <td class="ttdc">{{$no+1}}</td>
                     <td class="ttd">{{$o->nama_barang}} {{$o->satuan}}</td>
                     <td class="ttdr">{{$o->qty}}</td>
                     <td class="ttd">{{$o->satuan}}</td>
-                    <td class="ttdr">{{uang($o->harga_beli)}}</td>
-                    <td class="ttdr">{{uang($o->total_beli)}}</td>
+                    <td class="ttdr">{{uang($o->harga_jual)}}</td>
+                    <td class="ttdr">{{uang($o->total_jual)}}</td>
                 </tr>
                 @endforeach
                 @if($ford==$x)
