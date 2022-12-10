@@ -238,6 +238,9 @@
         function edit_data(id){
             $('#tampil-form').load("{{url('kasir/modal')}}?id={{$id}}&ide="+id+"&act=edit")
         }
+        function data_baru(){
+            location.assign("{{url('kasir/create')}}?id=0")
+        }
 
         function terima_data(){
             $('#modal-terima .modal-title').text('Konfirmasi ');

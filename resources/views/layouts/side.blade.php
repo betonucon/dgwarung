@@ -32,7 +32,7 @@
 							<span>Home</span>
 						</a>
 					</li>
-					
+					@if(Auth::user()->role_id==1)
 					<li class="has-sub closed">
 						<a href="javascript:;">
 							<b class="caret"></b>
@@ -80,6 +80,34 @@
 							<span>Setting</span>
 						</a>
 					</li>
+					@else
+					<li class=" @if(Request::is('barang')==1) active @endif">
+						<a href="{{url('/barang')}}">
+							<i class="fas fa-calculator"></i> 
+							<span>Barang</span>
+						</a>
+					</li>
+					<li class="has-sub @if(Request::is('stokorder/*')==1 || Request::is('stokorder')==1 || Request::is('stok')==1 || Request::is('stok/*')==1) active @endif">
+						<a href="javascript:;">
+							<b class="caret"></b>
+							<i class="fa fa-clone"></i>
+							<span>Stok</span>
+						</a>
+						<ul class="sub-menu" @if(Request::is('stokorder/*')==1 || Request::is('stokorder')==1 || Request::is('stok')==1 || Request::is('stok/*')==1) style="display: block;" @endif>
+							
+							<li><a href="{{url('stokorder')}}">Order Stok</a></li>
+							<li><a href="{{url('stok')}}">Stok Tersedia</a></li>
+							<li><a href="{{url('stokorder/retur')}}">Retur Barang</a></li>
+							<li><a href="{{url('stokorder/tukar')}}">Tukar Satuan</a></li>
+						</ul>
+					</li>
+					<li class=" @if(Request::is('kasir')==1) active @endif">
+						<a href="{{url('/kasir')}}">
+							<i class="fas fa-calculator"></i> 
+							<span>Kasir</span>
+						</a>
+					</li>
+					@endif
 					<li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
 					
 				</ul>

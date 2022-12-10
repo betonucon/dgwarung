@@ -74,24 +74,34 @@
         <div class="boody">
             <table width="100%">
                 <tr>
-                    <td width="100%" class="tth" style="text-align:center;font-size:17px" colspan="9"><b>BP SUPPLIER</b></td>
+                    <td class="tth" rowspan="2" style="text-align:center;font-size:17px"><b>BP SUPPLIER</b></td>
+                    <td class="tthlg" width="15%">NOMOR</td>
+                    <td class="tthlb"  width="20%">: {{$order->nomor_transaksi}}</td>
                 </tr>
                 <tr>
-                    <td class="tth" style="text-align:center;font-size:14px" colspan="9">JL. Cendrawasih No.05 Kota Serang - Banten</td>
+                    <td class="tthlg">KONSUMEN</td>
+                    <td class="tthlb">: {{$order->konsumen}}</td>
+                </tr>
+                <tr>
+                    <td class="tth" style="text-align:center;font-size:14px">JL. Cendrawasih No.05 Kota Serang - Banten</td>
+                    <td class="tthlg">TANGGAL</td>
+                    <td class="tthlb">: {{tanggal_eng($order->waktu)}}</td>
                 </tr>    
                 <tr>    
-                    <td class="tth" style="text-align:center;font-size:14px" colspan="9">Tlpn. 082118127033/087787234834<br><br></td>
+                    <td class="tth" style="text-align:center;font-size:14px">Tlpn. 082118127033/087787234834</td>
+                    <td class="tthlg" >BAYAR </td>
+                    <td class="tthlb" >: {{$order->mstatuskeuangan['status_keuangan']}}</td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td class="tthlg" width="8%">NOMOR</td>
                     <td class="tthlb"  width="14%">: {{$order->nomor_transaksi}}</td>
-                    <td class="tthlg" width="10%">KONSUMEN</td>
-                    <td class="tthlb"  width="15%">: {{$order->konsumen}}</td>
-                    <td class="tthlg" width="10%">TANGGAL</td>
+                    <td class="tthlg">KONSUMEN</td>
+                    <td class="tthlb">: {{$order->konsumen}}</td>
+                    <td class="tthlg">TANGGAL</td>
                     <td class="tthlb"  width="18%">: {{tanggal_eng($order->waktu)}}</td>
                     <td class="tthlg" width="9%" style="text-align:right">BAYAR :</td>
                     <td class="tthlb" style="text-align:right"> {{$order->mstatuskeuangan['status_keuangan']}}</td>
-                </tr>
+                </tr> -->
                 
             </table>
             <table width="100%" >

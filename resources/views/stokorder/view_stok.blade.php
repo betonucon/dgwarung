@@ -199,7 +199,7 @@
                 </div> -->
                 <form class="form-horizontal form-bordered" style="margin-bottom: 1%; padding: 1% 0 1% 0;" id="mydatatukar" method="post" action="{{ url('stokorder/store_tukar') }}" enctype="multipart/form-data" >
                     @csrf 
-                    <input type="text" name="kode" value="{{$kode}}">
+                    <input type="hidden" name="kode" value="{{$kode}}">
                     <div id="tampil-form-tukar"></div>
                  </form>
             </div>

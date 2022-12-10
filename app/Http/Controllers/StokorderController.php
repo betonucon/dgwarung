@@ -155,8 +155,8 @@ class StokorderController extends Controller
     {
         error_reporting(0);
         $data=Viewstokorder::where('nomor_stok',$request->nomor_stok)->where('kode',$request->kode)->first();
-        $sum=Viewstokorder::where('nomor_stok',$request->nomor_stok)->where('kode',$request->kode)->whereIn('status',array(4,5,3))->sum('qty');
-        return '@'.$data->satuan.'@'.($data->qty-$sum).'@'.$data->msupplier['supplier'];
+        $sum=Viewstokorder::where('nomor_stok',$request->nomor_stok)->where('kode',$request->kode)->whereIn('status',array(6,4,5,3))->sum('qty');
+        return '@'.$data->satuan.'@'.($data->sisa).'@'.$data->msupplier['supplier'];
     }
     public function cari_stok_tukar(request $request)
     {
