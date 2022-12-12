@@ -90,7 +90,7 @@
                     <td class="tthlb">Saldo</td>
                     <td class="tthlb">: {{uang(total_saldo(tahun_saja($tanggal)))}}</td>
                     <td class="tthlb">Provit</td>
-                    <td class="tthlb">: {{uang(total_keluar_tanggal($tanggal))}}</td>
+                    <td class="tthlb">: {{uang(total_provit_tanggal($tanggal))}}</td>
                 </tr>
                 <tr>
                     
