@@ -702,7 +702,7 @@ class StokorderController extends Controller
                     if($odr->kategori_opname_id==1){
                         $keuangan=Keuangan::UpdateOrcreate([
                             
-                            'nomor'=>kdk($request->kategori_keuangan_id).$request->nomor_stok,
+                            'nomor'=>kdk($request->kategori_keuangan_id).'2'.$request->nomor_stok,
                         ],[
                             'nilai'=>$request->nilai,
                             'status_keuangan_id'=>$request->status_keuangan_id,

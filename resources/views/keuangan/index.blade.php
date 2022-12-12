@@ -264,7 +264,7 @@
                     headerOffset: $('#header').height()
                 },
                 responsive: false,
-                ajax:"{{ url('keuangan/get_data')}}?even={{$act}}",
+                ajax:"{{ url('keuangan/get_data')}}?tahun={{$tahun}}&even={{$act}}",
                 columns: [
                     { data: 'kode', render: function (data, type, row, meta) 
                         {

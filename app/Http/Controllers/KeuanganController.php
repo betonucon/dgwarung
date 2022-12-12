@@ -114,7 +114,7 @@ class KeuanganController extends Controller
             }
             
         }
-        $data = $query->orderBy('id','Desc')->get();
+        $data = $query->where('tahun',$request->tahun)->orderBy('id','Desc')->get();
 
         return Datatables::of($data)
             ->addIndexColumn()
@@ -125,12 +125,18 @@ class KeuanganController extends Controller
                 if($row->kat==1){
                     if($row->kategori_keuangan_id==1 || $row->kategori_keuangan_id==2){
                         if($row->nomor_bayar==""){
-                            $btn='
-                                <div class="btn-group">
-                                <span class="btn btn-primary btn-xs" onclick="pembayaran_data('.$row->id.','.$row->kategori_keuangan_id.')">Bayar '.$row->nomor_bayar.'</span>
-                                <span class="btn btn-danger btn-xs" onclick="delete_data_bayar_header('.$row->id.','.$row->kategori_keuangan_id.')"><i class="fas fa-window-close text-white"></i></span>
-                                </div>
-                            ';
+                            if($row->nilai>0){
+                                $btn='
+                                    <div class="btn-group">
+                                    <span class="btn btn-primary btn-xs" onclick="pembayaran_data('.$row->id.','.$row->kategori_keuangan_id.')">Bayar '.$row->nomor_bayar.'</span>
+                                    <span class="btn btn-danger btn-xs" onclick="delete_data_bayar_header('.$row->id.','.$row->kategori_keuangan_id.')"><i class="fas fa-window-close text-white"></i></span>
+                                    </div>
+                                ';
+                            }else{
+                                $btn='
+                                    
+                                ';
+                            }
                         }else{
                             $btn='
                                 <div class="btn-group">
@@ -156,10 +162,7 @@ class KeuanganController extends Controller
                         ';
                     }else{
                         $btn='
-                            <div class="btn-group">
-                                <span class="btn btn-white btn-xs" ><i class="fas fa-pencil-alt text-white"></i></span>
-                                <span class="btn btn-white btn-xs"><i class="fas fa-window-close text-white"></i></span>
-                            </div>
+                           
                         ';
                     }
                     
@@ -265,7 +268,7 @@ class KeuanganController extends Controller
             $tahun=date('Y',strtotime($request->tanggal));
             
             if($request->id==0){
-                $nomor=penomoran_keuangan($request->kategori_keuangan_id);
+                $nomor=penomoran_keuangan($request->kategori_keuangan_id,1);
                 if($request->kategori_keuangan_id==5){
                     foreach(get_employe() as $no=>$g){
                         $gaji=Gaji::Updateorcreate([
@@ -378,7 +381,7 @@ class KeuanganController extends Controller
                         echo'Pembayaran melebihi tagihan';
                         echo'</div></div>';
                     }else{
-                        $nomor=penomoran_keuangan(1);
+                        $nomor=penomoran_keuangan(1,1);
                         $keuangan=Keuangan::UpdateOrcreate([
                                 
                             'nomor'=>$nomor,
@@ -424,7 +427,7 @@ class KeuanganController extends Controller
                         echo'</div></div>';
                     }else{
 
-                        $nomor=penomoran_keuangan(2);
+                        $nomor=penomoran_keuangan(2,1);
                         $keuangan=Keuangan::UpdateOrcreate([
                                 
                             'nomor'=>$nomor,
@@ -454,7 +457,7 @@ class KeuanganController extends Controller
                         $kugn=Keuangan::where('id',$request->id)->first();
 
                         if(ubah_uang($request->nilai_dibayarkan)==ubah_uang($request->nilai)){
-                            $nomortrs=penomoran_keuangan(6);
+                            $nomortrs=penomoran_keuangan(6,1);
                             $provit=Keuangan::create([
                             
                                 'nomor'=>$nomortrs,
@@ -467,7 +470,7 @@ class KeuanganController extends Controller
                                 'nomor_bayar'=>$request->nomor,
                                 'bulan'=>$bulan,
                                 'tahun'=>$tahun,
-                                'kat'=>2,
+                                'kat'=>1,
                                 'waktu'=>date('Y-m-d H:i:s'),
                             ]);
                         }

@@ -731,16 +731,16 @@ function penomoran($kd_satuan,$join_kode){
     }
     return $nomor;
 }
-function penomoran_keuangan($kategori_keuangan_id){
+function penomoran_keuangan($kategori_keuangan_id,$ide){
     
-    $cek=App\Keuangan::where('kategori_keuangan_id',$kategori_keuangan_id)->count();
+    $cek=App\Keuangan::where('kategori_keuangan_id',$kategori_keuangan_id)->where('kat',$ide)->count();
     if($cek>0){
-        $mst=App\Keuangan::where('kategori_keuangan_id',$kategori_keuangan_id)->orderBy('nomor','Desc')->firstOrfail();
-        $urutan = (int) substr($mst['nomor'], 5, 7);
+        $mst=App\Keuangan::where('kategori_keuangan_id',$kategori_keuangan_id)->where('kat',$ide)->orderBy('nomor','Desc')->firstOrfail();
+        $urutan = (int) substr($mst['nomor'], 6, 7);
         $urutan++;
-        $nomor=kdk($kategori_keuangan_id).date('ym').sprintf("%07s",  $urutan);
+        $nomor=kdk($kategori_keuangan_id).$ide.date('ym').sprintf("%07s",  $urutan);
     }else{
-        $nomor=kdk($kategori_keuangan_id).date('ym').sprintf("%07s",  1);
+        $nomor=kdk($kategori_keuangan_id).$ide.date('ym').sprintf("%07s",  1);
     }
     return $nomor;
 }

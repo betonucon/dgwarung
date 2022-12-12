@@ -526,7 +526,7 @@ class KasirController extends Controller
                     if($odr->kategori_opname_id==1){
                         $keuangan=Keuangan::create([
                             
-                            'nomor'=>kdk($request->kategori_keuangan_id).$request->nomor_transaksi,
+                            'nomor'=>kdk($request->kategori_keuangan_id).'2'.$request->nomor_transaksi,
                             'nilai'=>$request->nilai,
                             'status_keuangan_id'=>$request->status_keuangan_id,
                             'kategori_keuangan_id'=>$request->kategori_keuangan_id,
@@ -540,7 +540,7 @@ class KasirController extends Controller
                         if($request->status_keuangan_id==1){
                             $provit=Keuangan::create([
                                 
-                                'nomor'=>kdk(6).$request->nomor_transaksi,
+                                'nomor'=>kdk(6).'2'.$request->nomor_transaksi,
                                 'nilai'=>$request->provite,
                                 'status_keuangan_id'=>$request->status_keuangan_id,
                                 'kategori_keuangan_id'=>6,

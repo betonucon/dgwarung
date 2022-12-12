@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 use App\Barang;
+use App\Hargakosong;
 use App\Viewstokorder;
 use App\Viewhargabarang;
 use App\Stok;
@@ -157,20 +158,21 @@ class BarangController extends Controller
         
     }
     public function get_barang(request $request){
-        $data = Stok::get();
-        foreach($data as $o){
-            $br=substr($o->kode,0,3);
-            $non=substr($o->kode,3,8);
-            $kode=$br.'22'.$non;
-          
-                // $bar=Stok::UpdateOrcreate([
-                //     'id'=>$o->id,
-                // ],[
-                //     'kode'=>$kode,
-                // ]);
+        // $data = Hargakosong::get();
+        // foreach($data as $o){
+           
+        //         $bar=Stok::UpdateOrcreate([
+        //             'id'=>$o->id,
+        //         ],[
+        //             'harga_jual'=>$o->harga_jual,
+        //             'harga_beli'=>$o->harga_beli,
+        //             'total_beli'=>($o->harga_beli*$o->qty),
+        //             'total_jual'=>($o->harga_jual*$o->qty),
+        //             'qty'=>$o->qty,
+        //         ]);
                
             
-        }
+        // }
     }
 
     
