@@ -482,8 +482,16 @@ class KeuanganController extends Controller
     public function cetak(Request $request)
     {
         error_reporting(0);
-        $tanggal=$request->tanggal;
-        $pdf = PDF::loadView('keuangan.cetak', compact('tanggal'));
+        
+        $tgl=$request->tanggal;
+        if($tgl==""){
+            $tanggal='all';
+            $tahun=$request->tahun;
+        }else{
+            $tanggal=$request->tanggal;
+            $tahun=tahun_saja($tgl);
+        }
+        $pdf = PDF::loadView('keuangan.cetak', compact('tanggal','tahun'));
         $pdf->setPaper('A4', 'Landscape');
         $pdf->stream($request->id.'.pdf');
         return $pdf->stream();

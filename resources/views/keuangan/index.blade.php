@@ -108,7 +108,8 @@
                                 <div class="btn-group btn-group-justified">
                                     <a class="btn btn-blue text-white" onclick="tambah_data(0)"><i class="fas fa-plus"></i> Tambah</a>
                                     <a class="btn btn-green text-white" onclick="cari_data()"><i class="fas fa-filter"></i> Filter</a>
-                                    <a class="btn btn-green text-white" onclick="cetak()"><i class="fas fa-download"></i> Download</a>
+                                    <a class="btn btn-green text-white" onclick="cetak()"><i class="fas fa-download"></i> Download {{$tanggal}}</a>
+                                    <a class="btn btn-green text-white" onclick="cetak_tahun()"><i class="fas fa-download"></i> Download {{$tahun}}</a>
                                 </div>
                             </div>
                         </div>
@@ -295,7 +296,10 @@
             }
             function cetak(){
                 var tgl=$('#tanggaldate').val();
-                window.open("{{url('keuangan/cetak')}}?tanggal="+tgl,"_blank")
+                window.open("{{url('keuangan/cetak')}}?tanggal="+tgl+"&tahun={{$tahun}}","_blank")
+            }
+            function cetak_tahun(){
+                window.open("{{url('keuangan/cetak')}}?tahun={{$tahun}}","_blank")
             }
             function cari_data(){
                 $('#modal-cari').modal('show');

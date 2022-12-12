@@ -585,8 +585,13 @@ function total_tempo_tanggal($tanggal){
     $saldo=App\Keuangan::whereIn('status_keuangan_id',array(4))->where('tanggal',$tanggal)->where('kategori_keuangan_id',2)->sum('nilai');
     return $saldo;
 }
-function cetak_get_keuangan($tanggal){
-    $saldo=App\Viewkeuangan::where('tanggal',$tanggal)->orderBy('id','Asc')->get();
+function cetak_get_keuangan($tanggal,$tahun){
+    if($tanggal=='all'){
+        $saldo=App\Viewkeuangan::where('tahun',$tahun)->orderBy('tanggal','Asc')->get();
+    }else{
+        $saldo=App\Viewkeuangan::where('tanggal',$tanggal)->orderBy('id','Asc')->get();
+    }
+    
     return $saldo;
 }
 function total_keluar_tanggal($tanggal){

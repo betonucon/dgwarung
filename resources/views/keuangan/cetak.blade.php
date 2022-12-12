@@ -78,6 +78,44 @@
                 <tr>    
                     <td class="tth" style="text-align:center;font-size:14px" colspan="6">Tlpn. 082118127033/087787234834<br><br></td>
                 </tr>
+                @if($tanggal=='all')
+                <tr>
+                    <td class="tthlb" width="10%">TAHUN</td>
+                    <td class="tthlb">: {{$tahun}}</td>
+                    <td class="tthlb" colspan="2"></td>
+                    <td class="tthlb" colspan="2">TRANSAKSI {{$tahun}}</td>
+                </tr>
+                <tr>
+                    <td class="tthlb" rowspan="3" valign="top">PERIHAL</td>
+                    <td class="tthlb" >: LAPORAN KEUANGAN</td>
+                    <td class="tthlb"></td>
+                    <td class="tthlb"></td>
+                    <td class="tthlb">Saldo</td>
+                    <td class="tthlb">: {{uang(total_saldo($tahun))}}</td>
+                </tr>
+                <tr>
+                    
+                    
+                    <td class="tthlb"></td>
+                    <td class="tthlb" width="12%"></td>
+                    <td class="tthlb" width="12%"></td>
+                    <td class="tthlb" width="20%">Pembelian</td>
+                    <td class="tthlb" width="12%">: {{uang(total_keluar($tahun))}}</td>
+                    
+                </tr>
+                <tr>
+                    
+                    
+                    <td class="tthlb"></td>
+                    <td class="tthlb"></td>
+                    <td class="tthlb"></td>
+                    <td class="tthlb">Piutang</td>
+                    <td class="tthlb">: {{uang(total_piutang($tahun))}}</td>
+                    
+                </tr>
+                
+
+                @else
                 <tr>
                     <td class="tthlb" width="10%">TANGGAL</td>
                     <td class="tthlb">: {{$tanggal}}</td>
@@ -127,7 +165,7 @@
                     <td class="tthlb"></td>
                     <td class="tthlb"> </td>
                 </tr>
-                
+                @endif
                 
             </table>
             <table width="100%" >
@@ -149,7 +187,7 @@
                     $kater4=0;
                     $kater5=0;
                 ?>
-                @foreach(cetak_get_keuangan($tanggal) as $no=>$o)
+                @foreach(cetak_get_keuangan($tanggal,$tahun) as $no=>$o)
                     <?php
                         if($o->status_keuangan_id==1){
                             $kater1+=$o->nilai;
