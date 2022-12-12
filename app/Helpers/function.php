@@ -514,7 +514,7 @@ function beli_stok_ready($kode){
     }
 }
 function get_join_kode(){
-    $data=App\Barang::select('nama_barang','join_kode')->groupBy('nama_barang','join_kode')->orderBy('nama_barang','Asc')->get();
+    $data=App\Barang::select('nama_barang','join_kode')->where('aktive',1)->groupBy('nama_barang','join_kode')->orderBy('nama_barang','Asc')->get();
     return $data;
 }
 function first_join_kode($join_kode){
@@ -664,11 +664,24 @@ function kdk($id){
     $data=App\Kategorikeuangan::where('id',$id)->first();
     return $data->kdk;
 }
-function penomoran(){
+function join_kode(){
     
     $cek=App\Barang::count();
     if($cek>0){
         $mst=App\Barang::orderBy('join_kode','Desc')->firstOrfail();
+        $urutan = (int) substr($mst['join_kode'], 0, 5);
+        $urutan++;
+        $nomor=sprintf("%05s",  $urutan);
+    }else{
+        $nomor=sprintf("%05s",  1);
+    }
+    return $nomor;
+}
+function penomoran($kd_satuan,$join_kode){
+    
+    $cek=App\Barang::where('tahun',date('y'))->count();
+    if($cek>0){
+        $mst=App\Barang::where('tahun',date('y'))->orderBy('join_kode','Desc')->firstOrfail();
         $urutan = (int) substr($mst['join_kode'], 0, 5);
         $urutan++;
         $nomor=sprintf("%05s",  $urutan);

@@ -10,6 +10,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 use App\Barang;
 use App\Viewstokorder;
+use App\Viewhargabarang;
+use App\Stok;
 use App\User;
 
 class BarangController extends Controller
@@ -155,14 +157,18 @@ class BarangController extends Controller
         
     }
     public function get_barang(request $request){
-        $data = Barang::where('harga_beli','>',0)->get();
+        $data = Stok::get();
         foreach($data as $o){
-           
-                $bar=Barang::UpdateOrcreate([
-                    'id'=>$o->id,
-                ],[
-                    'harga_beli'=>$o->harga_beli-pembulatan((($o->harga_beli*5)/100)),
-                ]);
+            $br=substr($o->kode,0,3);
+            $non=substr($o->kode,3,8);
+            $kode=$br.'22'.$non;
+          
+                // $bar=Stok::UpdateOrcreate([
+                //     'id'=>$o->id,
+                // ],[
+                //     'kode'=>$kode,
+                // ]);
+               
             
         }
     }
@@ -179,14 +185,17 @@ class BarangController extends Controller
             if($request->kategori==1){
                 $rules['nama_barang']= 'required';
                 $messages['nama_barang.required']= 'Lengkapi nama barang';
+                $rules['satuan']= 'required';
+                $messages['satuan.required']= 'Pilih satuan';
             }else{
                 $rules['join_kode']= 'required';
                 $messages['join_kode.required']= 'Pilih barang yang akan ditambahkan';
-            }
-            if(count($request->satuan)==0){
+                $rules['nama_barang']= 'required';
+                $messages['nama_barang.required']= 'Lengkapi nama barang';
                 $rules['satuan']= 'required';
                 $messages['satuan.required']= 'Pilih satuan';
             }
+            
         }else{
             $rules['nama_barang']= 'required';
             $messages['nama_barang.required']= 'Lengkapi nama barang';
@@ -227,63 +236,88 @@ class BarangController extends Controller
             if($request->id==0){
                 if($request->kategori==1){
 
-                    $kodebarang=penomoran();
-                    for($x=0;$x<count($request->satuan);$x++){
-                        $data       = New Barang;
-                        $data->join_kode  = $kodebarang;
-                        $data->kode  = 'BR'.$request->satuan[$x].$kodebarang;
-                        $data->nama_barang  = $request->nama_barang;
-                        $data->keterangan  = $request->keterangan[$x];
-                        $data->kd_satuan  = $request->satuan[$x];
-                        $data->aktive  = 1;
-                        $data->discon  = 0;
-                        $data->harga_jual  = 0;
-                        $data->harga_beli  = 0;
-                        $data->harga_discon  = 0;
-                        $data->satuan  = satuan($request->satuan[$x]);
-                        $data->save();
+                    $kodebarang=join_kode();
+                    $kode='BR'.$request->satuan.date('y').$kodebarang;
+                    $data       =Barang::UpdateOrcreate([
+                        'kode'=>$kode,
+                        'join_kode'=>$kodebarang,
+                    ],[
+                        'nama_barang'=>$request->nama_barang,
+                        'keterangan'=>$request->keterangan,
+                        'kd_satuan'=>$request->satuan,
+                        'satuan'=>satuan($request->satuan),
+                        'harga_jual'=>ubah_uang($request->harga_jual),
+                        'harga_beli'=>ubah_uang($request->harga_beli),
+                        'harga_discon'=>ubah_uang($request->harga_jual)-((ubah_uang($request->harga_jual)*ubah_uang($request->discon))/100),
+                        'discon'=>ubah_uang($request->discon),
+                        'aktive'=>1,
+                    ]);
+                    if($request->file!=""){
+                        $thumbnail = $request->file;
+                        $thumbnailFileName =$kodebarang.'.'.$thumbnail->getClientOriginalExtension();
+                        $thumbnailPath =$thumbnailFileName;
+    
+                        $file =\Storage::disk('public_photo');
+                        if($file->put($thumbnailPath, file_get_contents($thumbnail))){
+                            $data=Barang::where('join_kode',$kodebarang)->update([
+                                
+                                'foto'=>$thumbnailPath,
+                            ]);
+    
+                            
+                        }
                     }
-                    
-
+                    echo'@ok';
                     
                 }else{
-                    $kodebarang=$request->join_kode;
-                    for($x=0;$x<count($request->satuan);$x++){
-                        $cek_data=Barang::where('kode','BR'.$request->satuan[$x].$kodebarang)->count();
-                        if($cek==0){
-                            $data=Barang::create([
-                                'kode'=>'BR'.$request->satuan[$x].$kodebarang,
-                                'join_kode'=>$kodebarang,
-                                'nama_barang'=>first_join_kode($kodebarang),
-                                'kd_satuan'=>$request->satuan[$x],
-                                'keterangan'=>$request->keterangan,
-                                'satuan'=>satuan($request->satuan[$x]),
-                            ]);
-                        }   
-                            
-                        
-                    }
-                }
-
-                if($request->file!=""){
-                    $thumbnail = $request->file;
-                    $thumbnailFileName =$kodebarang.'.'.$thumbnail->getClientOriginalExtension();
-                    $thumbnailPath =$thumbnailFileName;
-
-                    $file =\Storage::disk('public_photo');
-                    if($file->put($thumbnailPath, file_get_contents($thumbnail))){
-                        $data=Barang::where('join_kode',$kodebarang)->update([
-                            
-                            'foto'=>$thumbnailPath,
+                    $prs=explode('/',$request->join_kode);
+                    $kodebarang=$prs[0];
+                    $kode='BR'.$request->satuan.date('y').$kodebarang;
+                    $cekbr=Barang::where('join_kode',$kodebarang)->where('kd_satuan',$request->satuan)->count();
+                    if($cekbr>0){
+                        echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
+                        echo'Barang sudah tersedia';
+                        echo'</div></div>';
+                    }else{ 
+                        $data       =Barang::UpdateOrcreate([
+                            'kode'=>$kode,
+                            'join_kode'=>$kodebarang,
+                        ],[
+                            'nama_barang'=>$request->nama_barang,
+                            'keterangan'=>$request->keterangan,
+                            'kd_satuan'=>$request->satuan,
+                            'satuan'=>satuan($request->satuan),
+                            'harga_jual'=>ubah_uang($request->harga_jual),
+                            'harga_beli'=>ubah_uang($request->harga_beli),
+                            'harga_discon'=>ubah_uang($request->harga_jual)-((ubah_uang($request->harga_jual)*ubah_uang($request->discon))/100),
+                            'discon'=>ubah_uang($request->discon),
+                            'aktive'=>1,
                         ]);
-
-                        
+                        if($request->file!=""){
+                            $thumbnail = $request->file;
+                            $thumbnailFileName =$kodebarang.'.'.$thumbnail->getClientOriginalExtension();
+                            $thumbnailPath =$thumbnailFileName;
+        
+                            $file =\Storage::disk('public_photo');
+                            if($file->put($thumbnailPath, file_get_contents($thumbnail))){
+                                $data=Barang::where('join_kode',$kodebarang)->update([
+                                    
+                                    'foto'=>$thumbnailPath,
+                                ]);
+        
+                                
+                            }
+                        }
+                        echo'@ok';
                     }
                 }
-                echo'@ok';
+
+                
+
             }else{
                 $data       = Barang::find($request->id);
                 $data->keterangan  = $request->keterangan;
+                $data->nama_barang  = $request->nama_barang;
                 $data->harga_jual  = ubah_uang($request->harga_jual);
                 $data->harga_beli  = ubah_uang($request->harga_beli);
                 $data->discon  = ubah_uang($request->discon);

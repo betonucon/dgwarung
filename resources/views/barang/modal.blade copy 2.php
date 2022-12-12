@@ -28,46 +28,29 @@
                                     </div>
                                 </div>
                                 @endif
-                                
-                                <div class="form-group row" id="tampil_tambah_satuan">
-                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Barang Utama</label>
-                                    <div class="col-lg-8" style="padding: 0% 1% 0% 0%;">
-                                        <div class="input-group input-group-sm">
-                                            <select name="join_kode" onchange="cari_barang(this.value)" class="form-control form-control-sm " id="default-select2" placeholder="Ketik disini....">
-                                                <option value="">Pilih</option>
-                                                @foreach(get_join_kode() as $sat)
-                                                    <option value="{{$sat->join_kode}}/{{$sat->nama_barang}}" > {{$sat->nama_barang}}</option>
-                                                @endforeach
-                                            </select>
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
+                                <div class="form-group row" id="tampil_new">
                                     <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Nama Barang</label>
                                     <div class="col-lg-8" style="padding: 0% 1% 0% 0%;">
                                         <div class="input-group input-group-sm">
-                                            <input type="text"   name="nama_barang" id="nama_barang" value="{{$data->nama_barang}}" class="form-control form-control-sm" placeholder="Ketik disini...." />
+                                            <input type="text"  {{$disabled}}  name="nama_barang" value="{{$data->nama_barang}}" class="form-control form-control-sm" placeholder="Ketik disini...." />
                                             
                                         </div>
                                     </div>
                                 </div>
-                                @if($id==0)
-                                <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Satuan</label>
-                                    <div class="col-lg-4" style="padding: 0% 1% 0% 0%;">
+                                <div class="form-group row" id="tampil_tambah_satuan">
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Nama Barang</label>
+                                    <div class="col-lg-8" style="padding: 0% 1% 0% 0%;">
                                         <div class="input-group input-group-sm">
-                                            <select name="satuan"  class="form-control form-control-sm "  placeholder="Ketik disini....">
+                                            <select name="join_kode"  class="form-control form-control-sm " id="default-select2" placeholder="Ketik disini....">
                                                 <option value="">Pilih</option>
-                                                @foreach(get_satuan() as $sat)
-                                                    <option value="{{$sat->kd_satuan}}">{{$sat->satuan}}</option>
+                                                @foreach(get_join_kode() as $sat)
+                                                    <option value="{{$sat->join_kode}}" > {{$sat->nama_barang}}</option>
                                                 @endforeach
                                             </select>
                                             
                                         </div>
                                     </div>
                                 </div>
-                                @endif
                                 <div class="form-group row">
                                     <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Foto Barang</label>
                                     <div class="col-lg-7"  style="padding: 0% 1% 0% 0%;">
@@ -82,7 +65,25 @@
                                 
                             </div>
                             <div class="col-md-6">
-                               
+                                @if($id>0)
+                                    
+                                @else
+                                <div class="form-group row">
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Satuan</label>
+                                    <div class="col-lg-8" style="padding: 0% 1% 0% 0%;">
+                                        <div class="input-group input-group-sm">
+                                            @foreach(get_satuan() as $sat)
+                                                <div class="custom-control custom-checkbox mb-1">
+                                                    <input type="checkbox" name="satuan[]" value="{{$sat->kd_satuan}}" class="custom-control-input" id="customCheck{{$sat->id}}">
+                                                    <label class="custom-control-label" for="customCheck{{$sat->id}}">{{$sat->satuan}}&nbsp;</label>
+                                                </div>
+                                            @endforeach
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+                                @if($id>0)
                                     <div class="form-group row">
                                         <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Keterangan</label>
                                         <div class="col-lg-8" style="padding: 0% 1% 0% 0%;">
@@ -127,8 +128,22 @@
                                         </div>
                                         
                                     </div>
-                                
-                                
+                                @else
+                                    @foreach(get_satuan() as $sat)
+                                    <div class="form-group row">
+                                        <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Keterangan {{$sat->satuan}}</label>
+                                        <div class="col-lg-8" style="padding: 0% 1% 0% 0%;">
+                                            <div class="input-group input-group-sm">
+                                                <div class="input-group input-group-sm">
+                                                    <input type="text"  name="keterangan[]" value="{{$data->keterangan}}" class="form-control form-control-sm" placeholder="Ketik disini...." />
+                                                    
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                @endif
                                 
                                 
                             </div>
@@ -166,11 +181,5 @@
                                     $("#tampil_new").hide();
                                     $("#tampil_tambah_satuan").show();
                                 }
-                            }
-
-                            function cari_barang(text){
-                                var bat=text.split('/');
-                                // alert(text)
-                                $('#nama_barang').val(bat[1])
                             }
                         </script>
