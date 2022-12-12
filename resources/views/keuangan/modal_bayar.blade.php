@@ -1,5 +1,5 @@
 
-    <input type="text" name="id" value="{{$id}}">
+    <input type="hidden" name="id" value="{{$id}}">
     <div class="note note-warning note-with-right-icon m-b-15">
         <div class="note-content text-right">
             <h4><b>Perhatian</b></h4>
@@ -86,8 +86,8 @@
                         </tbody>
                     </table>
                 </div>
-                <input type="text" name="uangmasuk" value="{{$uangmasuk}}">
-                <input type="text" name="kategori_keuangan_id" value="{{$data->kategori_keuangan_id}}">
+                <input type="hidden" name="uangmasuk" value="{{$uangmasuk}}">
+                <input type="hidden" name="kategori_keuangan_id" value="{{$data->kategori_keuangan_id}}">
             </div>
             
             

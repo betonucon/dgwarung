@@ -338,6 +338,10 @@ class StokorderController extends Controller
                 return $row->supplier;
                 
             })
+            ->addColumn('updatenya', function ($row) {
+                return tanggal_tok($row->update);
+                
+            })
             ->addColumn('nama_barang_lengkap', function ($row) {
                 return $row->nama_barang.' ('.$row->keterangan.')';
                 
@@ -401,6 +405,10 @@ class StokorderController extends Controller
             ->addIndexColumn()
             ->addColumn('supplier', function ($row) {
                 return $row->msupplier['supplier'];
+            })
+            ->addColumn('updatenya', function ($row) {
+                return tanggal_tok($row->update);
+                
             })
             ->addColumn('status_data', function ($row) {
                 if($row->tukar_id>0){
@@ -541,6 +549,7 @@ class StokorderController extends Controller
                         
                         'nomor_stok'=>$nomor,
                         'supplier_id'=>$request->supplier_id,
+                        'kategori_opname_id'=>$request->kategori_opname_id,
                         'tanggal'=>$request->tanggal,
                         'users_id'=>Auth::user()->id,
                         'nama_user'=>Auth::user()->name,
@@ -566,6 +575,9 @@ class StokorderController extends Controller
         $rules['harga_jual']= 'required|min:0|not_in:0';
         $messages['harga_jual.required']= 'Lengkapi harga jual';
         $messages['harga_jual.not_in']= 'Lengkapi harga jual';
+        $rules['qty']= 'required|min:0|not_in:0';
+        $messages['qty.required']= 'Lengkapi Qty';
+        $messages['qty.not_in']= 'Lengkapi Qty';
         
        
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -587,18 +599,20 @@ class StokorderController extends Controller
                     $data=Stok::where('id',$request->id)->update([
                         
                         'harga_jual'=>ubah_uang($request->harga_jual),
+                        'qty'=>ubah_uang($request->qty),
                         'update'=>date('Y-m-d H:i:s'),
                     ]);
-                    if($gt->harga_jual>harga_jual($gt->kode)){
-                        $harga_jual=$gt->harga_jual;
-                    }else{
-                        $harga_jual=harga_jual($gt->kode);
-                    }
-                    
+                    // if($gt->harga_jual>harga_jual($gt->kode)){
+                    //     $harga_jual=$request->harga_jual;
+                    // }else{
+                    //     $harga_jual=harga_jual($gt->kode);
+                    // }
+                    $harga_jual=ubah_uang($request->harga_jual);
                     $hdiscon=$harga_jual-(($harga_jual*discon_barang($gt->kode))/100);
                     $bar=Barang::where('kode',$gt->kode)->update([ 
                         'harga_jual'=>$harga_jual,
                         'harga_discon'=>$hdiscon,
+                        'update'=>date('Y-m-d H:i:s'),
                     ]);
                     echo'@ok@';
                 
@@ -672,31 +686,35 @@ class StokorderController extends Controller
                             'harga_jual'=>$harga_jual,
                             'harga_beli'=>$harga_beli,
                             'harga_discon'=>$hdiscon,
+                            'update'=>date('Y-m-d H:i:s'),
                         ]);
                         $data=Stok::where('id',$gt->id)->update([     
                             'urut'=>($no+1),
                             'status'=>2,
                             'aktif'=>0,
+                            'kategori_opname_id'=>$odr->kategori_opname_id,
                             'users_id'=>Auth::user()->id,
                             'nama_user'=>Auth::user()->name,
                             'proses'=>1,
                             'update'=>date('Y-m-d H:i:s'),
                         ]);
                     }
-                    $keuangan=Keuangan::UpdateOrcreate([
-                        
-                        'nomor'=>kdk($request->kategori_keuangan_id).$request->nomor_stok,
-                    ],[
-                        'nilai'=>$request->nilai,
-                        'status_keuangan_id'=>$request->status_keuangan_id,
-                        'kategori_keuangan_id'=>$request->kategori_keuangan_id,
-                        'keterangan'=>'Pembelian Stok kepada '.$odr->msupplier['supplier'],
-                        'tanggal'=>$tanggal,
-                        'bulan'=>$bulan,
-                        'tahun'=>$tahun,
-                        'kat'=>2,
-                        'waktu'=>date('Y-m-d H:i:s'),
-                    ]);
+                    if($odr->kategori_opname_id==1){
+                        $keuangan=Keuangan::UpdateOrcreate([
+                            
+                            'nomor'=>kdk($request->kategori_keuangan_id).$request->nomor_stok,
+                        ],[
+                            'nilai'=>$request->nilai,
+                            'status_keuangan_id'=>$request->status_keuangan_id,
+                            'kategori_keuangan_id'=>$request->kategori_keuangan_id,
+                            'keterangan'=>'Pembelian Stok kepada '.$odr->msupplier['supplier'],
+                            'tanggal'=>$tanggal,
+                            'bulan'=>$bulan,
+                            'tahun'=>$tahun,
+                            'kat'=>2,
+                            'waktu'=>date('Y-m-d H:i:s'),
+                        ]);
+                    }
 
                     echo'@ok@'.$nomor;
                 

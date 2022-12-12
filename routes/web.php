@@ -47,8 +47,10 @@ Route::group(['prefix' => 'employe','middleware'    => 'auth'],function(){
 Route::group(['prefix' => 'keuangan','middleware'    => 'auth'],function(){
     Route::get('/','KeuanganController@index');
     Route::get('/get_data','KeuanganController@get_data');
+    Route::get('/cetak','KeuanganController@cetak');
     Route::get('/delete_data','KeuanganController@delete_data');
     Route::get('/delete_data_bayar','KeuanganController@delete_data_bayar');
+    Route::get('/delete_data_bayar_header','KeuanganController@delete_data_bayar_header');
     Route::get('/tentukan_status','KeuanganController@tentukan_status');
     Route::get('/create','KeuanganController@create');
     Route::get('/modal','KeuanganController@modal');

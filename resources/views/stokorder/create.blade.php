@@ -103,6 +103,14 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label>Kategori Transaksi</label>
+                        <select name="kategori_opname_id" class="form-control form-control-sm "  placeholder="Ketik disini....">
+                            @foreach(get_kategoriopname() as $opn)
+                                <option value="{{$opn->id}}" >{{$opn->kategori_opname}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label>Tanggal</label>
                         <input type="text" id="tanggaldate" value="{{date('Y-m-d')}}" onkeypress="proses_enter_order(event)"   name="tanggal" class="form-control" />
                     </div>

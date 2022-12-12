@@ -27,6 +27,14 @@
                     </div>
                 </div>
             </div>
+            <div class="form-group row">
+                <label style="padding: 1% 1% 2% 3%;" class="col-lg-3 col-form-label">Qty</label>
+                <div class="col-lg-5" style="padding: 1% 1% 2% 1%;">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" name="qty"   id="qty" value="{{$data->qty}}">
+                    </div>
+                </div>
+            </div>
             
             
             
@@ -39,6 +47,7 @@
         $("#currency1").inputmask({ alias : "currency", prefix: '','groupSeparator': ',', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
         $("#currency2").inputmask({ alias : "currency", prefix: '','groupSeparator': ',', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
         $("#currency3").inputmask({ alias : "currency", prefix: '', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
+        $("#qty").inputmask({ alias : "currency", prefix: '', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
         
         $('#tanggalnya').datepicker({
             format:"yyyy-mm-dd",

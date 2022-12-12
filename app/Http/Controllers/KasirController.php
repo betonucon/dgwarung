@@ -443,6 +443,7 @@ class KasirController extends Controller
                         
                         'nomor_transaksi'=>$nomor,
                         'konsumen'=>$request->konsumen,
+                        'kategori_opname_id'=>$request->kategori_opname_id,
                         'tanggal'=>$request->tanggal,
                         'users_id'=>Auth::user()->id,
                         'nama_user'=>Auth::user()->name,
@@ -516,38 +517,41 @@ class KasirController extends Controller
                             'urut'=>($no+1),
                             'status'=>3,
                             'proses'=>1,
+                            'kategori_opname_id'=>$odr->kategori_opname_id,
                             'users_id'=>Auth::user()->id,
                             'nama_user'=>Auth::user()->name,
                             'update'=>date('Y-m-d H:i:s'),
                         ]);
                     }
-                    $keuangan=Keuangan::create([
-                        
-                        'nomor'=>kdk($request->kategori_keuangan_id).$request->nomor_transaksi,
-                        'nilai'=>$request->nilai,
-                        'status_keuangan_id'=>$request->status_keuangan_id,
-                        'kategori_keuangan_id'=>$request->kategori_keuangan_id,
-                        'keterangan'=>'Pembayaran penjualan dari '.$odr->konsumen,
-                        'tanggal'=>$tanggal,
-                        'bulan'=>$bulan,
-                        'tahun'=>$tahun,
-                        'kat'=>2,
-                        'waktu'=>date('Y-m-d H:i:s'),
-                    ]);
-                    if($request->status_keuangan_id==1){
-                        $provit=Keuangan::create([
+                    if($odr->kategori_opname_id==1){
+                        $keuangan=Keuangan::create([
                             
-                            'nomor'=>kdk(6).$request->nomor_transaksi,
-                            'nilai'=>$request->provite,
+                            'nomor'=>kdk($request->kategori_keuangan_id).$request->nomor_transaksi,
+                            'nilai'=>$request->nilai,
                             'status_keuangan_id'=>$request->status_keuangan_id,
-                            'kategori_keuangan_id'=>6,
-                            'keterangan'=>'Pembayaran pennjualan dari '.$odr->konsumen,
+                            'kategori_keuangan_id'=>$request->kategori_keuangan_id,
+                            'keterangan'=>'Pembayaran penjualan dari '.$odr->konsumen,
                             'tanggal'=>$tanggal,
                             'bulan'=>$bulan,
                             'tahun'=>$tahun,
                             'kat'=>2,
                             'waktu'=>date('Y-m-d H:i:s'),
                         ]);
+                        if($request->status_keuangan_id==1){
+                            $provit=Keuangan::create([
+                                
+                                'nomor'=>kdk(6).$request->nomor_transaksi,
+                                'nilai'=>$request->provite,
+                                'status_keuangan_id'=>$request->status_keuangan_id,
+                                'kategori_keuangan_id'=>6,
+                                'keterangan'=>'Pembayaran pennjualan dari '.$odr->konsumen,
+                                'tanggal'=>$tanggal,
+                                'bulan'=>$bulan,
+                                'tahun'=>$tahun,
+                                'kat'=>2,
+                                'waktu'=>date('Y-m-d H:i:s'),
+                            ]);
+                        }
                     }
 
                     echo'@ok@'.$nomor;

@@ -54,6 +54,10 @@
                                     <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_piutang($tahun))}}</div>
                                 </div>
                                 <div class="form-group row">
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Tempo</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_tempo($tahun))}}</div>
+                                </div>
+                                <div class="form-group row">
                                     <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Provit</label>
                                     <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_provit($tahun))}}</div>
                                 </div>
@@ -64,7 +68,7 @@
                                     <label style="padding: 0% 1% 0% 1%;" class="col-lg-12 col-form-label">REKAPAN KEUANGAN {{date('F Y',strtotime($tanggal))}}</label>
                                 </div>
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Saldo</label>
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Penjualan</label>
                                     <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_saldo_bulan($bulan,$tahun))}}</div>
                                 </div>
                                 <div class="form-group row">
@@ -82,7 +86,7 @@
                                     <label style="padding: 0% 1% 0% 1%;" class="col-lg-12 col-form-label">REKAPAN KEUANGAN {{date('d F Y')}}</label>
                                 </div>
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Saldo</label>
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Penjualan</label>
                                     <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_saldo_tanggal($tanggal))}}</div>
                                 </div>
                                 <div class="form-group row">
@@ -103,25 +107,27 @@
                             <div class="col-md-12" style="padding:0px">
                                 <div class="btn-group btn-group-justified">
                                     <a class="btn btn-blue text-white" onclick="tambah_data(0)"><i class="fas fa-plus"></i> Tambah</a>
+                                    <a class="btn btn-green text-white" onclick="cari_data()"><i class="fas fa-filter"></i> Filter</a>
+                                    <a class="btn btn-green text-white" onclick="cetak()"><i class="fas fa-download"></i> Download</a>
                                 </div>
                             </div>
                         </div>
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
-                                <a href="{{url('keuangan')}}?act=0" class="nav-link @if($act==0) active @endif">
+                                <a href="{{url('keuangan')}}?tanggal={{$tanggal}}&act=0" class="nav-link @if($act==0) active @endif">
                                     <span class="d-sm-none">All Transaksi</span>
                                     <span class="d-sm-block d-none">All Transaksi</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{url('keuangan')}}?act=8" class="nav-link @if($act==8) active @endif">
+                                <a href="{{url('keuangan')}}?tanggal={{$tanggal}}&act=8" class="nav-link @if($act==8) active @endif">
                                     <span class="d-sm-none">Provit</span>
                                     <span class="d-sm-block d-none">Provit</span>
                                 </a>
                             </li>
                             @foreach(get_statuskeuangan() as $get)
                             <li class="nav-item">
-                                <a  href="{{url('keuangan')}}?act={{$get->id}}"  class="nav-link  @if($act==$get->id) active @endif">
+                                <a  href="{{url('keuangan')}}?tanggal={{$tanggal}}&act={{$get->id}}"  class="nav-link  @if($act==$get->id) active @endif">
                                     <span class="d-sm-none">{{$get->status_keuangan}}</span>
                                     <span class="d-sm-block d-none">{{$get->status_keuangan}}</span>
                                 </a>
@@ -194,6 +200,26 @@
         </div>
     </div>
 </div>  
+<div class="modal fade" id="modal-cari" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Filter data</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                    <div class="form-group">
+                        <label>Tanggal</label>
+                        <input type="text" id="tanggaldate" value="{{$tanggal}}" class="form-control" />
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Tutup</a>
+                <a href="javascript:;" class="btn btn-danger" onclick="filter_data()" >Terapkan</a>
+            </div>
+        </div>
+    </div>
+</div>  
 
 <div class="modal fade" id="modal-bayar" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -260,7 +286,20 @@
                     }
                 ]
             });
-
+            $("#tanggaldate").datepicker({
+                format:'yyyy-mm-dd'
+            });
+            function filter_data(){
+                var tgl=$('#tanggaldate').val();
+                location.assign("{{url('keuangan')}}?tanggal="+tgl)
+            }
+            function cetak(){
+                var tgl=$('#tanggaldate').val();
+                window.open("{{url('keuangan/cetak')}}?tanggal="+tgl,"_blank")
+            }
+            function cari_data(){
+                $('#modal-cari').modal('show');
+            }
             function tambah_data(id){
                 $('#modal-retur .modal-title').text('Form Keuangan ');
                 $('#modal-retur').modal('show');
@@ -361,7 +400,7 @@
                 });
                 
             }      
-            function delete_data_bayar(id){
+            function delete_data_bayar(id,kategori){
            
                 swal({
                     title: "Yakin menghapus data ini ?",
@@ -378,7 +417,40 @@
                             $.ajax({
                                 type: 'GET',
                                 url: "{{url('keuangan/delete_data_bayar')}}",
-                                data: "id="+id,
+                                data: "id="+id+"&kategori="+kategori,
+                                success: function(msg){
+                                    swal("Success! berhasil terhapus!", {
+                                        icon: "success",
+                                    });
+                                    location.reload();
+                                }
+                            });
+                        
+                        
+                    } else {
+                        
+                    }
+                });
+                
+            }      
+            function delete_data_bayar_header(id,kategori){
+           
+                swal({
+                    title: "Yakin menghapus data ini ?",
+                    text: "data akan hilang dari daftar ini",
+                    type: "warning",
+                    icon: "error",
+                    showCancelButton: true,
+                    align:"center",
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }).then((willDelete) => {
+                    if (willDelete) {
+                            $.ajax({
+                                type: 'GET',
+                                url: "{{url('keuangan/delete_data_bayar_header')}}",
+                                data: "id="+id+"&kategori="+kategori,
                                 success: function(msg){
                                     swal("Success! berhasil terhapus!", {
                                         icon: "success",

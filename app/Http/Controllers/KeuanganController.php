@@ -15,6 +15,7 @@ use App\Viewkeuangan;
 use App\Viewstokkasir;
 use App\Kasir;
 use App\Gaji;
+use PDF;
 use App\User;
 
 class KeuanganController extends Controller
@@ -29,9 +30,17 @@ class KeuanganController extends Controller
         }else{
             $act=$request->act;
         }
-        $bulan=date('m');
-        $tahun=date('Y');
-        $tanggal=date('Y-m-d');
+        if($request->tanggal==""){
+            $bulan=date('m');
+            $tahun=date('Y');
+            $tanggal=date('Y-m-d');
+        }else{
+            
+            $tanggal=$request->tanggal;
+            $bulan=date('m',strtotime($request->tanggal));
+            $tahun=date('Y',strtotime($request->tanggal));
+        }
+        
         return view('keuangan.index',compact('template','act','bulan','tahun','tanggal'));
     }
     public function create(request $request)
@@ -65,7 +74,12 @@ class KeuanganController extends Controller
         error_reporting(0);
         $template='top';
         $data=Keuangan::find($request->id);
-        $riwayat=Keuangan::where('nomor_bayar',$data->nomor)->orderBy('id','Asc')->get();
+        if($data->kategori_keuangan_id==2){
+            $riwayat=Keuangan::where('nomor_bayar',$data->nomor)->where('kategori_keuangan_id',$data->kategori_keuangan_id)->orderBy('id','Asc')->get();
+        }else{
+            $riwayat=Keuangan::where('nomor_bayar',$data->nomor)->where('kategori_keuangan_id',$data->kategori_keuangan_id)->orderBy('id','Asc')->get();
+        }
+        
         $id=$request->id;
         if($request->id==0){
             $disabled='';
@@ -110,11 +124,21 @@ class KeuanganController extends Controller
             ->addColumn('action', function ($row) {
                 if($row->kat==1){
                     if($row->kategori_keuangan_id==1 || $row->kategori_keuangan_id==2){
-                        $btn='
-                            <div class="btn-group">
-                               <span class="btn btn-danger btn-xs" onclick="delete_data_bayar('.$row->id.')"><i class="fas fa-window-close text-white"></i></span>
-                            </div>
-                        ';
+                        if($row->nomor_bayar==""){
+                            $btn='
+                                <div class="btn-group">
+                                <span class="btn btn-primary btn-xs" onclick="pembayaran_data('.$row->id.','.$row->kategori_keuangan_id.')">Bayar '.$row->nomor_bayar.'</span>
+                                <span class="btn btn-danger btn-xs" onclick="delete_data_bayar_header('.$row->id.','.$row->kategori_keuangan_id.')"><i class="fas fa-window-close text-white"></i></span>
+                                </div>
+                            ';
+                        }else{
+                            $btn='
+                                <div class="btn-group">
+                                <span class="btn btn-danger btn-xs" onclick="delete_data_bayar('.$row->id.','.$row->kategori_keuangan_id.')"><i class="fas fa-window-close text-white"></i></span>
+                                </div>
+                            ';
+                        }
+                       
                     }else{
                         $btn='
                             <div class="btn-group">
@@ -154,14 +178,34 @@ class KeuanganController extends Controller
     }
     public function delete_data_bayar(request $request){
         $find = Keuangan::where('id',$request->id)->first();
-        $utg = Keuangan::where('nomor',$find->nomor_bayar)->where('status_keuangan_id',3)->first();
-        $byrt=Keuangan::where('nomor',$find->nomor_bayar)->where('status_keuangan_id',3)->update([
+        if($request->kategori==1){
+            $utg = Keuangan::where('nomor',$find->nomor_bayar)->where('status_keuangan_id',3)->first();
+            $byrt=Keuangan::where('nomor',$find->nomor_bayar)->where('status_keuangan_id',3)->update([
+            
+                'nilai'=>($utg->nilai+$find->nilai),
+                'nilai_dibayar'=>($utg->nilai_dibayar-$find->nilai),
+                'waktu'=>date('Y-m-d H:i:s'),
+            ]);
+            $data = Keuangan::where('id',$request->id)->delete();
+        }else{
+            $utg = Keuangan::where('nomor',$find->nomor_bayar)->where('status_keuangan_id',4)->first();
+            $byrt=Keuangan::where('nomor',$find->nomor_bayar)->where('status_keuangan_id',4)->update([
+            
+                'nilai'=>($utg->nilai+$find->nilai),
+                'nilai_dibayar'=>($utg->nilai_dibayar-$find->nilai),
+                'waktu'=>date('Y-m-d H:i:s'),
+            ]);
+            $data = Keuangan::where('id',$request->id)->delete();
+        }
+
         
-            'nilai'=>($utg->nilai+$find->nilai),
-            'nilai_dibayar'=>($utg->nilai_dibayar-$find->nilai),
-            'waktu'=>date('Y-m-d H:i:s'),
-        ]);
-        $data = Keuangan::where('id',$request->id)->delete();
+    }
+    public function delete_data_bayar_header(request $request){
+        $find = Keuangan::where('id',$request->id)->first();
+        
+            $bayar = Keuangan::where('nomor_bayar',$find->nomor)->delete();
+            $data = Keuangan::where('id',$request->id)->delete();
+            
     }
 
     
@@ -321,8 +365,15 @@ class KeuanganController extends Controller
             $bulan=date('m');
             $tahun=date('Y');
             if($request->kategori_keuangan_id==1){
-                    $odr=Stokorder::where('nomor_stok',$request->nomor_stok)->first();
-                    if((ubah_uang($request->nilai_dibayarkan)+$request->uangmasuk)>ubah_uang($request->nilai)){
+                    $mstr=Keuangan::where('id',$request->id)->first();
+                    if($mstr->kat==1){
+                        $keterangan='Pembayaran piutang '.$request->nomor;
+                    }else{
+                        $odr=Stokorder::where('nomor_stok',$request->nomor_stok)->first();
+                        $keterangan='Pembayaran Nomor Order '.$request->nomor_stok.' '.$odr->msupplier['supplier'];
+                    }
+                    
+                    if(ubah_uang($request->nilai_dibayarkan)>ubah_uang($request->nilai)){
                         echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
                         echo'Pembayaran melebihi tagihan';
                         echo'</div></div>';
@@ -335,7 +386,7 @@ class KeuanganController extends Controller
                             'nilai'=>ubah_uang($request->nilai_dibayarkan),
                             'status_keuangan_id'=>2,
                             'kategori_keuangan_id'=>1,
-                            'keterangan'=>'Pembayaran Nomor Order '.$request->nomor_stok.' '.$odr->msupplier['supplier'],
+                            'keterangan'=>$keterangan,
                             'tanggal'=>$tanggal,
                             'nomor_bayar'=>$request->nomor,
                             'bulan'=>$bulan,
@@ -358,7 +409,14 @@ class KeuanganController extends Controller
                     }
 
             }else{
-                $odr=Kasir::where('nomor_transaksi',$request->nomor_stok)->first();
+                
+                $mstr=Keuangan::where('id',$request->id)->first();
+                    if($mstr->kat==1){
+                        $keterangan='Pembayaran hutang '.$mst->nomor;
+                    }else{
+                        $odr=Kasir::where('nomor_transaksi',$request->nomor_stok)->first();
+                        $keterangan='Pembayaran Penjualan Nomor '.$request->nomor_stok.' '.$odr->konsumen;
+                    }
                 $provite=Viewstokkasir::where('nomor_transaksi',$request->nomor_stok)->where('status',3)->sum('provite');
                     if(ubah_uang($request->nilai_dibayarkan)>ubah_uang($request->nilai)){
                         echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
@@ -374,7 +432,7 @@ class KeuanganController extends Controller
                             'nilai'=>ubah_uang($request->nilai_dibayarkan),
                             'status_keuangan_id'=>1,
                             'kategori_keuangan_id'=>2,
-                            'keterangan'=>'Pembayaran Penjualan Nomor '.$request->nomor_stok.' '.$odr->konsumen,
+                            'keterangan'=>$keterangan,
                             'tanggal'=>$tanggal,
                             'nomor_bayar'=>$request->nomor,
                             'bulan'=>$bulan,
@@ -401,10 +459,12 @@ class KeuanganController extends Controller
                             
                                 'nomor'=>$nomortrs,
                                 'nilai'=>$provite,
+                                'nilai_dibayar'=>$provite,
                                 'status_keuangan_id'=>1,
                                 'kategori_keuangan_id'=>6,
                                 'keterangan'=>$kugn->keterangan,
                                 'tanggal'=>$tanggal,
+                                'nomor_bayar'=>$request->nomor,
                                 'bulan'=>$bulan,
                                 'tahun'=>$tahun,
                                 'kat'=>2,
@@ -417,5 +477,16 @@ class KeuanganController extends Controller
             }
            
         }
+    }
+
+    public function cetak(Request $request)
+    {
+        error_reporting(0);
+        $tanggal=$request->tanggal;
+        $pdf = PDF::loadView('keuangan.cetak', compact('tanggal'));
+        $pdf->setPaper('A4', 'Landscape');
+        $pdf->stream($request->id.'.pdf');
+        return $pdf->stream();
+        
     }
 }

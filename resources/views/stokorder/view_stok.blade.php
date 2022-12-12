@@ -110,6 +110,7 @@
                                             <thead>
                                                 <tr>
                                                     <th class="text-nowrap" width="3%">No</th>
+                                                    <th class="text-nowrap" width="9%">Nomor Stok</th>
                                                     <th class="text-nowrap" width="7%">Kode</th>
                                                     <th class="text-nowrap">Nama Barang</th>
                                                     <th class="text-nowrap">Supplier</th>
@@ -117,7 +118,7 @@
                                                     <th class="text-nowrap"  width="9%" style="text-align:left !important">H.Jual</th>
                                                     <th class="text-nowrap"  width="9%" style="text-align:left !important">H.Beli</th>
                                                     <th class="text-nowrap"  width="6%">Status</th>
-                                                    <th class="text-nowrap"  width="12%">Waktu</th>
+                                                    <th class="text-nowrap"  width="9%">Waktu</th>
                                                     <th class="text-nowrap"  width="3%"></th>
                                                 </tr>
                                             </thead>
@@ -260,6 +261,7 @@
                                 return meta.row + meta.settings._iDisplayStart + 1;
                             } 
                         },
+                        { data: 'nomor_stok' },
                         { data: 'kode' },
                         { data: 'nama_barang_lengkap' },
                         { data: 'supplier' },
@@ -267,7 +269,7 @@
                         { data: 'u_harga_jual' ,className: "text-right"  },
                         { data: 'u_harga_beli' ,className: "text-right"  },
                         { data: 'status_data' },
-                        { data: 'update' },
+                        { data: 'updatenya' },
                         { data: 'action' },
                         
                     ]
@@ -294,7 +296,7 @@
                         { data: 'satuan' },
                         { data: 'qty' },
                         { data: 'status_data' },
-                        { data: 'update' },
+                        { data: 'updatenya' },
                         
                     ]
                 });

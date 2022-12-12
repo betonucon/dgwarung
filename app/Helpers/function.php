@@ -179,6 +179,22 @@ function tanggal_eng($date=null){
     }
     
  }
+function tahun_saja($date=null){
+    if($date=="" || $date==null){
+       return null;
+    }else{
+       return date('Y',strtotime($date));
+    }
+    
+ }
+function bulan_saja($date=null){
+    if($date=="" || $date==null){
+       return null;
+    }else{
+       return date('m',strtotime($date));
+    }
+    
+ }
 function tanggal_tok($date=null){
     if($date=="" || $date==null){
        return null;
@@ -245,6 +261,10 @@ function sum_gaji(){
 }
 function get_employe(){
     $data=App\Employe::where('status',1)->get();
+    return $data;
+}
+function get_kategoriopname(){
+    $data=App\Kategoriopname::orderBy('id','Asc')->get();
     return $data;
 }
 function aktive_transaksi(){
@@ -541,6 +561,10 @@ function total_piutang($id){
     $saldo=App\Keuangan::whereIn('status_keuangan_id',array(3))->where('tahun',$id)->where('kategori_keuangan_id',1)->sum('nilai');
     return $saldo;
 }
+function total_tempo($id){
+    $saldo=App\Keuangan::whereIn('status_keuangan_id',array(4))->where('tahun',$id)->where('kategori_keuangan_id',2)->sum('nilai');
+    return $saldo;
+}
 function total_keluar_bulan($bulan,$tahun){
     $saldo=App\Keuangan::whereIn('status_keuangan_id',array(2))->where('bulan',$bulan)->where('tahun',$tahun)->where('kategori_keuangan_id',1)->sum('nilai');
     return $saldo;
@@ -549,8 +573,20 @@ function total_piutang_bulan($bulan,$tahun){
     $saldo=App\Keuangan::whereIn('status_keuangan_id',array(3))->where('bulan',$bulan)->where('tahun',$tahun)->where('kategori_keuangan_id',1)->sum('nilai');
     return $saldo;
 }
+function total_tempo_bulan($bulan,$tahun){
+    $saldo=App\Keuangan::whereIn('status_keuangan_id',array(4))->where('bulan',$bulan)->where('tahun',$tahun)->where('kategori_keuangan_id',2)->sum('nilai');
+    return $saldo;
+}
 function total_piutang_tanggal($tanggal){
     $saldo=App\Keuangan::whereIn('status_keuangan_id',array(3))->where('tanggal',$tanggal)->where('kategori_keuangan_id',1)->sum('nilai');
+    return $saldo;
+}
+function total_tempo_tanggal($tanggal){
+    $saldo=App\Keuangan::whereIn('status_keuangan_id',array(4))->where('tanggal',$tanggal)->where('kategori_keuangan_id',2)->sum('nilai');
+    return $saldo;
+}
+function cetak_get_keuangan($tanggal){
+    $saldo=App\Viewkeuangan::where('tanggal',$tanggal)->orderBy('id','Asc')->get();
     return $saldo;
 }
 function total_keluar_tanggal($tanggal){
