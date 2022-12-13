@@ -29,7 +29,6 @@
                             <thead>
                                 <tr>
                                     <th class="text-nowrap" width="5%">No</th>
-                                    <th class="text-nowrap" width="10%">KD Supplier</th>
                                     <th class="text-nowrap">Nama Supplier</th>
                                     <th class="text-nowrap" width="12%">Telepon</th>
                                     <th class="text-nowrap" width="8%">Act</th>
@@ -52,7 +51,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Alert Header</h4>
+                <h4 class="modal-title">Form Supplier</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
@@ -67,7 +66,7 @@
             </div>
             <div class="modal-footer">
                 <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Tutup</a>
-                <a href="javascript:;" class="btn btn-danger" id="import-data" >Proses</a>
+                <a href="javascript:;" class="btn btn-danger" onclick="simpan_data()" >Proses</a>
             </div>
         </div>
     </div>
@@ -101,7 +100,6 @@
 								return meta.row + meta.settings._iDisplayStart + 1;
 							} 
 						},
-						{ data: 'kode_supplier' },
 						{ data: 'supplier' },
 						{ data: 'no_telepon' },
 						{ data: 'action' },
@@ -154,14 +152,14 @@
 				if (willDelete) {
 						$.ajax({
 							type: 'GET',
-							url: "{{url('pengumuman/delete_data')}}",
+							url: "{{url('supplier/delete_data')}}",
 							data: "id="+id,
 							success: function(msg){
 								swal("Success! berhasil terhapus!", {
 									icon: "success",
 								});
 								var table=$('#data-table-fixed-header').DataTable();
-								table.ajax.url("{{ url('pengumuman/get_data')}}").load();
+								table.ajax.url("{{ url('supplier/get_data')}}").load();
 							}
 						});
 					
@@ -173,7 +171,60 @@
 			
 		}
 
-        
+        function simpan_data(){
+            
+            var form=document.getElementById('mydata');
+            
+                
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ url('supplier') }}",
+                    data: new FormData(form),
+                    contentType: false,
+                    cache: false,
+                    processData:false,
+                    beforeSend: function() {
+                        document.getElementById("loadnya").style.width = "100%";
+                    },
+                    success: function(msg){
+                        var bat=msg.split('@');
+                        if(bat[1]=='ok'){
+                            document.getElementById("loadnya").style.width = "0px";
+                            swal({
+									title: "Success! berhasil disimpan!",
+									icon: "success",
+                            });
+                            var table=$('#data-table-fixed-header').DataTable();
+			                    table.ajax.url("{{ url('supplier/get_data')}}").load(); 
+                                $('#modal-form').modal('hide');   
+                                
+                        }else{
+                            document.getElementById("loadnya").style.width = "0px";
+                            swal({
+                                title: 'Notifikasi',
+                               
+                                html:true,
+                                text:'ss',
+                                icon: 'error',
+                                buttons: {
+                                    cancel: {
+                                        text: 'Tutup',
+                                        value: null,
+                                        visible: true,
+                                        className: 'btn btn-dangers',
+                                        closeModal: true,
+                                    },
+                                    
+                                }
+                            });
+                            $('.swal-text').html('<div style="width:100%;background:#f2f2f5;padding:1%;text-align:left;font-size:13px">'+msg+'</div>')
+                            $("#qty").val("");
+                        }
+                        
+                        
+                    }
+                });
+        };
 
         
     </script>

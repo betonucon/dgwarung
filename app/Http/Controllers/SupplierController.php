@@ -85,28 +85,11 @@ class SupplierController extends Controller
         $rules = [];
         $messages = [];
         
-        $rules['judul']= 'required';
-        $messages['judul.required']= 'Lengkapi kolom judul';
+        $rules['supplier']= 'required';
+        $messages['supplier.required']= 'Lengkapi kolom supplier';
         
-        $rules['content']= 'required';
-        $messages['content.required']= 'Lengkapi kolom deskripsi';
-        if($request->id==0){
-            $rules['file']= 'required|mimes:jpg,jpeg,png,gif';
-            $messages['file.required']= 'Lengkapi kolom thumbnail';
-            
-            $rules['lampiran']= 'required|mimes:pdf,jpg,jpeg,png,gif';
-            $messages['lampiran.required']= 'Lengkapi kolom lampiran';
-        }else{
-            if($request->file!=""){
-                $rules['file']= 'required|mimes:jpg,jpeg,png,gif';
-                $messages['file.required']= 'Lengkapi kolom thumbnail';
-            }
-            if($request->lampiran!=""){
-                $rules['lampiran']= 'required|mimes:pdf,jpg,jpeg,png,gif';
-                $messages['lampiran.required']= 'Lengkapi kolom lampiran';
-            }
-        }
-        
+        $rules['no_telepon']= 'required';
+        $messages['no_telepon.required']= 'Lengkapi kolom nomor telepon';
         
        
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -124,68 +107,25 @@ class SupplierController extends Controller
             echo'</div></div>';
         }else{
             if($request->id==0){
-                $thumbnail = $request->file;
-                $thumbnailFileName ='thumbnail'.date('ymdhis').'.'.$thumbnail->getClientOriginalExtension();
-                $thumbnailPath =$thumbnailFileName;
-
-                $lampiran = $request->lampiran;
-                $lampiranFileName ='lampiran'.date('ymdhis').'.'.$lampiran->getClientOriginalExtension();
-                $lampiranPath =$lampiranFileName;
-
-
-                $file =\Storage::disk('public_photo');
-                if($file->put($thumbnailPath, file_get_contents($thumbnail)) && $file->put($lampiranPath, file_get_contents($lampiran))){
-                    $data=Pengumuman::create([
+               
+                    $data=Supplier::create([
                         
-                        'judul'=>$request->judul,
-                        'deskripsi'=>$request->content,
-                        'background'=>$thumbnailPath,
-                        'lampiran'=>$lampiranPath,
-                        'waktu'=>date('Y-m-d H:i:s'),
+                        'supplier'=>$request->supplier,
+                        'no_telepon'=>$request->no_telepon,
                     ]);
 
                     echo'@ok';
-                }
+                
                 
             }else{
-                $data=Pengumuman::UpdateOrcreate([
+                $data=Supplier::UpdateOrcreate([
                     'id'=>$request->id,
                 ],
                 [
-                    'judul'=>$request->judul,
-                    'deskripsi'=>$request->content,
-                    'waktu'=>date('Y-m-d H:i:s'),
+                    'supplier'=>$request->supplier,
+                    'no_telepon'=>$request->no_telepon,
                 ]);
 
-                if($request->file!=""){
-                    $thumbnail = $request->file;
-                    $thumbnailFileName ='thumbnail'.date('ymdhis').'.'.$thumbnail->getClientOriginalExtension();
-                    $thumbnailPath =$thumbnailFileName;
-                    $file =\Storage::disk('public_photo');
-                    if($file->put($thumbnailPath, file_get_contents($thumbnail))){
-                        $data=Pengumuman::UpdateOrcreate([
-                            'id'=>$request->id,
-                        ],
-                        [
-                            'background'=>$thumbnailPath,
-                        ]);
-                    }
-                }
-
-                if($request->lampiran!=""){
-                    $lampiran = $request->lampiran;
-                    $lampiranFileName ='lampiran'.date('ymdhis').'.'.$lampiran->getClientOriginalExtension();
-                    $lampiranPath =$lampiranFileName;
-                    $file =\Storage::disk('public_photo');
-                    if($file->put($lampiranPath, file_get_contents($lampiran))){
-                        $data=Pengumuman::UpdateOrcreate([
-                            'id'=>$request->id,
-                        ],
-                        [
-                            'lampiran'=>$lampiranPath,
-                        ]);
-                    }
-                }
                 echo'@ok';
             }
         }
