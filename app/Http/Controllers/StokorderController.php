@@ -499,7 +499,12 @@ class StokorderController extends Controller
     
 
     public function delete_data(request $request){
-        $data = Supplier::where('id',$request->id)->delete();
+        $data = Stokorder::where('id',$request->id)->first();
+        if($data->status==0){
+            $del = Stok::where('nomor_stok',$data->nomor_stok)->where('status',1)->delete();
+            $del2 = Stokorder::where('id',$request->id)->where('status',0)->delete();
+        }
+        
     }
     public function delete_retur(request $request){
         $data = Stok::where('id',$request->id)->delete();

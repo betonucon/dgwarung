@@ -170,14 +170,14 @@
 				if (willDelete) {
 						$.ajax({
 							type: 'GET',
-							url: "{{url('pengumuman/delete_data')}}",
+							url: "{{url('stokorder/delete_data')}}",
 							data: "id="+id,
 							success: function(msg){
 								swal("Success! berhasil terhapus!", {
 									icon: "success",
 								});
 								var table=$('#data-table-fixed-header').DataTable();
-								table.ajax.url("{{ url('pengumuman/get_data')}}").load();
+								table.ajax.url("{{ url('stokorder/get_order')}}").load();
 							}
 						});
 					
