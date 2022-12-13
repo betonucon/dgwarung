@@ -264,6 +264,7 @@ class BarangController extends Controller
                             $data=Barang::where('join_kode',$kodebarang)->update([
                                 
                                 'foto'=>$thumbnailPath,
+                                'sts_gambar'=>1,
                             ]);
     
                             
@@ -305,6 +306,7 @@ class BarangController extends Controller
                                 $data=Barang::where('join_kode',$kodebarang)->update([
                                     
                                     'foto'=>$thumbnailPath,
+                                    'sts_gambar'=>1,
                                 ]);
         
                                 
@@ -337,6 +339,7 @@ class BarangController extends Controller
                         $data=Barang::where('id',$data->id)->update([
                             
                             'foto'=>$thumbnailPath,
+                            'sts_gambar'=>1,
                         ]);
 
                     }
