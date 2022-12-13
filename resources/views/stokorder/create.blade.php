@@ -37,9 +37,9 @@
                         <input type="hidden" name="nomor_stok" value="{{$id}}">
                         <div class="row">
         
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Nomor Order</label>
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Nomor Order</label>
                                     <div class="col-lg-3" style="padding: 0% 1% 0% 0%;border: solid 1px #f7f7ff; background: #e8e8f3;">
                                         <p  style="margin-top: 0; margin-left: 3%; margin-bottom: 0px; line-height: 2.1; font-size: 13px;">{{$id}}&nbsp;</p>
                                     </div>
@@ -240,6 +240,9 @@
              
         @endif
 
+        function data_baru(){
+            location.assign("{{url('stokorder/create')}}?id=0")
+        }
         function printDiv(divId,title) {
 
             let mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=150');

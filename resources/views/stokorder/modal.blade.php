@@ -2,9 +2,9 @@
     <input type="hidden" name="ide" value="{{$ide}}">
     <div class="row">
         
-        <div class="col-md-8">
+        <div class="col-md-9">
             <div class="form-group row">
-                <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Kode BR/Nama Barang</label>
+                <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Kode BR/Nama Barang</label>
                 <div class="col-lg-6" style="padding: 0% 1% 0% 0%;">
                     <div class="input-group input-group-sm">
                         <select name="kode" onchange="cari_barang(this.value)" class="form-control form-control-sm " id="default-select2" placeholder="Ketik disini....">
@@ -26,18 +26,13 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Harga Beli / Jual / Discon</label>
-                <div class="col-lg-3" style="padding: 0% 1% 0% 0%;">
-                    <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" name="harga_beli" value="{{$data->harga_beli}}"  onkeyup="tentukan_provit(this.value)" id="currency1" placeholder="999/99/9999">
-                    </div>
-                </div>
-                <div class="col-lg-3" style="padding: 0% 1% 0% 0%;">
-                    <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" name="harga_jual" value="{{$data->harga_jual}}" @if(setting_provit()==1) readonly @endif id="currency2" placeholder="999/99/9999">
-                    </div>
-                </div>
+                <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Harga Dasar / Discon</label>
                 <div class="col-lg-2" style="padding: 0% 1% 0% 0%;">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" name="harga_dasar" value="{{$data->harga_dasar}}"   id="harga_dasar" placeholder="Discon">
+                    </div>
+                </div>
+                <div class="col-lg-3" style="padding: 0% 1% 0% 0%;">
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control" name="discon" id="discon" value="{{$data->discon}}"  placeholder="%">
                     </div>
@@ -45,10 +40,25 @@
                 
             </div>
             <div class="form-group row">
-                <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Qty & Expired</label>
+                <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Harga Beli / Jual</label>
                 <div class="col-lg-2" style="padding: 0% 1% 0% 0%;">
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" name="qty" value="{{$data->qty}}" id="currency3"  @if($order->status==0) onkeypress="proses_enter(event)" @endif placeholder="0">
+                        <input type="text" class="form-control" name="harga_beli" value="{{$data->harga_beli}}"  onkeyup="tentukan_provit(this.value)" id="currency1" placeholder="999/99/9999">
+                    </div>
+                </div>
+                <div class="col-lg-2" style="padding: 0% 1% 0% 0%;">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" name="harga_jual" value="{{$data->harga_jual}}" @if(setting_provit()==1) readonly @endif id="currency2" placeholder="999/99/9999">
+                    </div>
+                </div>
+                
+                
+            </div>
+            <div class="form-group row">
+                <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Qty & Expired</label>
+                <div class="col-lg-2" style="padding: 0% 1% 0% 0%;">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" name="qty" value="{{$data->qty}}" id="qty"  @if($order->status==0) onkeypress="proses_enter(event)" @endif placeholder="0">
                     </div>
                 </div>
                 <div class="col-lg-3" style="padding: 0% 1% 0% 0%;">
@@ -63,7 +73,7 @@
            
             
         </div>
-        <div class="col-md-4" style="height: 95px;padding-top: 3.3%;">
+        <div class="col-md-3" style="height: 95px;padding-top: 3.3%;">
             <div class="form-group row">
                 <label style="padding: 0% 1% 0% 3%;" class="col-lg-5 col-form-label">Tot Barang</label>
                 <div class="col-lg-7" style="padding: 0% 1% 0% 0%;border: solid 1px #f7f7ff; background: #e8e8f3;height:30px">
@@ -110,7 +120,8 @@
         @endif
         $("#currency1").inputmask({ alias : "currency", prefix: '','groupSeparator': ',', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
         $("#currency2").inputmask({ alias : "currency", prefix: '','groupSeparator': ',', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
-        $("#currency3").inputmask({ alias : "currency", prefix: '', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
+        $("#qty").inputmask({ alias : "currency", prefix: '', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
+        $("#harga_dasar").inputmask({ alias : "currency", prefix: '', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
         $("#diskon").inputmask({ alias : "currency", prefix: '', 'autoGroup': true, 'digits': 1, 'digitsOptional': false });
         
         $('#tanggal').datepicker({
@@ -123,12 +134,15 @@
                 url: "{{url('barang/cari_barang')}}",
                 data: "supplier_id={{$order->supplier_id}}&kode="+text,
                 success: function(msg){
+                    // alert(msg)
                     var bat=msg.split('@');
         
                         $('#satuan').val(bat[1]);
                         $('#currency1').val(bat[3]);
                         $('#currency2').val(bat[2]);
                         $('#discon').val(bat[4]);
+                        $('#harga_dasar').val(bat[5]);
+                        $("#currency3").focus();
                 }
             });
         }

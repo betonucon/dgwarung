@@ -63,13 +63,15 @@ class BarangController extends Controller
             $harga_jual=$data->harga_jual;
             $harga_beli=$data->harga_beli;
             $discon=$data->discon;
+            $harga_dasar=$data->harga_awal;
         }else{
             $harga_jual=0;
             $harga_beli=0;
-            $discon=0;
+            $discon="";
+            $harga_dasar=0;
         }
         $dT=Barang::where('kode',$request->kode)->first();
-        return '@'.$dT->satuan.'@'.$harga_jual.'@'.$harga_beli.'@'.$discon;
+        return '@'.$dT->satuan.'@'.$harga_jual.'@'.$harga_beli.'@'.$discon.'@'.$harga_dasar;
     }
     public function cari_barang_jual(request $request)
     {

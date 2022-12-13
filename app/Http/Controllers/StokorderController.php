@@ -749,6 +749,13 @@ class StokorderController extends Controller
         $rules['qty']= 'required|min:0|not_in:0';
         $messages['qty.required']= 'Lengkapi jumlah';
         $messages['qty.not_in']= 'Lengkapi jumlah';
+
+        if($request->harga_dasar>$request->harga_beli){
+           
+                $rules['discon']= 'required';
+                $messages['discon.required']= 'Lengkapi Kolom discon';
+           
+        }
         
        
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -765,7 +772,11 @@ class StokorderController extends Controller
                 }
             echo'</div></div>';
         }else{
-            
+            if($request->harga_dasar>0){
+                $harga_dasar=ubah_uang($request->harga_dasar);
+            }else{
+                $harga_dasar=ubah_uang($request->harga_beli);
+            }
                     $data=Stok::UpdateOrcreate([
                         
                         'nomor_stok'=>$request->nomor_stok,
@@ -773,6 +784,7 @@ class StokorderController extends Controller
                     ],[
                         'harga_beli'=>ubah_uang($request->harga_beli),
                         'harga_jual'=>ubah_uang($request->harga_jual),
+                        'harga_dasar'=>$harga_dasar,
                         'qty'=>ubah_uang($request->qty),
                         'total_jual'=>(ubah_uang($request->harga_jual)*ubah_uang($request->qty)),
                         'total_beli'=>(ubah_uang($request->harga_beli)*ubah_uang($request->qty)),

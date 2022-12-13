@@ -119,6 +119,7 @@
             format:"yyyy-mm-dd",
             autoclose: true
         });
+        
         function cari_barang(text){
             $.ajax({
                 type: 'GET',
@@ -137,6 +138,7 @@
                         $('#nama_supplier').html(bat[5]);
                         $('#harga_jual').val(bat[4]);
                         $('#diskon').val(bat[6]);
+                        $("#qty").focus();
                 }
             });
         }
