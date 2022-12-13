@@ -179,6 +179,14 @@ function tanggal_eng($date=null){
     }
     
  }
+function tanggal_simple($date=null){
+    if($date=="" || $date==null){
+       return null;
+    }else{
+       return date('d/m/y H:i:s',strtotime($date));
+    }
+    
+ }
 function tahun_saja($date=null){
     if($date=="" || $date==null){
        return null;

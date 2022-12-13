@@ -152,14 +152,14 @@
                 <h4 class="modal-title"></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="height:450px;overflow-y:scroll">
                 
                 <div id="tampil-form-cetak"></div>
                  
             </div>
             <div class="modal-footer">
                 <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Tutup</a>
-                <a href="javascript:;" class="btn btn-danger" onclick="printDiv()" >Proses</a>
+                <a href="javascript:;" class="btn btn-danger" onclick="printDiv('tampil-form-cetak','Title')"  ><i class="fas fa-print"></i> Cetak</a>
             </div>
         </div>
     </div>
@@ -258,9 +258,26 @@
         function cetak_data(){
             $('#modal-cetak .modal-title').text('Konfirmasi ');
             $('#modal-cetak').modal('show');
-            $('#tampil-form-cetak').load("{{url('kasir/modal_cetak')}}?id={{$id}}")
+            $('#tampil-form-cetak').load("{{url('kasir/print')}}?id={{$id}}")
         }
        
+        function printDiv(divId,title) {
+
+            let mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=150');
+
+            mywindow.document.write(`<html><head><title>${title}</title>`);
+            mywindow.document.write('</head><body >');
+            mywindow.document.write(document.getElementById(divId).innerHTML);
+            mywindow.document.write('</body></html>');
+
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+
+            mywindow.print();
+            mywindow.close();
+
+            return true;
+        }
 
         function delete_data(id){
            
@@ -479,7 +496,7 @@
 									title: "Success! berhasil diproses!",
 									icon: "success",
                             });
-                            location.assign("{{url('kasir/create')}}?id=0")   
+                            location.reload();  
                         }else{
                             document.getElementById("loadnya").style.width = "0px";
                             swal({

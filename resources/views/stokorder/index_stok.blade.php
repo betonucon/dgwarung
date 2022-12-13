@@ -50,6 +50,7 @@
                                     <th class="text-nowrap"  width="7%">Jual</th>
                                     <th class="text-nowrap"  width="7%">Retur</th>
                                     <th class="text-nowrap"  width="7%">Tukar</th>
+                                    <th class="text-nowrap"  width="7%">Update</th>
                                     <th class="text-nowrap"  width="5%"></th>
                                 </tr>
                             </thead>
@@ -130,6 +131,7 @@
 						{ data: 'jual' },
 						{ data: 'retur' },
 						{ data: 'tukar' },
+						{ data: 'tanggal_simple' },
 						{ data: 'action' },
 						
 					],

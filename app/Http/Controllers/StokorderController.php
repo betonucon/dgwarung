@@ -311,6 +311,10 @@ class StokorderController extends Controller
                 $btn=even_stok($row->kode,5);
                 return $btn;
             })
+            ->addColumn('tanggal_simple', function ($row) {
+                $btn=tanggal_simple($row->terupdate);
+                return $btn;
+            })
             ->addColumn('action', function ($row) {
                 $btn='
                     <div class="btn-group">
@@ -971,5 +975,14 @@ class StokorderController extends Controller
             return $pdf->stream();
         }
         
+    }
+    public function print(Request $request)
+    {
+        error_reporting(0);
+        $order=Stokorder::where('nomor_stok',$request->id)->first();
+        $count=jumlah_item_order($request->id);
+        $ford=ceil(jumlah_item_order($request->id)/18);
+        return view('stokorder.print', compact('data','order','ford','count'));
+       
     }
 }

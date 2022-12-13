@@ -83,6 +83,7 @@ Route::group(['prefix' => 'stokorder','middleware'    => 'auth'],function(){
     Route::get('/proses_tukar','StokorderController@proses_tukar');
     Route::get('/create','StokorderController@create');
     Route::get('/cetak','StokorderController@cetak');
+    Route::get('/print','StokorderController@print');
     Route::get('/modal','StokorderController@modal');
     Route::get('/modal_retur','StokorderController@modal_retur');
     Route::get('/modal_tukar','StokorderController@modal_tukar');
@@ -116,6 +117,7 @@ Route::group(['prefix' => 'kasir','middleware'    => 'auth'],function(){
     Route::get('/proses_tukar','KasirController@proses_tukar');
     Route::get('/create','KasirController@create');
     Route::get('/cetak','KasirController@cetak');
+    Route::get('/print','KasirController@print');
     Route::get('/modal','KasirController@modal');
     Route::get('/modal_retur','KasirController@modal_retur');
     Route::get('/modal_tukar','KasirController@modal_tukar');

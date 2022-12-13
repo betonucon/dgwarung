@@ -156,14 +156,14 @@
                 <h4 class="modal-title"></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="height:450px;overflow-y:scroll">
                 
                 <div id="tampil-form-cetak"></div>
                  
             </div>
             <div class="modal-footer">
                 <a href="javascript:;" class="btn btn-white" data-dismiss="modal">Tutup</a>
-                <a href="javascript:;" class="btn btn-danger" onclick="printDiv()" >Proses</a>
+                <a href="javascript:;" class="btn btn-danger" onclick="printDiv('tampil-form-cetak','Title')" >Proses</a>
             </div>
         </div>
     </div>
@@ -240,6 +240,23 @@
              
         @endif
 
+        function printDiv(divId,title) {
+
+            let mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=150');
+
+            mywindow.document.write(`<html><head><title>${title}</title>`);
+            mywindow.document.write('</head><body >');
+            mywindow.document.write(document.getElementById(divId).innerHTML);
+            mywindow.document.write('</body></html>');
+
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+
+            mywindow.print();
+            mywindow.close();
+
+            return true;
+        }
         $(document).ready(function() {
 			TableManageFixedHeader.init();
             @if($id==0)
@@ -261,7 +278,7 @@
         function cetak_data(){
             $('#modal-cetak .modal-title').text('Konfirmasi ');
             $('#modal-cetak').modal('show');
-            $('#tampil-form-cetak').load("{{url('stokorder/modal_cetak')}}?id={{$id}}")
+            $('#tampil-form-cetak').load("{{url('stokorder/print')}}?id={{$id}}")
         }
         function download_data(){
             location.assign("{{url('stokorder/cetak')}}?id={{$id}}&act=1")

@@ -655,4 +655,14 @@ class KasirController extends Controller
         $pdf->stream($request->id.'.pdf');
         return $pdf->stream();
     }
+    public function print(Request $request)
+    {
+        error_reporting(0);
+        $order=Kasir::where('nomor_transaksi',$request->id)->first();
+        $count=jumlah_item_order_kasir($request->id);
+        $ford=ceil(jumlah_item_order_kasir($request->id)/18);
+        // $ford=3;
+        return view('kasir.print', compact('data','order','ford','count'));
+        
+    }
 }
