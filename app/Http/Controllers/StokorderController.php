@@ -608,6 +608,8 @@ class StokorderController extends Controller
                     $data=Stok::where('id',$request->id)->update([
                         
                         'harga_jual'=>ubah_uang($request->harga_jual),
+                        'total_jual'=>(ubah_uang($request->harga_jual)*ubah_uang($request->qty)),
+                        'total_beli'=>(ubah_uang($g->harga_beli)*ubah_uang($request->qty)),
                         'qty'=>ubah_uang($request->qty),
                         'update'=>date('Y-m-d H:i:s'),
                     ]);

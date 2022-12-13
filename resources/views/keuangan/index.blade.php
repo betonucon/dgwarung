@@ -276,7 +276,7 @@
                     { data: 'keterangan' },
                     { data: 'status_keuangan' },
                     { data: 'uang_nilai' ,className: "text-right"  },
-                    { data: 'waktu' },
+                    { data: 'tanggal' },
                     { data: 'action' },
                     
                 ],
