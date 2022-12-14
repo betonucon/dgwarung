@@ -136,7 +136,7 @@
                             </li>
                             
                             <li class="nav-item">
-                                <a href="{{url('keuangan')}}?tanggal={{$tanggal}}&act={{encoder(9)}}" class="nav-link @if($act==0) active @endif">
+                                <a href="{{url('keuangan')}}?tanggal={{$tanggal}}&act={{encoder(9)}}" class="nav-link @if($act==9) active @endif">
                                     <span class="d-sm-none">Piutang</span>
                                     <span class="d-sm-block d-none">Piutang</span>
                                 </a>
@@ -265,7 +265,7 @@
         */
         
             $('#data-table-fixed-sisa').DataTable({
-                lengthMenu: [20],
+                lengthMenu: [20,50,100,200],
                 fixedHeader: {
                     header: true,
                     headerOffset: $('#header').height()
