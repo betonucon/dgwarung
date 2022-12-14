@@ -28,7 +28,7 @@ class KeuanganController extends Controller
         if($request->act==""){
             $act=0;
         }else{
-            $act=$request->act;
+            $act=decoder($request->act);
         }
         if($request->tanggal==""){
             $bulan=date('m');
@@ -117,12 +117,26 @@ class KeuanganController extends Controller
                 $data=$query->whereIn('kategori_keuangan_id',array(1,2));
             }
         }else{
-           
-            if($even==8){
-                $data=$query->whereIn('kategori_keuangan_id',array(3,4,5,6));
+            if(Auth::user()->role_id==1){
+                if($even==8){
+                    $data=$query->whereIn('kategori_keuangan_id',array(3,4,5,6));
+                }else{
+                    if($even==9){
+                        $data=$query->where('status_keuangan_id',3);
+                    }else{
+                        $data=$query->where('kategori_keuangan_id',$even);
+                    }
+                    
+                }
             }else{
-                $data=$query->where('status_keuangan_id',$even);
+                if($even==8){
+                    $data=$query->where('status_keuangan_id',3);
+                }else{
+                    $data=$query->where('kategori_keuangan_id',$even);
+                }
+                
             }
+            
            
         }
         $data = $query->where('tahun',$request->tahun)->orderBy('tanggal','Desc')->get();

@@ -47,20 +47,25 @@
                         </div>
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
-                                <a href="{{url('keuangan')}}?tanggal={{$tanggal}}&act=0" class="nav-link @if($act==0) active @endif">
+                                <a href="{{url('keuangan')}}?tanggal={{$tanggal}}&act={{encoder(0)}}" class="nav-link @if($act==0) active @endif">
                                     <span class="d-sm-none">All Transaksi</span>
                                     <span class="d-sm-block d-none">All Transaksi</span>
                                 </a>
                             </li>
-                            @foreach(get_statuskeuangan() as $get)
+                            @foreach(get_katkeuangan() as $get)
                             <li class="nav-item">
-                                <a  href="{{url('keuangan')}}?tanggal={{$tanggal}}&act={{$get->id}}"  class="nav-link  @if($act==$get->id) active @endif">
-                                    <span class="d-sm-none">{{$get->status_keuangan}}</span>
-                                    <span class="d-sm-block d-none">{{$get->status_keuangan}}</span>
+                                <a  href="{{url('keuangan')}}?tanggal={{$tanggal}}&act={{encoder($get->id)}}"  class="nav-link  @if($act==$get->id) active @endif">
+                                    <span class="d-sm-none">{{$get->kategori_keuangan}}</span>
+                                    <span class="d-sm-block d-none">{{$get->kategori_keuangan}}</span>
                                 </a>
                             </li>
                             @endforeach
-                            
+                            <li class="nav-item">
+                                <a href="{{url('keuangan')}}?tanggal={{$tanggal}}&act={{encoder(8)}}" class="nav-link @if($act==0) active @endif">
+                                    <span class="d-sm-none">Piutang</span>
+                                    <span class="d-sm-block d-none">Piutang</span>
+                                </a>
+                            </li>
                         </ul>
                         <!-- end nav-tabs -->
                         <!-- begin tab-content -->
