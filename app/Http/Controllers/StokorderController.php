@@ -298,7 +298,7 @@ class StokorderController extends Controller
             ->addIndexColumn()
             ->addColumn('u_harga_jual', function ($row) {
                 if($row->abnormal>0){
-                    $btn='<b>'.uang($row->harga_jual).'</b>';
+                    $btn='<b><font color="red">'.uang($row->harga_jual).'</font></b>';
                 }else{
                     $btn=uang($row->harga_jual);
                 }
@@ -307,7 +307,7 @@ class StokorderController extends Controller
             })
             ->addColumn('u_harga_beli', function ($row) {
                 if($row->abnormal>0){
-                    $btn='<b>'.uang($row->harga_beli).'</b>';
+                    $btn='<b><font color="red">'.uang($row->harga_beli).'</font></b>';
                 }else{
                     $btn=uang($row->harga_beli);
                 }
