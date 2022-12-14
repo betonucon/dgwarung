@@ -427,7 +427,7 @@ function get_statuskeuangan(){
     if(Auth::user()->role_id==1){
         $data=App\Statuskeuangan::orderBy('id','Asc')->get();
     }else{
-        $data=App\Statuskeuangan::whereIn('id',array('1','2'))->orderBy('id','Asc')->get();
+        $data=App\Statuskeuangan::whereIn('id',array('1','2','3'))->orderBy('id','Asc')->get();
     }
     
     return $data;
