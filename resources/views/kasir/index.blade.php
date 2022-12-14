@@ -44,8 +44,9 @@
                                     <th class="text-nowrap">Nama Supplier</th>
                                     <th class="text-nowrap" width="12%">CreateBy</th>
                                     <th class="text-nowrap" width="12%">tanggal</th>
-                                    <th class="text-nowrap" width="12%">Status</th>
+                                    <th class="text-nowrap" width="11%">Status</th>
                                     <th class="text-nowrap" width="12%">Pembayaran</th>
+                                    <th class="text-nowrap" width="12%">Nilai</th>
                                     <th class="text-nowrap" width="8%">Act</th>
                                 </tr>
                             </thead>
@@ -121,6 +122,7 @@
 						{ data: 'tanggal' },
 						{ data: 'nama_status' },
 						{ data: 'pembayaran' },
+						{ data: 'uang_nilai' },
 						{ data: 'action' },
 						
 					],

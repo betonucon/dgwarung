@@ -217,6 +217,10 @@ class KasirController extends Controller
                 $btn=status($row->status);
                 return $btn;
             })
+            ->addColumn('uang_nilai', function ($row) {
+                $btn=uang($row->nilai);
+                return $btn;
+            })
             ->addColumn('pembayaran', function ($row) {
                 if($row->status==0){
                     return 'Null';
