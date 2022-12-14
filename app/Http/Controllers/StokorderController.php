@@ -299,6 +299,14 @@ class StokorderController extends Controller
                 $btn=sisa($row->kode);
                 return $btn;
             })
+            ->addColumn('u_harga_jual', function ($row) {
+                $btn=jual_stok_ready($row->kode);
+                return $btn;
+            })
+            ->addColumn('u_harga_beli', function ($row) {
+                $btn=beli_stok_ready($row->kode);
+                return $btn;
+            })
             ->addColumn('jual', function ($row) {
                 $btn=even_stok($row->kode,3);
                 return $btn;

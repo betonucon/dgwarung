@@ -46,6 +46,8 @@
                                     <th class="text-nowrap" width="10%">Kode</th>
                                     <th class="text-nowrap"  width="25%">Nama Barang</th>
                                     <th class="text-nowrap"  width="7%">Satuan</th>
+                                    <th class="text-nowrap"  width="9%"style="text-align:left !important">H.jual</th>
+                                    <th class="text-nowrap"  width="9%"style="text-align:left !important">H.Beli</th>
                                     <th class="text-nowrap"  width="7%">Stok</th>
                                     <th class="text-nowrap"  width="7%">Jual</th>
                                     <th class="text-nowrap"  width="7%">Retur</th>
@@ -127,6 +129,8 @@
 						{ data: 'kode' },
 						{ data: 'nama_barang' },
 						{ data: 'satuan' },
+						{ data: 'u_harga_jual' ,className: "text-right"  },
+						{ data: 'u_harga_beli' ,className: "text-right"  },
 						{ data: 'sisa' },
 						{ data: 'jual' },
 						{ data: 'retur' },
