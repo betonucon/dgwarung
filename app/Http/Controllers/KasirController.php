@@ -439,6 +439,7 @@ class KasirController extends Controller
         }else{
             if($request->id==0){
                     $nomor=penomoran_kasir();
+                    
                     $data=Kasir::create([
                         
                         'nomor_transaksi'=>$nomor,

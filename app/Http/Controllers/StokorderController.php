@@ -553,12 +553,15 @@ class StokorderController extends Controller
             echo'</div></div>';
         }else{
             if($request->id==0){
+                
+                    $opname=$request->kategori_opname_id;
+               
                     $nomor=penomoran_masuk();
                     $data=Stokorder::create([
                         
                         'nomor_stok'=>$nomor,
                         'supplier_id'=>$request->supplier_id,
-                        'kategori_opname_id'=>$request->kategori_opname_id,
+                        'kategori_opname_id'=>$opname,
                         'tanggal'=>$request->tanggal,
                         'users_id'=>Auth::user()->id,
                         'nama_user'=>Auth::user()->name,
