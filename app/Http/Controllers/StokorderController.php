@@ -951,10 +951,23 @@ class StokorderController extends Controller
                         'harga_beli'=>$harga_beli,
                         'harga_discon'=>$hdiscon,
                     ]);
-
+                    $nomor=penomoran_masuk();
+                    $stopsp=Stokorder::create([
+                        
+                        'nomor_stok'=>$nomor,
+                        'supplier_id'=>5,
+                        'kategori_opname_id'=>2,
+                        'tanggal'=>date('Y-m-d'),
+                        'users_id'=>Auth::user()->id,
+                        'nama_user'=>Auth::user()->name,
+                        'bulan'=>date('m'),
+                        'tahun'=>date('Y'),
+                        'status'=>2,
+                        'waktu'=>date('Y-m-d H:i:s'),
+                    ]);
                     $tukar=Stok::create([
                         
-                        'nomor_stok'=>$request->nomor_stok,
+                        'nomor_stok'=>$nomor,
                         'kode'=>$request->kode_tukar,
                         'tukar_id'=>$data->id,
                         'harga_beli'=>ubah_uang($request->harga_beli),
