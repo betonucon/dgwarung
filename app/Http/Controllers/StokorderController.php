@@ -300,11 +300,11 @@ class StokorderController extends Controller
                 return $btn;
             })
             ->addColumn('u_harga_jual', function ($row) {
-                $btn=jual_stok_ready($row->kode);
+                $btn=uang(jual_stok_ready($row->kode));
                 return $btn;
             })
             ->addColumn('u_harga_beli', function ($row) {
-                $btn=beli_stok_ready($row->kode);
+                $btn=uang(beli_stok_ready($row->kode));
                 return $btn;
             })
             ->addColumn('jual', function ($row) {
