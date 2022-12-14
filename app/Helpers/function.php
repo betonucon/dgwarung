@@ -456,7 +456,7 @@ function get_barang(){
 }
 function get_stokready(){
     if(setting_aktive_stok()==1){
-        $data=App\Stokup::select('kode','nama_barang')->where('sisa','>',0)->groupBy('kode','nama_barang')->orderBy('nama_barang','Asc')->get();
+        $data=App\Stokup::select('kode','nama_barang')->where('sisa','>',0)->groupBy('kode','nama_barang')->orderBy('nama_barang','Asc')->paginate(10);
     }else{
         $data=App\Stokup::where('aktif','>',1)->orderBy('nama_barang','Asc')->get();
     }

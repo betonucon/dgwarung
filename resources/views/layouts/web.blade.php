@@ -276,96 +276,22 @@
 	<script src="{{url_plug()}}/assets/js/app.min.js"></script>
 	<script src="{{url_plug()}}/assets/js/theme/default.min.js"></script>
 	<!-- ================== END BASE JS ================== -->
-	
+	<script src="{{url_plug()}}/assets/plugins/gritter/js/jquery.gritter.js"></script>
+	<script src="{{url_plug()}}/assets/plugins/sweetalert/dist/sweetalert.min.js"></script>
+	<script src="{{url_plug()}}/assets/plugins/datatables.net/js/jquery.dataTables.min.js"></script>
+	<script src="{{url_plug()}}/assets/plugins/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+	<script src="{{url_plug()}}/assets/plugins/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+	<script src="{{url_plug()}}/assets/plugins/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 	<!-- ================== BEGIN PAGE LEVEL JS ================== -->
 	<script src="{{url_plug()}}/assets/plugins/jquery-migrate/dist/jquery-migrate.min.js"></script>
 	<script src="{{url_plug()}}/assets/plugins/moment/min/moment.min.js"></script>
 	<script src="{{url_plug()}}/assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/ion-rangeslider/js/ion.rangeSlider.min.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/jquery.maskedinput/src/jquery.maskedinput.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/@danielfarrell/bootstrap-combobox/js/bootstrap-combobox.js"></script>
+	
 	<script src="{{url_plug()}}/assets/plugins/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/tag-it/js/tag-it.min.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
 	<script src="{{url_plug()}}/assets/plugins/select2/dist/js/select2.min.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/bootstrap-show-password/dist/bootstrap-show-password.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/bootstrap-colorpalette/js/bootstrap-colorpalette.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/jquery-simplecolorpicker/jquery.simplecolorpicker.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/clipboard/dist/clipboard.min.js"></script>
-    <script src="{{url_plug()}}/assets/plugins/datatables.net/js/jquery.dataTables.min.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/gritter/js/jquery.gritter.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/sweetalert/dist/sweetalert.min.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/ckeditor/ckeditor.js"></script>
-	<script src="{{url_plug()}}/assets/plugins/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.all.min.js"></script>
     @stack('ajax')
 	<script type='text/javascript' src="{{url_plug()}}/js/jquery.inputmask.bundle.js"></script>
-	<script src="https://js.pusher.com/7.2/pusher.min.js"></script>
-    <script type="text/javascript">
-    
-     Pusher.logToConsole = true;
-	 @if(Auth::user()->role_id==1)
-
-	 @else
-		@if(aktive_transaksi()==2)
-			$('#modal-aktive').modal({backdrop: 'static', keyboard: false})  
-		@endif
-	@endif
-    var pusher = new Pusher('99efd5a3e253906ee0ed', {
-        cluster: 'ap1',
-        
-    });
-
-    var channel = pusher.subscribe('my-chanel');
-        channel.bind('kirim-created', function(data) {
-			var pesan=data.message;
-			var bat=pesan.split('@');
-			if(bat[1]=='1'){
-				swal({
-					title: bat[2],
-					
-					html:true,
-					text:bat[3],
-					icon: 'info',
-					buttons: {
-						cancel: {
-							text: 'Tutup',
-							value: null,
-							visible: true,
-							className: 'btn btn-dangers',
-							closeModal: true,
-						},
-						
-					}
-				});
-			}
-			if(bat[1]=='2'){
-				swal({
-					title: bat[2],
-					
-					html:true,
-					text:bat[3],
-					icon: 'info',
-					buttons: {
-						cancel: {
-							text: 'Tutup',
-							value: null,
-							visible: true,
-							className: 'btn btn-dangers',
-							closeModal: true,
-						},
-						
-					}
-				});
-			}
-        });
-    </script>
+	
 	<!-- ================== END PAGE LEVEL JS ================== -->
 </body>
 </html>
