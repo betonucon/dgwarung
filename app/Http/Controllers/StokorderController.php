@@ -14,6 +14,7 @@ use App\Vieworder;
 use App\Stokup;
 use App\Stok;
 use App\Viewstokorder;
+use App\Viewstokaktive;
 use App\Barang;
 use App\Keuangan;
 use App\User;
@@ -289,38 +290,22 @@ class StokorderController extends Controller
     public function get_data_stok(request $request)
     {
         error_reporting(0);
-        $query = Stokready::query();
+        $query = Viewstokaktive::query();
         
         $data = $query->orderBy('nama_barang','Asc')->get();
 
         return Datatables::of($data)
             ->addIndexColumn()
-            ->addColumn('sisa', function ($row) {
-                $btn=sisa($row->kode);
-                return $btn;
-            })
             ->addColumn('u_harga_jual', function ($row) {
-                $btn=uang(jual_stok_ready($row->kode));
+                $btn=uang($row->harga_jual);
                 return $btn;
             })
             ->addColumn('u_harga_beli', function ($row) {
-                $btn=uang(beli_stok_ready($row->kode));
-                return $btn;
-            })
-            ->addColumn('jual', function ($row) {
-                $btn=even_stok($row->kode,3);
-                return $btn;
-            })
-            ->addColumn('retur', function ($row) {
-                $btn=even_stok($row->kode,4);
-                return $btn;
-            })
-            ->addColumn('tukar', function ($row) {
-                $btn=even_stok($row->kode,5);
+                $btn=uang($row->harga_beli);
                 return $btn;
             })
             ->addColumn('tanggal_simple', function ($row) {
-                $btn=tanggal_simple($row->terupdate);
+                $btn=tanggal_simple($row->update);
                 return $btn;
             })
             ->addColumn('action', function ($row) {
