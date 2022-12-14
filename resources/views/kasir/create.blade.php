@@ -62,8 +62,9 @@
                                     <th class="text-nowrap">Nama Barang</th>
                                     <th class="text-nowrap"  width="5%" style="text-align:left !important">Qty</th>
                                     <th class="text-nowrap"  width="8%">Satuan</th>
-                                    <th class="text-nowrap"  width="10%" style="text-align:left !important">H.Satuan</th>
-                                    <th class="text-nowrap"  width="10%" style="text-align:left !important">Diskon</th>
+                                    <th class="text-nowrap"  width="9%" style="text-align:left !important">H.Satuan</th>
+                                    <th class="text-nowrap"  width="9%" style="text-align:left !important">H.Modal</th>
+                                    <th class="text-nowrap"  width="8%" style="text-align:left !important">Diskon</th>
                                     <th class="text-nowrap"  width="10%" style="text-align:left !important">Total</th>
                                     <th class="text-nowrap" width="3%">Act</th>
                                 </tr>
@@ -200,6 +201,7 @@
 						{ data: 'qty'  ,className: "text-right" },
 						{ data: 'satuan' },
 						{ data: 'uang_harga_jual' ,className: "text-right"  },
+						{ data: 'uang_harga_beli' ,className: "text-right"  },
 						{ data: 'uang_discon_jual' ,className: "text-right"  },
 						{ data: 'uang_total_jual' ,className: "text-right"  },
 						{ data: 'action' },
