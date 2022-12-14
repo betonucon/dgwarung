@@ -292,7 +292,7 @@ class StokorderController extends Controller
         error_reporting(0);
         $query = Viewstokaktive::query();
         
-        $data = $query->orderBy('nama_barang','Asc')->get();
+        $data = $query->orderBy('abnormal','Desc')->get();
 
         return Datatables::of($data)
             ->addIndexColumn()
