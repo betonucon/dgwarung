@@ -297,11 +297,20 @@ class StokorderController extends Controller
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('u_harga_jual', function ($row) {
-                $btn=uang($row->harga_jual);
+                if($row->abnormal>0){
+                    $btn='<b>'.uang($row->harga_jual).'</b>';
+                }else{
+                    $btn=uang($row->harga_jual);
+                }
+                
                 return $btn;
             })
             ->addColumn('u_harga_beli', function ($row) {
-                $btn=uang($row->harga_beli);
+                if($row->abnormal>0){
+                    $btn='<b>'.uang($row->harga_beli).'</b>';
+                }else{
+                    $btn=uang($row->harga_beli);
+                }
                 return $btn;
             })
             ->addColumn('tanggal_simple', function ($row) {
@@ -317,7 +326,7 @@ class StokorderController extends Controller
                 return $btn;
             })
             
-            ->rawColumns(['action'])
+            ->rawColumns(['action','u_harga_jual','u_harga_beli'])
             ->make(true);
     }
     
