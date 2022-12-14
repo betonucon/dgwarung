@@ -660,16 +660,14 @@ class StokorderController extends Controller
                 }
             echo'</div></div>';
         }else{
+            $odr=Stokorder::where('nomor_stok',$request->nomor_stok)->first();
+            $tanggal=$odr->tanggal;
+            $bulan=date('m',strtotime($request->tanggal));
+            $tahun=date('Y',strtotime($request->tanggal));
             if($request->status_keuangan_id==3){
-                $tanggal=$request->tanggal;
                 $dibayarkan=null;
-                $bulan=date('m',strtotime($request->tanggal));
-                $tahun=date('Y',strtotime($request->tanggal));
             }else{
-                $tanggal=date('Y-m-d');
                 $dibayarkan=date('Y-m-d');
-                $bulan=date('m');
-                $tahun=date('Y');
             }
                 $get=Viewstokorder::where('nomor_stok',$request->nomor_stok)->where('nomor_transaksi',null)->get();
                 $odr=Stokorder::where('nomor_stok',$request->nomor_stok)->first();

@@ -1,6 +1,6 @@
 
 <?php
-
+use Illuminate\Support\Facades\Crypt;
 function name(){
     return "Kedai PePE";
 }
@@ -275,12 +275,25 @@ function get_kategoriopname(){
     $data=App\Kategoriopname::orderBy('id','Asc')->get();
     return $data;
 }
+function encp($id){
+    $data = Crypt::encryptString($id);
+    return $data;
+}
+function decp($id){
+    $data = Crypt::encryptString($id);
+    return $data;
+}
 function aktive_transaksi(){
     $data=App\Setting::where('id',4)->first();
     return $data->setting_int;
 }
 function get_katkeuangan(){
-    $data=App\Kategorikeuangan::get();
+    if(Auth::user()->role_id==1){
+        $data=App\Kategorikeuangan::orderBy('id','Asc')->get();
+    }else{
+        $data=App\Kategorikeuangan::whereIn('id',array('1','2'))->orderBy('id','Asc')->get();
+    }
+   
     return $data;
 }
 function get_setkeuangan(){
@@ -411,7 +424,12 @@ function get_satuan(){
     return $data;
 }
 function get_statuskeuangan(){
-    $data=App\Statuskeuangan::orderBy('id','Asc')->get();
+    if(Auth::user()->role_id==1){
+        $data=App\Statuskeuangan::orderBy('id','Asc')->get();
+    }else{
+        $data=App\Statuskeuangan::whereIn('id',array('1','2'))->orderBy('id','Asc')->get();
+    }
+    
     return $data;
 }
 function first_setting($id){

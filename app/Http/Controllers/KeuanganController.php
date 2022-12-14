@@ -40,8 +40,13 @@ class KeuanganController extends Controller
             $bulan=date('m',strtotime($request->tanggal));
             $tahun=date('Y',strtotime($request->tanggal));
         }
+        if(Auth::user()->role_id==1){
+            return view('keuangan.index',compact('template','act','bulan','tahun','tanggal'));
+        }
+        if(Auth::user()->role_id==2){
+            return view('keuangan.index_user',compact('template','act','bulan','tahun','tanggal'));
+        }
         
-        return view('keuangan.index',compact('template','act','bulan','tahun','tanggal'));
     }
     public function create(request $request)
     {
@@ -104,15 +109,21 @@ class KeuanganController extends Controller
     {
         error_reporting(0);
         $query = Viewkeuangan::query();
-        if($request->even==0){
-
-        }else{
-            if($request->even==8){
-                $data=$query->where('kategori_keuangan_id',6);
+        $even=$request->even;
+        if($even==0){
+            if(Auth::user()->role_id==1){
+               
             }else{
-                $data=$query->where('status_keuangan_id',$request->even);
+                $data=$query->whereIn('kategori_keuangan_id',array(1,2));
             }
-            
+        }else{
+           
+            if($even==8){
+                $data=$query->whereIn('kategori_keuangan_id',array(3,4,5,6));
+            }else{
+                $data=$query->where('status_keuangan_id',$even);
+            }
+           
         }
         $data = $query->where('tahun',$request->tahun)->orderBy('tanggal','Desc')->get();
 
@@ -123,13 +134,33 @@ class KeuanganController extends Controller
             })
             ->addColumn('action', function ($row) {
                 if($row->kat==1){
-                    if($row->kategori_keuangan_id==1 || $row->kategori_keuangan_id==2){
+                    if($row->kategori_keuangan_id==1 ){
                         if($row->nomor_bayar==""){
                             if($row->nilai>0){
+                                if(Auth::user()->role_id==1){
+                                    $btn='
+                                        <div class="btn-group">
+                                            <span class="btn btn-primary btn-xs" onclick="pembayaran_data('.$row->id.','.$row->kategori_keuangan_id.')">Bayar '.$row->nomor_bayar.'</span>
+                                            <span class="btn btn-danger btn-xs" onclick="delete_data_bayar_header('.$row->id.','.$row->kategori_keuangan_id.')"><i class="fas fa-window-close text-white"></i></span>
+                                        </div>
+                                    ';
+                                }else{
+                                    $btn='
+                                        <div class="btn-group">
+                                            <span class="btn btn-primary btn-xs" onclick="pembayaran_data('.$row->id.','.$row->kategori_keuangan_id.')">Bayar '.$row->nomor_bayar.'</span>
+                                        </div>
+                                    ';
+                                }
+                            }else{
+                                $btn='
+                                    
+                                ';
+                            }
+                        }else{
+                            if(Auth::user()->role_id==1){
                                 $btn='
                                     <div class="btn-group">
-                                    <span class="btn btn-primary btn-xs" onclick="pembayaran_data('.$row->id.','.$row->kategori_keuangan_id.')">Bayar '.$row->nomor_bayar.'</span>
-                                    <span class="btn btn-danger btn-xs" onclick="delete_data_bayar_header('.$row->id.','.$row->kategori_keuangan_id.')"><i class="fas fa-window-close text-white"></i></span>
+                                        <span class="btn btn-danger btn-xs" onclick="delete_data_bayar('.$row->id.','.$row->kategori_keuangan_id.')"><i class="fas fa-window-close text-white"></i></span>
                                     </div>
                                 ';
                             }else{
@@ -137,21 +168,19 @@ class KeuanganController extends Controller
                                     
                                 ';
                             }
-                        }else{
-                            $btn='
-                                <div class="btn-group">
-                                <span class="btn btn-danger btn-xs" onclick="delete_data_bayar('.$row->id.','.$row->kategori_keuangan_id.')"><i class="fas fa-window-close text-white"></i></span>
-                                </div>
-                            ';
                         }
                        
                     }else{
-                        $btn='
-                            <div class="btn-group">
-                                <span class="btn btn-primary btn-xs" onclick="tambah_data('.$row->id.')"><i class="fas fa-pencil-alt text-white"></i></span>
-                                <span class="btn btn-danger btn-xs" onclick="delete_data('.$row->id.')"><i class="fas fa-window-close text-white"></i></span>
-                            </div>
-                        ';
+                        if(Auth::user()->role_id==1){
+                            $btn='
+                                <div class="btn-group">
+                                    <span class="btn btn-primary btn-xs" onclick="tambah_data('.$row->id.')"><i class="fas fa-pencil-alt text-white"></i></span>
+                                    <span class="btn btn-danger btn-xs" onclick="delete_data('.$row->id.')"><i class="fas fa-window-close text-white"></i></span>
+                                </div>
+                            ';
+                        }else{
+                            $btn='';
+                        }
                     }
                 }else{
                     if($row->status_keuangan_id==3 || ($row->status_keuangan_id==4 && $row->kategori_keuangan_id==2)){

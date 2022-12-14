@@ -113,6 +113,12 @@
 							<span>Kasir</span>
 						</a>
 					</li>
+					<li class=" @if(Request::is('keuangan')==1) active @endif">
+						<a href="{{url('/keuangan')}}">
+							<i class="fas fa-money-bill-alt"></i> 
+							<span>Keuangan</span>
+						</a>
+					</li>
 					@endif
 					<li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
 					
