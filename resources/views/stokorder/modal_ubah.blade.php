@@ -15,7 +15,7 @@
                 <label style="padding: 1% 1% 2% 3%;" class="col-lg-3 col-form-label">Harga Beli</label>
                 <div class="col-lg-5" style="padding: 1% 1% 2% 1%;">
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" disabled name="harga_beli"   id="currency2" value="{{$data->harga_beli}}">
+                        <input type="text" class="form-control"  name="harga_beli"   id="currency2" value="{{$data->harga_beli}}">
                     </div>
                 </div>
             </div>

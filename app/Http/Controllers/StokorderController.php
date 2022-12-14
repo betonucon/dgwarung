@@ -358,6 +358,10 @@ class StokorderController extends Controller
                 return uang($row->harga_beli);
                 
             })
+            ->addColumn('u_harga_awal', function ($row) {
+                return uang($row->harga_awal);
+                
+            })
             ->addColumn('u_harga_jual', function ($row) {
                 return uang($row->harga_jual);
                 
@@ -584,6 +588,10 @@ class StokorderController extends Controller
         $rules = [];
         $messages = [];
         
+        $rules['harga_beli']= 'required|min:0|not_in:0';
+        $messages['harga_beli.required']= 'Lengkapi harga beli';
+        $messages['harga_beli.not_in']= 'Lengkapi harga beli';
+
         $rules['harga_jual']= 'required|min:0|not_in:0';
         $messages['harga_jual.required']= 'Lengkapi harga jual';
         $messages['harga_jual.not_in']= 'Lengkapi harga jual';
@@ -610,9 +618,10 @@ class StokorderController extends Controller
                     $gt=Stok::where('id',$request->id)->first();
                     $data=Stok::where('id',$request->id)->update([
                         
+                        'harga_beli'=>ubah_uang($request->harga_beli),
                         'harga_jual'=>ubah_uang($request->harga_jual),
                         'total_jual'=>(ubah_uang($request->harga_jual)*ubah_uang($request->qty)),
-                        'total_beli'=>(ubah_uang($g->harga_beli)*ubah_uang($request->qty)),
+                        'total_beli'=>(ubah_uang($request->harga_beli)*ubah_uang($request->qty)),
                         'qty'=>ubah_uang($request->qty),
                         'update'=>date('Y-m-d H:i:s'),
                     ]);
