@@ -10,10 +10,11 @@
                         <select name="kode" onchange="cari_barang(this.value)" class="form-control form-control-sm sele2" id="default-select2" placeholder="Ketik disini....">
                            
                             <option value="">Cari Nama Barang</option>
-                            
-                            @foreach(get_stokready() as $sat)
-                                <option value="{{$sat->kode}}" @if($data->kode==$sat->kode) selected @endif >[{{$sat->kode}}] {{$sat->nama_barang}} ({{$sat->satuan}})</option>
-                            @endforeach
+                            @if($order->status==0)
+                                @foreach(get_stokready() as $sat)
+                                    <option value="{{$sat->kode}}" @if($data->kode==$sat->kode) selected @endif >[{{$sat->kode}}] {{$sat->nama_barang}} ({{$sat->satuan}})</option>
+                                @endforeach
+                            @endif
                         </select>
                         
                     </div>
