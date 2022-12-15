@@ -100,19 +100,20 @@ class BarangController extends Controller
     {
         error_reporting(0);
         $search=$request->search;
-        $page=$request->page;
-        $query = Viewstokaktive::query();
+        $query = Viewstokaktivejual::query();
+        $data = $query->select('kode','nama_barang');
         if($search==""){
-            $data = $query->where('nama_barang','LIKE','%'.$search.'%')->orderBy('nama_barang','Asc')->paginate(8);
+            
         }else{
-            $data = $query->orderBy('nama_barang','Asc')->paginate(5);
+           
+            $data = $query->where('nama_barang','LIKE','%'.$search.'%');
         }
-        
+        $data = $query->orderBy('nama_barang','Asc')->paginate(10);
         $response=array();
         foreach($data as $o){
             $response[]=array(
                 'id'=>$o->kode,
-                'text'=>$o->nama_barang,
+                'text'=>'['.$o->kode.'] '.$o->nama_barang,
             );
         }
         return response()->json($response);

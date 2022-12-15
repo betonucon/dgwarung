@@ -10,11 +10,7 @@
                         <select name="kode" onchange="cari_barang(this.value)" class="form-control form-control-sm sele2" id="default-select2" placeholder="Ketik disini....">
                            
                             <option value="">Cari Nama Barang</option>
-                            @if($order->status==0)
-                                @foreach(get_stokready() as $sat)
-                                    <option value="{{$sat->kode}}" @if($data->kode==$sat->kode) selected @endif >[{{$sat->kode}}] {{$sat->nama_barang}} ({{$sat->satuan}})</option>
-                                @endforeach
-                            @endif
+                           
                         </select>
                         
                     </div>
@@ -107,31 +103,28 @@
 
     <script>
         
-        $("#default-select2").select2();
-        // $("#default-select2").select2({
-        //     minimumInputLength: 2,
-        //     ajax: {
-        //         url: "{{url('barang/get_data_barang')}}",
-        //         dataType: 'json',
-        //         type: "GET",
-        //         quietMillis: 50,
-        //         data: function (term) {
-        //             return {
-        //                 term: term
-        //             };
-        //         },
-        //         results: function (data) {
-        //             return {
-        //                 results: $.map(data, function (item) {
-        //                     return {
-        //                         text: item.text,
-        //                         id: item.id
-        //                     }
-        //                 })
-        //             };
-        //         }
-        //     }
-        // });
+        
+        $('#default-select2').select2({
+            minimumInputLength: 1,
+            allowClear: true,
+            placeholder: 'Masukan Nama Barang',
+            ajax: {
+                dataType: 'json',
+                url: "{{url('barang/get_data_barang')}}",
+                delay: 1000,
+                data: function(params) {
+                    return {
+                    search: params.term
+                    }
+                },
+                processResults: function (data, page) {
+                    return {
+                        results: data
+                    };
+                },
+            }
+        });
+
         @if($order->status==0)
         $("#default-select2").select2('open');
         @endif
@@ -167,18 +160,65 @@
                 }
             });
         }
-        function tentukan_provit(text){
-            @if(setting_provit()==1)
-                $.ajax({
-                    type: 'GET',
-                    url: "{{url('stokorder/tentukan_provit')}}",
-                    data: "nilai="+text,
-                    success: function(msg){
-                        var bat=msg.split('@');
+        function proses_enter(e){
+			if(e.keyCode === 13){
+                var form=document.getElementById('mydata');
             
-                            $('#currency2').val(bat[1]);
-                    }
-                });
-            @endif
+                
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ url('kasir/store_stok') }}",
+                        data: new FormData(form),
+                        contentType: false,
+                        cache: false,
+                        processData:false,
+                        beforeSend: function() {
+                            document.getElementById("loadnya").style.width = "100%";
+                        },
+                        success: function(msg){
+                            var bat=msg.split('@');
+                            if(bat[1]=='ok'){
+                                document.getElementById("loadnya").style.width = "0px";
+                                
+                                $('#satuan').val("");
+                                $('#tampil_stok').html("");
+                                $('#stok').val(0);
+                                $('#nomor_stok').val("");
+                                $('#tampil_nomor_stok').html("");
+                                $('#tampil_harga_jual').html("");
+                                $('#nama_supplier').html("");
+                                $('#harga_jual').val(0);
+                                $('#diskon').val(0);
+                                $('#qty').val(0);
+                                $("#default-select2").select2('open');
+                                var table=$('#data-table-fixed-header').DataTable();
+                                    table.ajax.url("{{ url('kasir/get_data')}}?nomor_stok={{$id}}").load();    
+                            }else{
+                                document.getElementById("loadnya").style.width = "0px";
+                                swal({
+                                    title: 'Notifikasi',
+                                
+                                    html:true,
+                                    text:'ss',
+                                    icon: 'error',
+                                    buttons: {
+                                        cancel: {
+                                            text: 'Tutup',
+                                            value: null,
+                                            visible: true,
+                                            className: 'btn btn-dangers',
+                                            closeModal: true,
+                                        },
+                                        
+                                    }
+                                });
+                                $('.swal-text').html('<div style="width:100%;background:#f2f2f5;padding:1%;text-align:left;font-size:13px">'+msg+'</div>')
+                                $("#qty").val("");
+                            }
+                            
+                            
+                        }
+                    });
+            }
         }
     </script>
