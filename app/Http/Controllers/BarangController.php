@@ -104,12 +104,13 @@ class BarangController extends Controller
         $query = Viewstokbarang::query();
         $data = $query->select('kode','nama_barang');
         if($search==""){
-            
+            $data = $query->orderBy('nama_barang','Asc')->paginate(1);
         }else{
            
             $data = $query->where('nama_barang','LIKE','%'.$search.'%');
+            $data = $query->orderBy('nama_barang','Asc')->paginate(10);
         }
-        $data = $query->orderBy('nama_barang','Asc')->paginate(10);
+        
         $response=array();
         foreach($data as $o){
             $response[]=array(

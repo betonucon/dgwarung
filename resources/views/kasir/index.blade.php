@@ -41,7 +41,7 @@
                                 <tr>
                                     <th class="text-nowrap" width="5%">No</th>
                                     <th class="text-nowrap" width="12%">Nomor</th>
-                                    <th class="text-nowrap">Nama Supplier</th>
+                                    <th class="text-nowrap">Nama Konsumen</th>
                                     <th class="text-nowrap" width="12%">CreateBy</th>
                                     <th class="text-nowrap" width="12%">tanggal</th>
                                     <th class="text-nowrap" width="11%">Status</th>
@@ -172,14 +172,14 @@
 				if (willDelete) {
 						$.ajax({
 							type: 'GET',
-							url: "{{url('pengumuman/delete_data')}}",
+							url: "{{url('kasir/delete_data')}}",
 							data: "id="+id,
 							success: function(msg){
 								swal("Success! berhasil terhapus!", {
 									icon: "success",
 								});
 								var table=$('#data-table-fixed-header').DataTable();
-								table.ajax.url("{{ url('pengumuman/get_data')}}").load();
+								table.ajax.url("{{ url('kasir/get_order')}}").load();
 							}
 						});
 					
