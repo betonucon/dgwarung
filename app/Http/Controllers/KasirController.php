@@ -44,6 +44,10 @@ class KasirController extends Controller
         }
         return view('kasir.create',compact('template','disabled','id','data'));
     }
+    public function totalnya(request $request)
+    {
+        echo total_item_jual($request->nomor_transaksi).'@'.uang(total_harga_jual($request->nomor_transaksi));
+    }
     public function view_stok(request $request)
     {
         error_reporting(0);
@@ -634,7 +638,7 @@ class KasirController extends Controller
                         'waktu'=>date('Y-m-d H:i:s'),
                     ]);
 
-                    echo'@ok@';
+                    echo'@ok@'.total_item_jual($request->nomor_transaksi).'@'.uang(total_harga_jual($request->nomor_transaksi));
                 }else{
                     echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
                     echo'Stok tidak mencukupi';

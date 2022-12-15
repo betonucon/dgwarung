@@ -65,13 +65,13 @@
             <div class="form-group row">
                 <label style="padding: 0% 1% 0% 3%;" class="col-lg-5 col-form-label">Tot Barang</label>
                 <div class="col-lg-7" style="padding: 0% 1% 0% 0%;border: solid 1px #f7f7ff; background: #e8e8f3;height:30px">
-                    <p  style="margin-top: 0; margin-left: 3%; margin-bottom: 0px; line-height: 2.1; font-size: 13px;">{{total_item_jual($id)}} Item</p>
+                    <p  style="margin-top: 0; margin-left: 3%; margin-bottom: 0px; line-height: 2.1; font-size: 13px;" id="total_item_jual" >{{total_item_jual($id)}} Item</p>
                 </div>
             </div>
             <div class="form-group row">
                 <label style="padding: 0% 1% 0% 3%;" class="col-lg-5 col-form-label">Tot Harga</label>
                 <div class="col-lg-7" style="padding: 0% 1% 0% 0%;border: solid 1px #f7f7ff; background: #e8e8f3;height:30px">
-                    <p  style="margin-top: 0; margin-left: 3%; margin-bottom: 0px; line-height: 2.1; font-size: 13px;">Rp.{{uang(total_harga_jual($id))}} </p>
+                    <p  style="margin-top: 0; margin-left: 3%; margin-bottom: 0px; line-height: 2.1; font-size: 13px;" id="total_harga_jual">Rp.{{uang(total_harga_jual($id))}} </p>
                 </div>
             </div>
             
@@ -191,6 +191,8 @@
                             $('#harga_jual').val(0);
                             $('#diskon').val(0);
                             $('#qty').val(0);
+                            $('#total_item_jual').html(bat[2]);
+                            $('#total_harga_jual').html(bat[3]);
                             $("#default-select2").select2('open');
                             var table=$('#data-table-fixed-header').DataTable();
                                 table.ajax.url("{{ url('kasir/get_data')}}?nomor_stok={{$id}}").load();    
@@ -238,7 +240,9 @@
                         },
                         success: function(msg){
                             var bat=msg.split('@');
+                            
                             if(bat[1]=='ok'){
+
                                 document.getElementById("loadnya").style.width = "0px";
                                 
                                 $('#satuan').val("");
@@ -251,6 +255,8 @@
                                 $('#harga_jual').val(0);
                                 $('#diskon').val(0);
                                 $('#qty').val(0);
+                                $('#total_item_jual').html(bat[2]);
+                                $('#total_harga_jual').html(bat[3]);
                                 $("#default-select2").select2('open');
                                 var table=$('#data-table-fixed-header').DataTable();
                                     table.ajax.url("{{ url('kasir/get_data')}}?nomor_stok={{$id}}").load();    
