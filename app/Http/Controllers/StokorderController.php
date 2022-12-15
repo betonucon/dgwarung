@@ -161,7 +161,7 @@ class StokorderController extends Controller
     public function cari_stok_tukar(request $request)
     {
         error_reporting(0);
-        $data=Viewstokorder::where('nomor_stok',$request->nomor_stok)->where('kode',$request->kode)->first();
+        $data=Stokup::where('nomor_stok',$request->nomor_stok)->where('kode',$request->kode)->first();
         
         
         $barang=Barang::where('join_kode',$data->join_kode)->where('kd_satuan','!=',$data->kd_satuan)->get();
