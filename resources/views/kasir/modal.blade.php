@@ -114,7 +114,7 @@
                 delay: 1000,
                 data: function(params) {
                     return {
-                    search: params.term
+                        search: params.term
                     }
                 },
                 processResults: function (data, page) {
