@@ -15,6 +15,7 @@ use App\Viewstokbarang;
 use App\Hargakosong;
 use App\Viewstokorder;
 use App\Viewhargabarang;
+use App\Viewbarangaktive;
 use App\Stok;
 use App\User;
 
@@ -101,7 +102,7 @@ class BarangController extends Controller
     {
         error_reporting(0);
         $search=$request->search;
-        $query = Viewstokbarang::query();
+        $query = Viewbarangaktive::query();
         $data = $query->select('kode','nama_barang');
         if($search==""){
             $data = $query->orderBy('nama_barang','Asc')->paginate(1);
