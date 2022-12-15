@@ -446,12 +446,20 @@ class KasirController extends Controller
         }else{
             if($request->id==0){
                     $nomor=penomoran_kasir();
-                    
+                    if($request->kategori_opname_id==1){
+                        if($request->tanggal==date('Y-m-d')){
+                            $kategori=1;
+                        }else{
+                            $kategori=2;
+                        }
+                    }else{
+                        $kategori=$request->kategori_opname_id;
+                    }
                     $data=Kasir::create([
                         
                         'nomor_transaksi'=>$nomor,
                         'konsumen'=>$request->konsumen,
-                        'kategori_opname_id'=>$request->kategori_opname_id,
+                        'kategori_opname_id'=>$kategori,
                         'tanggal'=>$request->tanggal,
                         'users_id'=>Auth::user()->id,
                         'nama_user'=>Auth::user()->name,

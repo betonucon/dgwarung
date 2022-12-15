@@ -36,7 +36,7 @@
                                             <select name="join_kode" onchange="cari_barang(this.value)" class="form-control form-control-sm " id="default-select2" placeholder="Ketik disini....">
                                                 <option value="">Pilih</option>
                                                 @foreach(get_join_kode() as $sat)
-                                                    <option value="{{$sat->join_kode}}/{{$sat->nama_barang}}" > {{$sat->nama_barang}}</option>
+                                                    <option value="{{$sat->join_kode}}/{{$sat->nama_barang}}" >{{$sat->kode}} {{$sat->nama_barang}}</option>
                                                 @endforeach
                                             </select>
                                             
