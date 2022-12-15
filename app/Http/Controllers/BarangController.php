@@ -11,6 +11,7 @@ use Validator;
 use App\Barang;
 use App\Viewstokaktive;
 use App\Viewstokaktivejual;
+use App\Viewstokbarang;
 use App\Hargakosong;
 use App\Viewstokorder;
 use App\Viewhargabarang;
@@ -100,7 +101,7 @@ class BarangController extends Controller
     {
         error_reporting(0);
         $search=$request->search;
-        $query = Viewstokaktivejual::query();
+        $query = Viewstokbarang::query();
         $data = $query->select('kode','nama_barang');
         if($search==""){
             
