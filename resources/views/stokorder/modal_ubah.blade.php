@@ -31,7 +31,7 @@
                 <label style="padding: 1% 1% 2% 3%;" class="col-lg-3 col-form-label">Qty</label>
                 <div class="col-lg-5" style="padding: 1% 1% 2% 1%;">
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" name="qty"   id="qty" value="{{$data->qty}}">
+                        <input type="text" class="form-control" name="qty"   id="qty" value="{{$data->sisa}}">
                     </div>
                 </div>
             </div>
