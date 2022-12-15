@@ -560,7 +560,7 @@ function beli_stok_ready($kode){
     }
 }
 function get_join_kode(){
-    $data=App\Barang::select('nama_barang','join_kode')->where('aktive',1)->groupBy('nama_barang','join_kode')->orderBy('nama_barang','Asc')->get();
+    $data=App\Barang::select('nama_barang','join_kode','kode')->where('aktive',1)->groupBy('nama_barang','join_kode','kode')->orderBy('nama_barang','Asc')->get();
     return $data;
 }
 function first_join_kode($join_kode){
