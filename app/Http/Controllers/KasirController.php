@@ -393,7 +393,11 @@ class KasirController extends Controller
     
 
     public function delete_data(request $request){
-        $data = Supplier::where('id',$request->id)->delete();
+        $data = Kasir::where('id',$request->id)->first();
+        if($data->status==0){
+            $stok = Stok::where('nomor_transaksi',$data->nomor_transaksi)->where('status',6)->delete();
+            $datahapus = Kasir::where('id',$request->id)->delete();
+        }
     }
     public function delete_data_stok(request $request){
         $data = Stok::where('id',$request->id)->delete();
