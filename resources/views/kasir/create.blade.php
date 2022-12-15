@@ -168,6 +168,7 @@
 @endsection
 
 @push('ajax')
+
 <script type="text/javascript">
         /*
         Template Name: Color Admin - Responsive Admin Dashboard Template build with Twitter Bootstrap 4
@@ -241,7 +242,16 @@
             @if($id==0)
 
             @else
-            $('#tampil-form').load("{{url('kasir/modal')}}?id={{$id}}&ide=0&act=new")
+            $('#tampil-form').load("{{url('kasir/modal')}}?id={{$id}}")
+            // $.ajax({
+            //     type: 'GET',
+            //     url: "{{url('kasir/modal')}}",
+            //     data: "id={{$id}}",
+            //     success: function(msg){
+            //         $('#tampil-form').html(msg)
+            //     }
+            // });
+					
             @endif
 		});
 

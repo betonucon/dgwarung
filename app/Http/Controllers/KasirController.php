@@ -70,7 +70,6 @@ class KasirController extends Controller
         $id=$request->id;
         $ide=$request->ide;
         $act=$request->act;
-        $data=Viewstokorder::find($request->ide);
         $order=Kasir::where('nomor_transaksi',$request->id)->first();
         if($request->id==0){
             $disabled='';

@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 use App\Barang;
+use App\Viewstokaktive;
+use App\Viewstokaktivejual;
 use App\Hargakosong;
 use App\Viewstokorder;
 use App\Viewhargabarang;
@@ -75,14 +77,15 @@ class BarangController extends Controller
     }
     public function cari_barang_jual(request $request)
     {
-        $dT=Barang::where('kode',$request->kode)->first();
-        if(setting_harga_jual()==1){
-            $discon=(harga_jual($request->kode)-harga_discon($request->kode));
-            return '@'.$dT->satuan.'@'.stok_ready($request->kode).'@'.nomor_stok_ready($request->kode).'@'.harga_jual($request->kode).'@'.supplier_stok_ready($request->kode).'@'.$discon;
-        }else{
-            $discon=0;
-            return '@'.$dT->satuan.'@'.stok_ready($request->kode).'@'.nomor_stok_ready($request->kode).'@'.jual_stok_ready($request->kode).'@'.supplier_stok_ready($request->kode).'@'.$discon;
-        }
+        $dT=Viewstokaktivejual::where('kode',$request->kode)->first();
+        return '@'.$dT->satuan.'@'.$dT->sisa.'@'.$dT->nomor_stok.'@'.$dT->harga_jual.'@'.$dT->supplier.'@0';
+        // if(setting_harga_jual()==1){
+        //     $discon=(harga_jual($request->kode)-harga_discon($request->kode));
+        //     return '@'.$dT->satuan.'@'.stok_ready($request->kode).'@'.nomor_stok_ready($request->kode).'@'.harga_jual($request->kode).'@'.supplier_stok_ready($request->kode).'@'.$discon;
+        // }else{
+        //     $discon=0;
+        //     return '@'.$dT->satuan.'@'.stok_ready($request->kode).'@'.nomor_stok_ready($request->kode).'@'.jual_stok_ready($request->kode).'@'.supplier_stok_ready($request->kode).'@'.$discon;
+        // }
         
     }
     public function cari_harga_barang(request $request)
@@ -93,6 +96,28 @@ class BarangController extends Controller
         return '@'.$jual.'@'.$beli;
     }
 
+    public function get_data_barang(request $request)
+    {
+        error_reporting(0);
+        $search=$request->search;
+        $page=$request->page;
+        $query = Viewstokaktive::query();
+        if($search==""){
+            $data = $query->where('nama_barang','LIKE','%'.$search.'%')->orderBy('nama_barang','Asc')->paginate(8);
+        }else{
+            $data = $query->orderBy('nama_barang','Asc')->paginate(5);
+        }
+        
+        $response=array();
+        foreach($data as $o){
+            $response[]=array(
+                'id'=>$o->kode,
+                'text'=>$o->nama_barang,
+            );
+        }
+        return response()->json($response);
+
+    }
     public function get_data(request $request)
     {
         error_reporting(0);

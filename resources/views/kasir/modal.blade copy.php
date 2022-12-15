@@ -10,11 +10,7 @@
                         <select name="kode" onchange="cari_barang(this.value)" class="form-control form-control-sm sele2" id="default-select2" placeholder="Ketik disini....">
                            
                             <option value="">Cari Nama Barang</option>
-                            @if($order->status==0)
-                                @foreach(get_stokready() as $sat)
-                                    <option value="{{$sat->kode}}" @if($data->kode==$sat->kode) selected @endif >[{{$sat->kode}}] {{$sat->nama_barang}} ({{$sat->satuan}})</option>
-                                @endforeach
-                            @endif
+                           
                         </select>
                         
                     </div>
@@ -107,31 +103,32 @@
 
     <script>
         
-        $("#default-select2").select2();
-        // $("#default-select2").select2({
-        //     minimumInputLength: 2,
-        //     ajax: {
-        //         url: "{{url('barang/get_data_barang')}}",
-        //         dataType: 'json',
-        //         type: "GET",
-        //         quietMillis: 50,
-        //         data: function (term) {
-        //             return {
-        //                 term: term
-        //             };
-        //         },
-        //         results: function (data) {
-        //             return {
-        //                 results: $.map(data, function (item) {
-        //                     return {
-        //                         text: item.text,
-        //                         id: item.id
-        //                     }
-        //                 })
-        //             };
-        //         }
-        //     }
-        // });
+        $("#default-select2").select2({
+            ajax: {
+                url: "{{url('barang/get_data_barang')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        search: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+                params.page = params.page || 1;
+
+                return {
+                    results: data.items,
+                    pagination: {
+                    more: (params.page * 30) < data.total_count
+                    }
+                };
+                },
+                cache: true
+            },
+            placeholder: 'Search for a repository',
+            minimumInputLength: 1,
+        });
         @if($order->status==0)
         $("#default-select2").select2('open');
         @endif
