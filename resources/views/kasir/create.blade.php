@@ -329,60 +329,7 @@
         
         
 
-        function simpan_data(){
-            
-            var form=document.getElementById('mydata');
-            
-                
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ url('kasir/store_stok') }}",
-                    data: new FormData(form),
-                    contentType: false,
-                    cache: false,
-                    processData:false,
-                    beforeSend: function() {
-                        document.getElementById("loadnya").style.width = "100%";
-                    },
-                    success: function(msg){
-                        var bat=msg.split('@');
-                        if(bat[1]=='ok'){
-                            document.getElementById("loadnya").style.width = "0px";
-                            swal({
-									title: "Success! berhasil disimpan!",
-									icon: "success",
-                            });
-                            $('#tampil-form').load("{{url('kasir/modal')}}?id={{$id}}&ide=0&act=new")
-                            var table=$('#data-table-fixed-header').DataTable();
-			                    table.ajax.url("{{ url('kasir/get_data')}}?nomor_stok={{$id}}").load();    
-                                
-                        }else{
-                            document.getElementById("loadnya").style.width = "0px";
-                            swal({
-                                title: 'Notifikasi',
-                               
-                                html:true,
-                                text:'ss',
-                                icon: 'error',
-                                buttons: {
-                                    cancel: {
-                                        text: 'Tutup',
-                                        value: null,
-                                        visible: true,
-                                        className: 'btn btn-dangers',
-                                        closeModal: true,
-                                    },
-                                    
-                                }
-                            });
-                            $('.swal-text').html('<div style="width:100%;background:#f2f2f5;padding:1%;text-align:left;font-size:13px">'+msg+'</div>')
-                            $("#qty").val("");
-                        }
-                        
-                        
-                    }
-                });
-        };
+        
 
         function simpan_order(){
             
