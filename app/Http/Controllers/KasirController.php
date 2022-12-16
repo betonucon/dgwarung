@@ -556,6 +556,7 @@ class KasirController extends Controller
                             
                             'nomor'=>kdk($request->kategori_keuangan_id).'2'.$request->nomor_transaksi,
                             'nilai'=>$request->nilai,
+                            'nomor_transaksi'=>$request->nomor_transaksi,
                             'status_keuangan_id'=>$request->status_keuangan_id,
                             'kategori_keuangan_id'=>$request->kategori_keuangan_id,
                             'keterangan'=>'Pembayaran penjualan dari '.$odr->konsumen,
@@ -567,7 +568,7 @@ class KasirController extends Controller
                         ]);
                         if($request->status_keuangan_id==1){
                             $provit=Keuangan::create([
-                                
+                                'nomor_transaksi'=>$request->nomor_transaksi,
                                 'nomor'=>kdk(6).'2'.$request->nomor_transaksi,
                                 'nilai'=>$request->provite,
                                 'status_keuangan_id'=>$request->status_keuangan_id,
