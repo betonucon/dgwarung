@@ -58,6 +58,11 @@
                                     <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_tempo($tahun))}}</div>
                                 </div>
                                 <div class="form-group row">
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Operasional</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_provit_keluar($tahun))}}</div>
+                                </div>
+                                
+                                <div class="form-group row">
                                     <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Provit</label>
                                     <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_provit($tahun))}}</div>
                                 </div>
@@ -69,15 +74,19 @@
                                 </div>
                                 <div class="form-group row">
                                     <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Penjualan</label>
-                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_saldo_bulan($bulan,$tahun))}}</div>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_saldo_bulan($bulan,$tahun,$tanggal))}}</div>
                                 </div>
                                 <div class="form-group row">
                                     <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Pembelian</label>
-                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_keluar_bulan($bulan,$tahun))}}</div>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_keluar_bulan($bulan,$tahun,$tanggal))}}</div>
+                                </div>
+                                <div class="form-group row">
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Operasional</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_provit_keluar_bulan($bulan,$tahun,$tanggal))}}</div>
                                 </div>
                                 <div class="form-group row">
                                     <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Provit</label>
-                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_provit_bulan($bulan,$tahun))}}</div>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_provit_bulan($bulan,$tahun,$tanggal))}}</div>
                                 </div>
                                
                             </div>
@@ -92,6 +101,10 @@
                                 <div class="form-group row">
                                     <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Pembelian</label>
                                     <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_keluar_tanggal($tanggal))}}</div>
+                                </div>
+                                <div class="form-group row">
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Operasional</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_provit_keluar_tanggal($tanggal))}}</div>
                                 </div>
                                 <div class="form-group row">
                                     <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Provit</label>
@@ -132,6 +145,12 @@
                                 <a href="{{url('keuangan')}}?tanggal={{$tanggal}}&act={{encoder(8)}}" class="nav-link @if($act==8) active @endif">
                                     <span class="d-sm-none">Provit</span>
                                     <span class="d-sm-block d-none">Provit</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{url('keuangan')}}?tanggal={{$tanggal}}&act={{encoder(10)}}" class="nav-link @if($act==10) active @endif">
+                                    <span class="d-sm-none">Operasional</span>
+                                    <span class="d-sm-block d-none">Operasional</span>
                                 </a>
                             </li>
                             

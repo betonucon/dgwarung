@@ -591,15 +591,19 @@ function total_tempo($id){
     $saldo=App\Keuangan::whereIn('status_keuangan_id',array(4))->where('tahun',$id)->where('kategori_keuangan_id',2)->sum('nilai');
     return $saldo;
 }
-function total_keluar_bulan($bulan,$tahun){
+function total_keluar_bulan($bulan,$tahun,$tanggal){
     $saldo=App\Keuangan::whereIn('status_keuangan_id',array(2))->where('bulan',$bulan)->where('tahun',$tahun)->where('kategori_keuangan_id',1)->sum('nilai');
     return $saldo;
 }
-function total_piutang_bulan($bulan,$tahun){
+function total_keluar_tanggal($tanggal){
+    $saldo=App\Keuangan::whereIn('status_keuangan_id',array(2))->where('tanggal',$tanggal)->where('kategori_keuangan_id',1)->sum('nilai');
+    return $saldo;
+}
+function total_piutang_bulan($bulan,$tahun,$tanggal){
     $saldo=App\Keuangan::whereIn('status_keuangan_id',array(3))->where('bulan',$bulan)->where('tahun',$tahun)->where('kategori_keuangan_id',1)->sum('nilai');
     return $saldo;
 }
-function total_tempo_bulan($bulan,$tahun){
+function total_tempo_bulan($bulan,$tahun,$tanggal){
     $saldo=App\Keuangan::whereIn('status_keuangan_id',array(4))->where('bulan',$bulan)->where('tahun',$tahun)->where('kategori_keuangan_id',2)->sum('nilai');
     return $saldo;
 }
@@ -620,15 +624,12 @@ function cetak_get_keuangan($tanggal,$tahun){
     
     return $saldo;
 }
-function total_keluar_tanggal($tanggal){
-    $saldo=App\Keuangan::whereIn('status_keuangan_id',array(2))->where('tanggal',$tanggal)->where('kategori_keuangan_id',1)->sum('nilai');
-    return $saldo;
-}
+
 function total_provit_keluar($id){
     $saldo=App\Keuangan::where('status_keuangan_id',2)->where('tahun',$id)->whereNotIn('kategori_keuangan_id',array(1,2))->sum('nilai');
     return $saldo;
 }
-function total_provit_keluar_bulan($bulan,$tahun){
+function total_provit_keluar_bulan($bulan,$tahun,$tanggal){
     $saldo=App\Keuangan::where('status_keuangan_id',2)->where('bulan',$bulan)->where('tahun',$tahun)->whereNotIn('kategori_keuangan_id',array(1,2))->sum('nilai');
     return $saldo;
 }
@@ -642,23 +643,28 @@ function total_saldo($id){
     $saldo=App\Keuangan::where('status_keuangan_id',1)->where('tahun',$id)->where('kategori_keuangan_id',2)->sum('nilai');
     return ($saldo-total_keluar($id));
 }
-function total_saldo_bulan($bulan,$tahun){
+function total_saldo_bulan($bulan,$tahun,$tanggal){
     $saldo=App\Keuangan::where('status_keuangan_id',1)->where('kategori_keuangan_id',2)->where('bulan',$bulan)->where('tahun',$tahun)->sum('nilai');
-    return ($saldo-total_keluar_bulan($bulan,$tahun));
+    return ($saldo);
+}
+function total_saldo_tanggal_sebelumnya($tanggal){
+    $saldo=App\Keuangan::where('status_keuangan_id',1)->where('kategori_keuangan_id',2)->where('tanggal','<=',$tanggal)->sum('nilai');
+    return ($saldo-total_keluar_tanggal($tanggal));
+    
 }
 function total_saldo_tanggal($tanggal){
     $saldo=App\Keuangan::where('status_keuangan_id',1)->where('kategori_keuangan_id',2)->where('tanggal',$tanggal)->sum('nilai');
-    return ($saldo-total_keluar_tanggal($tanggal));
+    return $saldo;
     
 }
 function total_provit($id){
     $saldo=App\Keuangan::where('status_keuangan_id',1)->where('tahun',$id)->where('kategori_keuangan_id',6)->sum('nilai');
     return ($saldo-total_provit_keluar($id));
 }
-function total_provit_bulan($bulan,$tahun){
+function total_provit_bulan($bulan,$tahun,$tanggal){
     
     $saldo=App\Keuangan::where('status_keuangan_id',1)->where('kategori_keuangan_id',6)->where('bulan',$bulan)->where('tahun',$tahun)->sum('nilai');
-    return ($saldo-total_provit_keluar_bulan($bulan,$tahun));
+    return ($saldo-total_provit_keluar_bulan($bulan,$tahun,$tanggal));
 }
 function total_provit_tanggal($tanggal){
     $saldo=App\Keuangan::where('status_keuangan_id',1)->where('kategori_keuangan_id',6)->where('tanggal',$tanggal)->sum('nilai');

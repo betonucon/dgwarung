@@ -118,8 +118,12 @@ class KeuanganController extends Controller
             }
         }else{
             if(Auth::user()->role_id==1){
-                if($even==8){
-                    $data=$query->whereIn('kategori_keuangan_id',array(3,4,5,6));
+                if($even==8 || $even==10){
+                    if($even==8){
+                        $data=$query->whereIn('kategori_keuangan_id',array(6));
+                    }else{
+                        $data=$query->whereIn('kategori_keuangan_id',array(3,4,5));
+                    }
                 }else{
                     if($even==9){
                         $data=$query->where('status_keuangan_id',3);
