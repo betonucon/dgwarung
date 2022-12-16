@@ -43,6 +43,7 @@
                                     <th class="text-nowrap" width="12%">Nomor</th>
                                     <th class="text-nowrap">Nama Konsumen</th>
                                     <th class="text-nowrap" width="12%">CreateBy</th>
+                                    <th class="text-nowrap" width="10%">Opname</th>
                                     <th class="text-nowrap" width="12%">tanggal</th>
                                     <th class="text-nowrap" width="11%">Status</th>
                                     <th class="text-nowrap" width="12%">Pembayaran</th>
@@ -119,6 +120,7 @@
 						{ data: 'nomor_transaksi' },
 						{ data: 'konsumen' },
 						{ data: 'nama_user' },
+						{ data: 'opname' },
 						{ data: 'tanggal' },
 						{ data: 'nama_status' },
 						{ data: 'pembayaran' },

@@ -224,6 +224,14 @@ class KasirController extends Controller
                 $btn=uang($row->nilai);
                 return $btn;
             })
+            ->addColumn('opname', function ($row) {
+                if($row->kategori_opname_id==1){
+                    return '<font style="color:blue">Non</font>';
+                }else{
+                    return '<font style="color:red">Opn</font>';
+                }
+                
+            })
             ->addColumn('pembayaran', function ($row) {
                 if($row->status==0){
                     return 'Null';
@@ -252,7 +260,7 @@ class KasirController extends Controller
                 return $btn;
             })
             
-            ->rawColumns(['action','nama_status'])
+            ->rawColumns(['action','nama_status','opname'])
             ->make(true);
     }
     public function get_data_stok(request $request)
