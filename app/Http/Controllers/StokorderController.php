@@ -263,6 +263,14 @@ class StokorderController extends Controller
                 }
                 
             })
+            ->addColumn('opname', function ($row) {
+                if($row->kategori_opname_id==1){
+                    return '<font style="color:blue">Non</font>';
+                }else{
+                    return '<font style="color:red">Opn</font>';
+                }
+                
+            })
             ->addColumn('action', function ($row) {
                 if($row->status==1){
                     $btn='
@@ -282,7 +290,7 @@ class StokorderController extends Controller
                 return $btn;
             })
             
-            ->rawColumns(['action','nama_status'])
+            ->rawColumns(['action','nama_status','opname'])
             ->make(true);
     }
 
@@ -675,8 +683,8 @@ class StokorderController extends Controller
         }else{
             $odr=Stokorder::where('nomor_stok',$request->nomor_stok)->first();
             $tanggal=$odr->tanggal;
-            $bulan=date('m',strtotime($request->tanggal));
-            $tahun=date('Y',strtotime($request->tanggal));
+            $bulan=date('m',strtotime($odr->tanggal));
+            $tahun=date('Y',strtotime($odr->tanggal));
             if($request->status_keuangan_id==3){
                 $dibayarkan=null;
             }else{

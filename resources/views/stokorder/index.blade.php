@@ -43,6 +43,7 @@
                                     <th class="text-nowrap" width="12%">Nomor</th>
                                     <th class="text-nowrap">Nama Supplier</th>
                                     <th class="text-nowrap" width="12%">CreateBy</th>
+                                    <th class="text-nowrap" width="12%">Opname</th>
                                     <th class="text-nowrap" width="12%">tanggal</th>
                                     <th class="text-nowrap" width="12%">Status</th>
                                     <th class="text-nowrap" width="12%">Pembayaran</th>
@@ -118,6 +119,7 @@
 						{ data: 'nomor_stok' },
 						{ data: 'supplier' },
 						{ data: 'nama_user' },
+						{ data: 'opname' },
 						{ data: 'tanggal' },
 						{ data: 'nama_status' },
 						{ data: 'pembayaran' },
