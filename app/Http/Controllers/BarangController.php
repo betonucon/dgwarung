@@ -11,6 +11,7 @@ use Validator;
 use App\Barang;
 use App\Viewstokaktive;
 use App\Viewstokaktivejual;
+use App\Viewbaranghapus;
 use App\Viewstokbarang;
 use App\Hargakosong;
 use App\Viewstokorder;
@@ -28,6 +29,13 @@ class BarangController extends Controller
         $template='top';
         
         return view('barang.index',compact('template'));
+    }
+    public function index_hapus(request $request)
+    {
+        error_reporting(0);
+        $template='top';
+        
+        return view('barang.index_hapus',compact('template'));
     }
     public function create(request $request)
     {
@@ -164,11 +172,57 @@ class BarangController extends Controller
             ->rawColumns(['action','checkbox'])
             ->make(true);
     }
+    public function get_data_hapus(request $request)
+    {
+        error_reporting(0);
+        $query = Viewbaranghapus::query();
+        
+        $data = $query->orderBy('nama_barang','Asc')->get();
+
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action', function ($row) {
+                $btn='
+                    <div class="btn-group">
+                        <span class="btn btn-primary btn-sm" onclick="restore_data('.$row->id.')"><i class="fas fa-cog text-white"></i> Restore</span>
+                    </div>
+                ';
+                return $btn;
+            })
+            ->addColumn('checkbox', function ($row) {
+                $btn='<input type="checkbox" class="checkbox" name="id[]" value="'.$row->id.'">';
+                return $btn;
+            })
+            ->addColumn('nama_barangnya', function ($row) {
+                $btn=$row->nama_barang.' ('.$row->satuan.')';
+                return $btn;
+            })
+            ->addColumn('uang_harga_jual', function ($row) {
+                $btn=uang($row->harga_jual);
+                return $btn;
+            })
+            ->addColumn('uang_harga_beli', function ($row) {
+                $btn=uang($row->harga_beli);
+                return $btn;
+            })
+            ->addColumn('diskonnya', function ($row) {
+                $btn=$row->discon.' %';
+                return $btn;
+            })
+            
+            ->rawColumns(['action','checkbox'])
+            ->make(true);
+    }
     
 
     public function delete_data(request $request){
         $data = Barang::where('id',$request->id)->update([
             'aktive'=>0
+        ]);
+    }
+    public function restore_data(request $request){
+        $data = Barang::where('id',$request->id)->update([
+            'aktive'=>1
         ]);
     }
     

@@ -33,7 +33,7 @@
 						</a>
 					</li>
 					@if(Auth::user()->role_id==1)
-					<li class="has-sub closed">
+					<li class="has-sub @if(Request::is('barang/*')==1 || Request::is('barang')==1 || Request::is('supplier')==1 || Request::is('employe')==1) active @endif">
 						<a href="javascript:;">
 							<b class="caret"></b>
 							<i class="fa fa-clone"></i>
@@ -43,6 +43,7 @@
 							
 							<li><a href="{{url('supplier')}}">Supplier</a></li>
 							<li><a href="{{url('barang')}}">Barang</a></li>
+							<li><a href="{{url('barang/hapus')}}">Restore Barang</a></li>
 							<li><a href="{{url('employe')}}">Pegawai</a></li>
 							
 						</ul>
