@@ -603,6 +603,9 @@ class KasirController extends Controller
         $rules['qty']= 'required|min:0|not_in:0';
         $messages['qty.required']= 'Lengkapi Qty';
         $messages['qty.not_in']= 'Lengkapi Qty';
+        $rules['stok']= 'required|min:0|not_in:0';
+        $messages['stok.required']= 'Lengkapi stok';
+        $messages['stok.not_in']= 'Lengkapi stok';
 
        
        
@@ -621,7 +624,7 @@ class KasirController extends Controller
             echo'</div></div>';
         }else{
                 $odr=Stok::where('nomor_stok',$request->nomor_stok)->where('kode',$request->kode)->where('status',2)->first();
-                if(stok_ready($request->kode)>=$request->qty){  
+                if($request->stok>=$request->qty){  
                     if(ubah_uang($request->discon_jual)>0){
                         $dicon=ubah_uang($request->discon_jual);
                     }else{

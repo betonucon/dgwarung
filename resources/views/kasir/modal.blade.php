@@ -44,7 +44,7 @@
                 <div class="col-lg-2" style="padding: 0% 1% 0% 0%;">
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control" value="{{$data->qty}}"   @if($order->status==0) onkeypress="proses_enter(event)" @endif  name="qty" id="qty" >
-                    </div>
+                   </div>
                 </div>
                 <div class="col-lg-3" style="padding: 0% 1% 0% 0%;">
                     <div class="input-group input-group-sm">
@@ -149,6 +149,7 @@
         
                         $('#satuan').val(bat[1]);
                         $('#tampil_stok').html(bat[2]+' '+bat[1]);
+                        $('#sisa').html(bat[2]);
                         $('#stok').val(bat[2]);
                         $('#nomor_stok').val(bat[3]);
                         $('#tampil_nomor_stok').html(bat[3]);
