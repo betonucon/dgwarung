@@ -200,7 +200,7 @@ class StokorderController extends Controller
         error_reporting(0);
         $query = Viewstokorder::query();
         
-        $data = $query->where('nomor_stok',$request->nomor_stok)->where('nomor_transaksi',null);
+        $data = $query->where('nomor_stok',$request->nomor_stok)->whereIn('status',array(1,2));
         $data = $query->orderBy('id','Asc')->get();
 
         return Datatables::of($data)
@@ -221,14 +221,12 @@ class StokorderController extends Controller
                 if($row->status_order==0){
                     $btn='
                         <div class="btn-group">
-                            <span class="btn btn-primary btn-sm" onclick="edit_data('.$row->id.')"><i class="fas fa-pencil-alt text-white"></i></span>
                             <span class="btn btn-danger btn-sm" onclick="delete_data('.$row->id.')"><i class="fas fa-window-close text-white"></i></span>
                         </div>
                     ';
                 }else{
                     $btn='
                         <div class="btn-group">
-                            <span class="btn btn-white btn-sm"><i class="fas fa-pencil-alt text-aqua"></i></span>
                             <span class="btn btn-white btn-sm"><i class="fas fa-window-close text-aqua"></i></span>
                         </div>
                     ';
@@ -357,6 +355,10 @@ class StokorderController extends Controller
             })
             ->addColumn('nama_barang_lengkap', function ($row) {
                 return $row->nama_barang.' ('.$row->keterangan.')';
+                
+            })
+            ->addColumn('qty_awal', function ($row) {
+                return $row->qty.' '.$row->kd_satuan;
                 
             })
             ->addColumn('sisanya', function ($row) {
@@ -733,6 +735,7 @@ class StokorderController extends Controller
                         $keuangan=Keuangan::UpdateOrcreate([
                             
                             'nomor'=>kdk($request->kategori_keuangan_id).'2'.$request->nomor_stok,
+                            'kat'=>2,
                         ],[
                             'nilai'=>$request->nilai,
                             'nomor_transaksi'=>$request->nomor_stok,
@@ -742,7 +745,7 @@ class StokorderController extends Controller
                             'tanggal'=>$tanggal,
                             'bulan'=>$bulan,
                             'tahun'=>$tahun,
-                            'kat'=>2,
+                            
                             'waktu'=>date('Y-m-d H:i:s'),
                         ]);
                     }
@@ -808,6 +811,7 @@ class StokorderController extends Controller
                         
                         'nomor_stok'=>$request->nomor_stok,
                         'kode'=>$request->kode,
+                        'status'=>1,
                     ],[
                         'harga_beli'=>ubah_uang($request->harga_beli),
                         'harga_jual'=>ubah_uang($request->harga_jual),

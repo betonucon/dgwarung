@@ -111,9 +111,8 @@
                                                 <tr>
                                                     <th class="text-nowrap" width="3%">No</th>
                                                     <th class="text-nowrap" width="9%">Nomor Stok</th>
-                                                    <th class="text-nowrap" width="7%">Kode</th>
-                                                    <th class="text-nowrap">Nama Barang</th>
                                                     <th class="text-nowrap">Supplier</th>
+                                                    <th class="text-nowrap"  width="7%">Qty</th>
                                                     <th class="text-nowrap"  width="7%">Sisa</th>
                                                     <th class="text-nowrap"  width="9%" style="text-align:left !important">H.Jual</th>
                                                     <th class="text-nowrap"  width="9%" style="text-align:left !important">H.Beli</th>
@@ -263,9 +262,8 @@
                             } 
                         },
                         { data: 'nomor_stok' },
-                        { data: 'kode' },
-                        { data: 'nama_barang_lengkap' },
                         { data: 'supplier' },
+                        { data: 'qty_awal' },
                         { data: 'sisanya' },
                         { data: 'u_harga_jual' ,className: "text-right"  },
                         { data: 'u_harga_beli' ,className: "text-right"  },

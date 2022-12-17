@@ -65,7 +65,7 @@
                                     <th class="text-nowrap"  width="10%" style="text-align:left !important">Beli</th>
                                     <th class="text-nowrap"  width="10%" style="text-align:left !important">Jual</th>
                                     <th class="text-nowrap"  width="10%" style="text-align:left !important">Total</th>
-                                    <th class="text-nowrap" width="8%">Act</th>
+                                    <th class="text-nowrap" width="5%">Act</th>
                                 </tr>
                             </thead>
                             
