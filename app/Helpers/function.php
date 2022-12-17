@@ -305,7 +305,7 @@ function setting_provit_value(){
     return $data->setting_int_value;
 }
 function total_item_stok($nomor_stok){
-    $data=App\Stok::where('nomor_stok',$nomor_stok)->count();
+    $data=App\Stok::where('nomor_stok',$nomor_stok)->whereIn('status',array(1,2))->count();
     return $data;
 }
 function total_item_jual($nomor_transaksi){
@@ -351,7 +351,7 @@ function cetak_item_kasir($nomor_transaksi,$x){
     return $data;
 }
 function total_harga_stok($nomor_stok){
-    $data=App\Stok::where('nomor_stok',$nomor_stok)->sum('total_beli');
+    $data=App\Stok::where('nomor_stok',$nomor_stok)->whereIn('status',array(1,2))->sum('total_beli');
     return $data;
 }
 function jumlah_item_order($nomor_stok){
