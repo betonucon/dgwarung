@@ -521,7 +521,7 @@ class StokorderController extends Controller
         }
         
     }
-    public function delete_retur(request $request){
+    public function delete_data_barang(request $request){
         $data = Stok::where('id',$request->id)->delete();
     }
     public function delete_tukar(request $request){

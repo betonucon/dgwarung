@@ -81,6 +81,7 @@ Route::group(['prefix' => 'stokorder','middleware'    => 'auth'],function(){
     Route::get('/get_data_retur','StokorderController@get_data_retur');
     Route::get('/get_data_tukar','StokorderController@get_data_tukar');
     Route::get('/delete_data','StokorderController@delete_data');
+    Route::get('/delete_data_barang','StokorderController@delete_data_barang');
     Route::get('/delete_retur','StokorderController@delete_retur');
     Route::get('/delete_tukar','StokorderController@delete_tukar');
     Route::get('/proses_retur','StokorderController@proses_retur');
