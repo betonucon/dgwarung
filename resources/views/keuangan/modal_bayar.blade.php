@@ -78,7 +78,7 @@
                                 <td>{{$no+1}}</td>
                                 <td>{{$g->keterangan}}</td>
                                 <td style="text-align:right">{{uang($g->nilai)}}</td>
-                                <td>{{$g->waktu}}</td>
+                                <td>{{$g->tanggal}}</td>
                                 <td><span class="btn btn-danger btn-xs" onclick="delete_data_bayar({{$g->id}},{{$id}})"><i class="fas fa-window-close text-white"></i></span></td>
                                 
                             </tr>

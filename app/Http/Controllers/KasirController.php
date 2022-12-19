@@ -248,7 +248,7 @@ class KasirController extends Controller
             })
             ->addColumn('action', function ($row) {
                 if($row->status==1){
-                    if($row->tanggal>'2022-12-17'){
+                    if($row->tanggal>'2022-12-16'){
                         $btn='
                         <div class="btn-group">
                             <span class="btn btn-primary btn-xs" onclick="location.assign(`'.url('kasir/create?id='.$row->nomor_transaksi).'`)"><i class="fas fa-pencil-alt text-white"></i> View</span>
