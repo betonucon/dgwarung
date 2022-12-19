@@ -42,7 +42,12 @@ class KasirController extends Controller
         }else{
             $disabled='readonly';
         }
-        return view('kasir.create',compact('template','disabled','id','data'));
+        if(Auth::user()->role_id==1){
+            return view('kasir.create_admin',compact('template','disabled','id','data'));
+        }else{
+            return view('kasir.create',compact('template','disabled','id','data'));
+        }
+        
     }
     public function totalnya(request $request)
     {
