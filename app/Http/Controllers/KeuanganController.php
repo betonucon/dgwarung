@@ -143,7 +143,7 @@ class KeuanganController extends Controller
             
            
         }
-        $data = $query->where('tahun',$request->tahun)->orderBy('tanggal','Desc')->get();
+        $data = $query->where('tahun',$request->tahun)->where('nomor_bayar',null)->orderBy('tanggal','Desc')->get();
 
         return Datatables::of($data)
             ->addIndexColumn()
