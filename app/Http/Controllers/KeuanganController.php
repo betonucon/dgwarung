@@ -128,7 +128,7 @@ class KeuanganController extends Controller
                     if($even==9){
                         $data=$query->where('status_keuangan_id',3);
                     }else{
-                        if($even==2){
+                        if($even==1){
                             $data=$query->where('kategori_keuangan_id',$even)->where('status_keuangan_id',2);
                         }else{
                             $data=$query->where('kategori_keuangan_id',$even);
