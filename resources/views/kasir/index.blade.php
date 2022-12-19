@@ -192,6 +192,40 @@
 			});
 			
 		}
+        function ulangi_data(id){
+           
+			swal({
+				title: "Yakin mengembalikan proses data ini ?",
+				text: "data akan dikembalikan keproses ulang",
+				type: "warning",
+				icon: "error",
+				showCancelButton: true,
+				align:"center",
+				confirmButtonClass: "btn-danger",
+				confirmButtonText: "Yes, delete it!",
+				closeOnConfirm: false
+			}).then((willDelete) => {
+				if (willDelete) {
+						$.ajax({
+							type: 'GET',
+							url: "{{url('kasir/ulangi_data')}}",
+							data: "id="+id,
+							success: function(msg){
+								swal("Success! berhasil diproses!", {
+									icon: "success",
+								});
+								var table=$('#data-table-fixed-header').DataTable();
+								table.ajax.url("{{ url('kasir/get_order')}}").load();
+							}
+						});
+					
+					
+				} else {
+					
+				}
+			});
+			
+		}
 
         
 

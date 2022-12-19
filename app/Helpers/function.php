@@ -359,7 +359,7 @@ function jumlah_item_order($nomor_stok){
     return $data;
 }
 function sum_item_order($nomor_stok){
-    $data=App\Stok::where('nomor_stok',$nomor_stok)->sum('total_beli');
+    $data=App\Stok::where('nomor_stok',$nomor_stok)->whereIn('status',array(1,2))->sum('total_beli');
     return $data;
 }
 function jumlah_item_order_kasir($nomor_transaksi){
@@ -367,7 +367,7 @@ function jumlah_item_order_kasir($nomor_transaksi){
     return $data;
 }
 function sum_item_order_kasir($nomor_transaksi){
-    $data=App\Stok::where('nomor_transaksi',$nomor_transaksi)->where('status',3)->sum('total_jual');
+    $data=App\Stok::where('nomor_transaksi',$nomor_transaksi)->whereIn('status',array(3,6))->sum('total_jual');
     return $data;
 }
 function harga_jual($kode){

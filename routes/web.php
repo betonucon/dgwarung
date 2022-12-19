@@ -115,6 +115,7 @@ Route::group(['prefix' => 'kasir','middleware'    => 'auth'],function(){
     Route::get('/get_data_retur','KasirController@get_data_retur');
     Route::get('/get_data_tukar','KasirController@get_data_tukar');
     Route::get('/delete_data','KasirController@delete_data');
+    Route::get('/ulangi_data','KasirController@ulangi_data');
     Route::get('/delete_data_stok','KasirController@delete_data_stok');
     Route::get('/delete_retur','KasirController@delete_retur');
     Route::get('/delete_tukar','KasirController@delete_tukar');

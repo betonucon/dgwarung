@@ -243,11 +243,20 @@ class KasirController extends Controller
             })
             ->addColumn('action', function ($row) {
                 if($row->status==1){
-                    $btn='
-                    <div class="btn-group">
-                        <span class="btn btn-primary btn-xs" onclick="location.assign(`'.url('kasir/create?id='.$row->nomor_transaksi).'`)"><i class="fas fa-pencil-alt text-white"></i> View</span>
-                    </div>
-                    ';
+                    if($row->tanggal>'2022-12-17'){
+                        $btn='
+                        <div class="btn-group">
+                            <span class="btn btn-primary btn-xs" onclick="location.assign(`'.url('kasir/create?id='.$row->nomor_transaksi).'`)"><i class="fas fa-pencil-alt text-white"></i> View</span>
+                            <span class="btn btn-success btn-xs" onclick="ulangi_data('.$row->id.')"><i class="fas fa-sync text-white"></i></span>
+                        </div>
+                        ';
+                    }else{
+                        $btn='
+                        <div class="btn-group">
+                            <span class="btn btn-primary btn-xs" onclick="location.assign(`'.url('kasir/create?id='.$row->nomor_transaksi).'`)"><i class="fas fa-pencil-alt text-white"></i> View</span>
+                        </div>
+                        ';
+                    }
                 }else{
                     $btn='
                     <div class="btn-group">
@@ -407,6 +416,12 @@ class KasirController extends Controller
             $datahapus = Kasir::where('id',$request->id)->delete();
         }
     }
+    public function ulangi_data(request $request){
+        $data = Kasir::where('id',$request->id)->update([
+            'status'=>0
+        ]);
+        
+    }
     public function delete_data_stok(request $request){
         $data = Stok::where('id',$request->id)->delete();
     }
@@ -552,11 +567,12 @@ class KasirController extends Controller
                         ]);
                     }
                     if($odr->kategori_opname_id==1){
-                        $keuangan=Keuangan::create([
+                        $keuangan=Keuangan::UpdateOrcreate([
                             
                             'nomor'=>kdk($request->kategori_keuangan_id).'2'.$request->nomor_transaksi,
-                            'nilai'=>$request->nilai,
                             'nomor_transaksi'=>$request->nomor_transaksi,
+                        ],[
+                            'nilai'=>$request->nilai,
                             'status_keuangan_id'=>$request->status_keuangan_id,
                             'kategori_keuangan_id'=>$request->kategori_keuangan_id,
                             'keterangan'=>'Pembayaran penjualan dari '.$odr->konsumen,
@@ -567,9 +583,10 @@ class KasirController extends Controller
                             'waktu'=>date('Y-m-d H:i:s'),
                         ]);
                         if($request->status_keuangan_id==1){
-                            $provit=Keuangan::create([
+                            $provit=Keuangan::UpdateOrcreate([
                                 'nomor_transaksi'=>$request->nomor_transaksi,
                                 'nomor'=>kdk(6).'2'.$request->nomor_transaksi,
+                            ],[
                                 'nilai'=>$request->provite,
                                 'status_keuangan_id'=>$request->status_keuangan_id,
                                 'kategori_keuangan_id'=>6,
