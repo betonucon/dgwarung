@@ -942,6 +942,7 @@ class StokorderController extends Controller
             echo'</div></div>';
         }else{
                 $order=Stok::where('nomor_stok',$request->nomor_stok)->where('kode',$request->kode)->first();
+                $mst=Stokorder::where('nomor_stok',$request->nomor_stok)->first();
                 if($order->qty>=$request->qty_keluar){   
                     $data=Stok::create([
                         
@@ -977,7 +978,7 @@ class StokorderController extends Controller
                     $stopsp=Stokorder::create([
                         
                         'nomor_stok'=>$nomor,
-                        'supplier_id'=>$order->supplier_id,
+                        'supplier_id'=>$mst->supplier_id,
                         'kategori_opname_id'=>2,
                         'tanggal'=>date('Y-m-d'),
                         'users_id'=>Auth::user()->id,
@@ -985,6 +986,17 @@ class StokorderController extends Controller
                         'bulan'=>date('m'),
                         'tahun'=>date('Y'),
                         'status'=>2,
+                        'waktu'=>date('Y-m-d H:i:s'),
+
+                        'nomor_stok'=>$nomor,
+                        'supplier_id'=>$request->supplier_id,
+                        'kategori_opname_id'=>$opname,
+                        'tanggal'=>$request->tanggal,
+                        'users_id'=>Auth::user()->id,
+                        'nama_user'=>Auth::user()->name,
+                        'bulan'=>date('m'),
+                        'tahun'=>date('Y'),
+                        'status'=>0,
                         'waktu'=>date('Y-m-d H:i:s'),
                     ]);
                     $tukar=Stok::create([
