@@ -985,19 +985,9 @@ class StokorderController extends Controller
                         'nama_user'=>Auth::user()->name,
                         'bulan'=>date('m'),
                         'tahun'=>date('Y'),
-                        'status'=>2,
+                        'status'=>1,
                         'waktu'=>date('Y-m-d H:i:s'),
 
-                        'nomor_stok'=>$nomor,
-                        'supplier_id'=>$request->supplier_id,
-                        'kategori_opname_id'=>$opname,
-                        'tanggal'=>$request->tanggal,
-                        'users_id'=>Auth::user()->id,
-                        'nama_user'=>Auth::user()->name,
-                        'bulan'=>date('m'),
-                        'tahun'=>date('Y'),
-                        'status'=>0,
-                        'waktu'=>date('Y-m-d H:i:s'),
                     ]);
                     $tukar=Stok::create([
                         
