@@ -181,7 +181,6 @@ class KeuanganController extends Controller
                             if(Auth::user()->role_id==1){
                                 $btn='
                                     <div class="btn-group">
-                                        <span class="btn btn-danger btn-xs" onclick="delete_data_bayar('.$row->id.','.$row->kategori_keuangan_id.')"><i class="fas fa-window-close text-white"></i></span>
                                     </div>
                                 ';
                             }else{
