@@ -986,6 +986,7 @@ class StokorderController extends Controller
                         'bulan'=>date('m'),
                         'tahun'=>date('Y'),
                         'status'=>1,
+                        'kat'=>1,
                         'waktu'=>date('Y-m-d H:i:s'),
 
                     ]);
