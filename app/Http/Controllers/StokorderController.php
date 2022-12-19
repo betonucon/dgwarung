@@ -977,7 +977,7 @@ class StokorderController extends Controller
                     $stopsp=Stokorder::create([
                         
                         'nomor_stok'=>$nomor,
-                        'supplier_id'=>5,
+                        'supplier_id'=>$order->supplier_id,
                         'kategori_opname_id'=>2,
                         'tanggal'=>date('Y-m-d'),
                         'users_id'=>Auth::user()->id,
