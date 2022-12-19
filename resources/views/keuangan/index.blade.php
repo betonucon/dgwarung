@@ -430,7 +430,7 @@
                 });
                 
             }      
-            function delete_data_bayar(id,kategori){
+            function delete_data_bayar(ide,id,kategori){
            
                 swal({
                     title: "Yakin menghapus data ini ?",
@@ -452,7 +452,7 @@
                                     swal("Success! berhasil terhapus!", {
                                         icon: "success",
                                     });
-                                    location.reload();
+                                    $('#tampil-form-bayar').load("{{url('keuangan/modal_bayar')}}?id="+ide)
                                 }
                             });
                         

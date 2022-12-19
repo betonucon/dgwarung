@@ -43,6 +43,17 @@
                 </div>
                 
             </div>
+            <div class="form-group row">
+                <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Tanggal</label>
+                
+                <div class="col-lg-3" style="padding: 0% 1% 0% 0%;">
+                    <div class="input-group input-group-sm">
+                        <input type="text"   name="tanggal" id="tanggal" value="{{date('Y-m-d')}}" class="form-control form-control-sm" placeholder="Ketik disini...." />
+                        
+                    </div>
+                </div>
+                
+            </div>
             <div class="form-group row" >
                 <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Nilai Dibayarkan</label>
                 
@@ -79,7 +90,7 @@
                                 <td>{{$g->keterangan}}</td>
                                 <td style="text-align:right">{{uang($g->nilai)}}</td>
                                 <td>{{$g->tanggal}}</td>
-                                <td><span class="btn btn-danger btn-xs" onclick="delete_data_bayar({{$g->id}},{{$id}})"><i class="fas fa-window-close text-white"></i></span></td>
+                                <td><span class="btn btn-danger btn-xs" onclick="delete_data_bayar({{$id}},{{$g->id}},{{$g->kategori_keuangan_id}})"><i class="fas fa-window-close text-white"></i></span></td>
                                 
                             </tr>
                             @endforeach

@@ -396,6 +396,8 @@ class KeuanganController extends Controller
         $rules['nilai_dibayarkan']= 'required|min:0|not_in:0';
         $messages['nilai_dibayarkan.required']= 'Lengkapi nilai dibayarkan';
         $messages['nilai_dibayarkan.not_in']= 'Lengkapi Nilai dibayarkan';
+        $rules['tanggal']= 'required';
+        $messages['tanggal.required']= 'Lengkapi tanggal';
 
         $validator = Validator::make($request->all(), $rules, $messages);
         $val=$validator->Errors();
@@ -411,9 +413,9 @@ class KeuanganController extends Controller
                 }
             echo'</div></div>';
         }else{
-            $tanggal=date('Y-m-d');
-            $bulan=date('m');
-            $tahun=date('Y');
+            $tanggal=$request->tanggal;
+            $bulan=date('m',strtotime($tanggal));
+            $tahun=date('Y',strtotime($tanggal));
             if($request->kategori_keuangan_id==1){
                     $mstr=Keuangan::where('id',$request->id)->first();
                     if($mstr->kat==1){
