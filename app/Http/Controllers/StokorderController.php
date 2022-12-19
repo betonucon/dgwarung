@@ -741,7 +741,7 @@ class StokorderController extends Controller
                             'nilai'=>$request->nilai,
                             'nomor_transaksi'=>$request->nomor_stok,
                             'status_keuangan_id'=>$request->status_keuangan_id,
-                            'kategori_keuangan_id'=>$request->kategori_keuangan_id,
+                            'kategori_keuangan_id'=>1,
                             'keterangan'=>'Pembelian Stok kepada '.$odr->msupplier['supplier'],
                             'tanggal'=>$tanggal,
                             'bulan'=>$bulan,

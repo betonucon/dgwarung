@@ -289,7 +289,7 @@ function aktive_transaksi(){
 }
 function get_katkeuangan(){
     if(Auth::user()->role_id==1){
-        $data=App\Kategorikeuangan::whereIn('id',array('1','2'))->orderBy('id','Asc')->get();
+        $data=App\Kategorikeuangan::orderBy('id','Asc')->get();
     }else{
         $data=App\Kategorikeuangan::whereIn('id',array('1','2'))->orderBy('id','Asc')->get();
     }
