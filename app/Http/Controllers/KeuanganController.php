@@ -128,7 +128,12 @@ class KeuanganController extends Controller
                     if($even==9){
                         $data=$query->where('status_keuangan_id',3);
                     }else{
-                        $data=$query->where('kategori_keuangan_id',$even);
+                        if($even==2){
+                            $data=$query->where('kategori_keuangan_id',$even)->where('status_keuangan_id',2);
+                        }else{
+                            $data=$query->where('kategori_keuangan_id',$even);
+                        }
+                        
                     }
                     
                 }
@@ -143,7 +148,7 @@ class KeuanganController extends Controller
             
            
         }
-        $data = $query->where('tahun',$request->tahun)->where('nomor_bayar',null)->orderBy('tanggal','Desc')->get();
+        $data = $query->where('tahun',$request->tahun)->orderBy('tanggal','Desc')->get();
 
         return Datatables::of($data)
             ->addIndexColumn()
