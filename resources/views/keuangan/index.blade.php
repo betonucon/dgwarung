@@ -177,6 +177,9 @@
                                                     <th class="text-nowrap" width="15%">Kategori</th>
                                                     <th class="text-nowrap">Keterangan</th>
                                                     <th class="text-nowrap"  width="10%">Satus</th>
+                                                    @if($act==9)
+                                                    <th class="text-nowrap"  width="13%" style="text-align:left !important">Pokok</th>
+                                                    @endif
                                                     <th class="text-nowrap"  width="13%" style="text-align:left !important">Nilai</th>
                                                     <th class="text-nowrap"  width="14%">Waktu</th>
                                                     <th class="text-nowrap"  width="5%"></th>
@@ -301,6 +304,9 @@
                     { data: 'kategori_keuangan' },
                     { data: 'keterangan' },
                     { data: 'status_keuangan' },
+                    @if($act==9)
+                    { data: 'uang_pokok' ,className: "text-right"  },
+                    @endif
                     { data: 'uang_nilai' ,className: "text-right"  },
                     { data: 'tanggal' },
                     { data: 'action' },

@@ -150,6 +150,9 @@ class KeuanganController extends Controller
             ->addColumn('uang_nilai', function ($row) {
                 return uang($row->nilai);
             })
+            ->addColumn('uang_pokok', function ($row) {
+                return uang(($row->nilai+$row->nilai_dibayar));
+            })
             ->addColumn('action', function ($row) {
                 if($row->kat==1){
                     if($row->kategori_keuangan_id==1 ){
