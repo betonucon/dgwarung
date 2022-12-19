@@ -133,7 +133,7 @@
                                     <span class="d-sm-block d-none">All Transaksi</span>
                                 </a>
                             </li>
-                            @foreach(get_katkeuangan() as $get)
+                            @foreach(get_katkeuangan_get() as $get)
                             <li class="nav-item">
                                 <a  href="{{url('keuangan')}}?tanggal={{$tanggal}}&act={{encoder($get->id)}}"  class="nav-link  @if($act==$get->id) active @endif">
                                     <span class="d-sm-none">{{$get->kategori_keuangan}}</span>

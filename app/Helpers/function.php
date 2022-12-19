@@ -296,6 +296,15 @@ function get_katkeuangan(){
    
     return $data;
 }
+function get_katkeuangan_get(){
+    if(Auth::user()->role_id==1){
+        $data=App\Kategorikeuangan::whereIn('id',array('1','2'))->orderBy('id','Asc')->get();
+    }else{
+        $data=App\Kategorikeuangan::whereIn('id',array('1','2'))->orderBy('id','Asc')->get();
+    }
+   
+    return $data;
+}
 function get_setkeuangan(){
     $data=App\Statuskeuangan::get();
     return $data;
