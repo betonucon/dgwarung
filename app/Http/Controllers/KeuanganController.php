@@ -126,7 +126,7 @@ class KeuanganController extends Controller
                     }
                 }else{
                     if($even==9){
-                        $data=$query->where('status_keuangan_id',3);
+                        $data=$query->where('status_keuangan_id',3)->where('nilai','>',0);
                     }else{
                         if($even==1){
                             $data=$query->where('kategori_keuangan_id',$even)->where('status_keuangan_id',2);
@@ -164,12 +164,20 @@ class KeuanganController extends Controller
                         if($row->nomor_bayar==""){
                             if($row->nilai>0){
                                 if(Auth::user()->role_id==1){
+                                    if($row->status_keuangan_id==3 ){
                                     $btn='
                                         <div class="btn-group">
                                             <span class="btn btn-primary btn-xs" onclick="pembayaran_data('.$row->id.','.$row->kategori_keuangan_id.')">Bayar '.$row->nomor_bayar.'</span>
                                             <span class="btn btn-danger btn-xs" onclick="delete_data_bayar_header('.$row->id.','.$row->kategori_keuangan_id.')"><i class="fas fa-window-close text-white"></i></span>
                                         </div>
                                     ';
+                                    }else{
+                                        $btn='
+                                        <div class="btn-group">
+                                            <span class="btn btn-danger btn-xs" onclick="delete_data_bayar_header('.$row->id.','.$row->kategori_keuangan_id.')"><i class="fas fa-window-close text-white"></i></span>
+                                        </div>
+                                    ';  
+                                    }
                                 }else{
                                     $btn='
                                         <div class="btn-group">
