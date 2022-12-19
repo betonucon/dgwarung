@@ -23,7 +23,7 @@
                            
                             <option value="">Pilih Kategori</option>
                             @foreach(get_katkeuangan() as $ket)
-                                <option value="{{$ket->id}}" @if($ket->id==$data->kategori_keuangan_id) selected @endif >{{$ket->kategori_keuangan}}</option>
+                                <option value="{{$ket->id}}" @if($ket->id==$data->kategori_keuangan_id) selected @endif >{{$ket->keterangan}}</option>
                             @endforeach
                         </select>
                         

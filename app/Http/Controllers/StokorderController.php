@@ -735,6 +735,7 @@ class StokorderController extends Controller
                         $keuangan=Keuangan::UpdateOrcreate([
                             
                             'nomor'=>kdk($request->kategori_keuangan_id).'2'.$request->nomor_stok,
+                            'nomor_transaksi'=>$request->nomor_stok,
                             'kat'=>2,
                         ],[
                             'nilai'=>$request->nilai,

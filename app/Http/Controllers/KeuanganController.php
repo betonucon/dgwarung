@@ -101,7 +101,7 @@ class KeuanganController extends Controller
         $data=Viewstatuskategori::where('kategori_keuangan_id',$request->kategori_keuangan_id)->get();
         $btn='<option value="">Pilih Status</option>';
         foreach($data as $o){
-            $btn.='<option value="'.$o->status_keuangan_id.'">'.$o->status_keuangan.'</option>';
+            $btn.='<option value="'.$o->status_keuangan_id.'">'.$o->kategori.'</option>';
         }
         return $btn;
     }
