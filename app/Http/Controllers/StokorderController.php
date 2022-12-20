@@ -979,6 +979,7 @@ class StokorderController extends Controller
                         
                         'nomor_stok'=>$nomor,
                         'supplier_id'=>$mst->supplier_id,
+                        'nomor_stok_utama'=>$mst->nomor_stok,
                         'kategori_opname_id'=>2,
                         'tanggal'=>date('Y-m-d'),
                         'users_id'=>Auth::user()->id,
@@ -993,6 +994,7 @@ class StokorderController extends Controller
                     $tukar=Stok::create([
                         
                         'nomor_stok'=>$nomor,
+                        'nomor_stok_utama'=>$nomor,
                         'kode'=>$request->kode_tukar,
                         'tukar_id'=>$data->id,
                         'harga_beli'=>ubah_uang($request->harga_beli),
