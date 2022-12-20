@@ -171,7 +171,7 @@ class KeuanganController extends Controller
                                     if($row->status_keuangan_id==3 ){
                                     $btn='
                                         <div class="btn-group">
-                                            <span class="btn btn-primary btn-xs" onclick="pembayaran_data('.$row->id.','.$row->kategori_keuangan_id.')">Bayar '.$row->nomor_bayar.'</span>
+                                            <span class="btn btn-primary btn-xs" onclick="pembayaran_data('.$row->id.','.$row->kategori_keuangan_id.')">Bayar</span>
                                             <span class="btn btn-danger btn-xs" onclick="delete_data_bayar_header('.$row->id.','.$row->kategori_keuangan_id.')"><i class="fas fa-window-close text-white"></i></span>
                                         </div>
                                     ';
@@ -185,13 +185,15 @@ class KeuanganController extends Controller
                                 }else{
                                     $btn='
                                         <div class="btn-group">
-                                            <span class="btn btn-primary btn-xs" onclick="pembayaran_data('.$row->id.','.$row->kategori_keuangan_id.')">Bayar '.$row->nomor_bayar.'</span>
+                                            <span class="btn btn-primary btn-xs" onclick="pembayaran_data('.$row->id.','.$row->kategori_keuangan_id.')">Bayar</span>
                                         </div>
                                     ';
                                 }
                             }else{
                                 $btn='
-                                    
+                                    <div class="btn-group">
+                                        <span class="btn btn-primary btn-xs" onclick="pembayaran_data('.$row->id.','.$row->kategori_keuangan_id.')">View</span>
+                                    </div>
                                 ';
                             }
                         }else{
@@ -221,11 +223,19 @@ class KeuanganController extends Controller
                     }
                 }else{
                     if($row->status_keuangan_id==3 || ($row->status_keuangan_id==4 && $row->kategori_keuangan_id==2)){
-                        $btn='
-                            <div class="btn-group">
-                                <span class="btn btn-primary btn-xs" onclick="pembayaran_data('.$row->id.','.$row->kategori_keuangan_id.')">Bayar</span>
-                            </div>
-                        ';
+                        if($row->nilai>0){
+                            $btn='
+                                <div class="btn-group">
+                                    <span class="btn btn-primary btn-xs" onclick="pembayaran_data('.$row->id.','.$row->kategori_keuangan_id.')">Bayar</span>
+                                </div>
+                            ';
+                        }else{
+                            $btn='
+                                <div class="btn-group">
+                                    <span class="btn btn-primary btn-xs" onclick="pembayaran_data('.$row->id.','.$row->kategori_keuangan_id.')">View</span>
+                                </div>
+                            ';
+                        }
                     }else{
                         $btn='
                            
