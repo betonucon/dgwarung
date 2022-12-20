@@ -61,7 +61,8 @@
         
                             <div class="col-md-12" style="padding:0px">
                                 <div class="btn-group btn-group-justified">
-                                    <a class="btn btn-blue text-white" onclick="retur_data()"><i class="fas fa-backward"></i> Retur</a>
+                                    <a href="javascript:;"  class="btn btn-success btn-sm" onclick="location.assign(`{{url('stok')}}`)"><i class="fas fa-backward"></i> Kembali</a>
+                                    <a class="btn btn-blue text-white" onclick="retur_data()"><i class="fas fa-random"></i> Retur</a>
                                     <a class="btn btn-green text-white" onclick="tukar_data()"><i class="fas fa-object-ungroup"></i> Tukar Satuan</a>
                                 </div>
                             </div>
@@ -146,9 +147,7 @@
                                 </div>
                             
                         </div> 
-                        <div class="col-xl-12" style="margin-bottom:1%;text-align:center">
-                            <a href="javascript:;"  class="btn btn-success btn-sm" onclick="location.assign(`{{url('stok')}}`)"><i class="fas fa-plus"></i> Kembali</a>
-                        </div>  
+                         
                     </form>
                 </div>
                 <!-- end panel-body -->

@@ -198,9 +198,7 @@
                                 </div>
                             
                         </div> 
-                        <div class="col-xl-12" style="margin-bottom:1%;text-align:center">
-                            <a href="javascript:;"  class="btn btn-success btn-sm" onclick="location.assign(`{{url('stok')}}`)"><i class="fas fa-plus"></i> Kembali</a>
-                        </div>  
+                        
                     </form>
                 </div>
                 <!-- end panel-body -->
