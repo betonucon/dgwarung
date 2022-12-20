@@ -243,7 +243,7 @@ class StokorderController extends Controller
         error_reporting(0);
         $query = Vieworder::query();
         
-        $data = $query->orderBy('tanggal','Desc')->get();
+        $data = $query->where('kat',null)->orderBy('tanggal','Desc')->get();
 
         return Datatables::of($data)
             ->addIndexColumn()
@@ -866,25 +866,41 @@ class StokorderController extends Controller
             echo'</div></div>';
         }else{
                 $order=Stok::where('nomor_stok',$request->nomor_stok)->where('kode',$request->kode)->first();
-                if($order->qty>=$request->qty_retur){   
-                    $data=Stok::create([
-                        
-                        'nomor_stok'=>$request->nomor_stok,
-                        'kode'=>$request->kode,
-                        'harga_beli'=>ubah_uang($order->harga_beli),
-                        'harga_jual'=>ubah_uang($order->harga_jual),
-                        'qty'=>ubah_uang($request->qty_retur),
-                        'total_jual'=>(ubah_uang($order->harga_jual)*ubah_uang($request->qty_retur)),
-                        'total_beli'=>(ubah_uang($order->harga_beli)*ubah_uang($request->qty_retur)),
-                        'expired'=>$order->expired,
-                        'status'=>4,
-                        'bulan'=>date('m'),
-                        'tahun'=>date('Y'),
-                        'waktu'=>date('Y-m-d H:i:s'),
-                        'update'=>date('Y-m-d H:i:s'),
-                    ]);
-
-                    echo'@ok@'.$nomor;
+                if($order->qty>=$request->qty_retur){ 
+                    $countcek=Keuangan::where('nomor_transaksi',$request->nomor_stok)->where('status_keuangan_id',3)->where('nomor_transaksi',$request->nomor_stok)->count(); 
+                    if($countcek>0){
+                        $data=Stok::create([
+                            
+                            'nomor_stok'=>$request->nomor_stok,
+                            'kode'=>$request->kode,
+                            'harga_beli'=>ubah_uang($order->harga_beli),
+                            'harga_jual'=>ubah_uang($order->harga_jual),
+                            'qty'=>ubah_uang($request->qty_retur),
+                            'total_jual'=>(ubah_uang($order->harga_jual)*ubah_uang($request->qty_retur)),
+                            'total_beli'=>(ubah_uang($order->harga_beli)*ubah_uang($request->qty_retur)),
+                            'expired'=>$order->expired,
+                            'status'=>4,
+                            'bulan'=>date('m'),
+                            'tahun'=>date('Y'),
+                            'waktu'=>date('Y-m-d H:i:s'),
+                            'update'=>date('Y-m-d H:i:s'),
+                        ]);
+                        $keuanganready=Keuangan::where('nomor_transaksi',$request->nomor_stok)->where('status_keuangan_id',3)->where('nomor_transaksi',$request->nomor_stok)->first();
+                        $keuangan=Keuangan::UpdateOrcreate([
+                                
+                            'nomor_transaksi'=>$request->nomor_stok,
+                            'kat'=>2,
+                        ],[
+                            'nilai'=>($keuanganready->nilai-(ubah_uang($order->harga_beli)*ubah_uang($request->qty_retur))),
+                            'waktu'=>date('Y-m-d H:i:s'),
+                            'keterangan'=>$keuanganready->keterangan.' ( Retur '.$request->qty_retur.' Produk)',
+                        ]);
+                        echo'@ok@'.$nomor;
+                    }else{
+                        echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
+                        echo'Status keungan tidak tersedia';
+                        echo'</div></div>';
+                    }
                 }else{
                     echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
                     echo'Permintaan retur melebihi qty yang tersedia';
