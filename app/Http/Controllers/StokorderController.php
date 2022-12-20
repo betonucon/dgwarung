@@ -994,7 +994,6 @@ class StokorderController extends Controller
                     $tukar=Stok::create([
                         
                         'nomor_stok'=>$nomor,
-                        'nomor_stok_utama'=>$nomor,
                         'kode'=>$request->kode_tukar,
                         'tukar_id'=>$data->id,
                         'harga_beli'=>ubah_uang($request->harga_beli),
