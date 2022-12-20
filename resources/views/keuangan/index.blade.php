@@ -160,6 +160,12 @@
                                     <span class="d-sm-block d-none">Piutang</span>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{url('keuangan')}}?tanggal={{$tanggal}}&act={{encoder(11)}}" class="nav-link @if($act==11) active @endif">
+                                    <span class="d-sm-none">Piutang Lunas</span>
+                                    <span class="d-sm-block d-none">Piutang Lunas</span>
+                                </a>
+                            </li>
                             
                         </ul>
                         <!-- end nav-tabs -->

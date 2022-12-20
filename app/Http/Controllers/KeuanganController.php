@@ -125,8 +125,12 @@ class KeuanganController extends Controller
                         $data=$query->whereIn('kategori_keuangan_id',array(3,4,5));
                     }
                 }else{
-                    if($even==9){
-                        $data=$query->where('status_keuangan_id',3)->where('nilai','>',0);
+                    if($even==9 || $even==11){
+                        if($even==9){
+                            $data=$query->where('status_keuangan_id',3)->where('nilai','>',0);
+                        }else{
+                            $data=$query->where('status_keuangan_id',3)->where('nilai',0);
+                        }
                     }else{
                         if($even==1){
                             $data=$query->where('kategori_keuangan_id',$even)->where('status_keuangan_id',2);
