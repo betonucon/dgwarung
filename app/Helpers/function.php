@@ -342,19 +342,19 @@ function cetak_item($nomor_stok,$x){
 }
 function cetak_item_kasir($nomor_transaksi,$x){
     if($x==1){
-        $data=App\Viewstokkasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[1,18])->orderBy('urut','Asc')->get();
+        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[1,18])->orderBy('urut','Asc')->get();
     }
     if($x==2){
-        $data=App\Viewstokkasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[19,37])->orderBy('urut','Asc')->get();
+        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[19,37])->orderBy('urut','Asc')->get();
     }
     if($x==3){
-        $data=App\Viewstokkasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[37,56])->orderBy('urut','Asc')->get();
+        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[37,56])->orderBy('urut','Asc')->get();
     }
     if($x==4){
-        $data=App\Viewstokkasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[56,75])->orderBy('urut','Asc')->get();
+        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[56,75])->orderBy('urut','Asc')->get();
     }
     if($x==5){
-        $data=App\Viewstokkasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[75,94])->orderBy('urut','Asc')->get();
+        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[75,94])->orderBy('urut','Asc')->get();
     }
     
     return $data;

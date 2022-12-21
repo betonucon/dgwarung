@@ -17,6 +17,7 @@ use App\Viewstokorder;
 use App\Barang;
 use App\Keuangan;
 use App\Viewstokkasir;
+use App\Viewtransaksikasir;
 use App\User;
 use PDF;
 
@@ -175,7 +176,7 @@ class KasirController extends Controller
     public function get_data(request $request)
     {
         error_reporting(0);
-        $query = Viewstokorder::query();
+        $query = Viewtransaksikasir::query();
         
         $data = $query->where('nomor_transaksi',$request->nomor_stok);
         $data = $query->distinct()->orderBy('id','Asc')->get();
