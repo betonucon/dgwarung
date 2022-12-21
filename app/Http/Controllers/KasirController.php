@@ -178,7 +178,7 @@ class KasirController extends Controller
         $query = Viewstokorder::query();
         
         $data = $query->where('nomor_transaksi',$request->nomor_stok);
-        $data = $query->orderBy('id','Asc')->get();
+        $data = $query->distinct()->orderBy('id','Asc')->get();
 
         return Datatables::of($data)
             ->addIndexColumn()

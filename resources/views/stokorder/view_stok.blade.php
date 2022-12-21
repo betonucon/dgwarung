@@ -63,11 +63,9 @@
                                 <div class="btn-group btn-group-justified">
                                     <a href="javascript:;"  class="btn btn-success btn-sm" onclick="location.assign(`{{url('stok')}}`)"><i class="fas fa-backward"></i> Kembali</a>
                                     <a class="btn btn-blue text-white" onclick="retur_data()"><i class="fas fa-random"></i> Retur</a>
-                                    @if(max_satuan()==$data->kd_satuan)
-
-                                    @else
+                                   
                                     <a class="btn btn-green text-white" onclick="tukar_data()"><i class="fas fa-object-ungroup"></i> Tukar Satuan</a>
-                                    @endif
+                                 
                                 </div>
                             </div>
                         </div>
