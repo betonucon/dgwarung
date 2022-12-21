@@ -553,7 +553,7 @@ class KasirController extends Controller
             }
             if($request->ready==$request->count){
                     
-                    $get=Viewstokkasir::where('nomor_transaksi',$request->nomor_transaksi)->get();
+                    $get=Viewtransaksikasir::where('nomor_transaksi',$request->nomor_transaksi)->get();
                     $data=Kasir::where('nomor_transaksi',$request->nomor_transaksi)->update([
                         
                         'status'=>1,
