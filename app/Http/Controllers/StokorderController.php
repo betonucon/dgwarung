@@ -131,7 +131,7 @@ class StokorderController extends Controller
         error_reporting(0);
         $template='top';
         $kode=$request->kode;
-        $data=Viewstokorder::where('kode',$request->kode)->where('status',2)->orderBy('id','Asc')->get();
+        $data=Stokup::where('kode',$request->kode)->where('sisa','>',0)->distinct()->orderBy('id','Asc')->get();
         if($request->id==0){
             $disabled='';
         }else{
@@ -144,7 +144,7 @@ class StokorderController extends Controller
         error_reporting(0);
         $template='top';
         $kode=$request->kode;
-        $data=Viewstokorder::where('kode',$request->kode)->where('status',2)->orderBy('id','Asc')->get();
+        $data=Stokup::where('kode',$request->kode)->where('sisa','>',0)->distinct()->orderBy('id','Asc')->get();
         if($request->id==0){
             $disabled='';
         }else{
@@ -341,7 +341,7 @@ class StokorderController extends Controller
         
         
         $query = Stokup::query();
-        $data = $query->where('kode',$request->kode)->where('status','!=',1)->orderBy('sisa','Desc')->get();
+        $data = $query->where('kode',$request->kode)->distinct()->orderBy('sisa','Desc')->get();
         
         return Datatables::of($data)
             ->addIndexColumn()
@@ -990,12 +990,28 @@ class StokorderController extends Controller
                         'harga_beli'=>$harga_beli,
                         'harga_discon'=>$hdiscon,
                     ]);
-                    $nomor=penomoran_masuk();
-                    $stopsp=Stokorder::create([
+                    $nomor=$request->nomor_stok;
+                    $cekchange=Stok::where('nomor_stok',$request->nomor_stok)->where('kode',$request->kode_tukar)->where('status',2)->count();
+                    if($cekchange>0){
+                        $change=Stok::where('nomor_stok',$request->nomor_stok)->where('kode',$request->kode_tukar)->where('status',2)->first();
+                        $qtytukar=($change->qty+ubah_uang($request->qty_tukar));
+                        $hargabelitukar=(ubah_uang($request->harga_beli)*($change->qty+ubah_uang($request->qty_tukar)));
+                        $hargajualtukar=(ubah_uang($request->harga_jual)*($change->qty+ubah_uang($request->qty_tukar)));
+                    }else{
+                        $qtytukar=ubah_uang($request->qty_tukar);
+                        $hargabelitukar=(ubah_uang($request->harga_beli)*ubah_uang($request->qty_tukar));
+                        $hargajualtukar=(ubah_uang($request->harga_jual)*ubah_uang($request->qty_tukar));
+                    }
+                    
+                    $stopsp=Stokorder::UpdateOrcreate([
                         
                         'nomor_stok'=>$nomor,
+                        'kat'=>1,
+                        
+                    ],[
                         'supplier_id'=>$mst->supplier_id,
                         'nomor_stok_utama'=>$mst->nomor_stok,
+                        'nilai'=>$hargabelitukar,
                         'kategori_opname_id'=>2,
                         'tanggal'=>date('Y-m-d'),
                         'users_id'=>Auth::user()->id,
@@ -1003,22 +1019,23 @@ class StokorderController extends Controller
                         'bulan'=>date('m'),
                         'tahun'=>date('Y'),
                         'status'=>1,
-                        'kat'=>1,
                         'waktu'=>date('Y-m-d H:i:s'),
 
                     ]);
-                    $tukar=Stok::create([
+                    $tukar=Stok::UpdateOrcreate([
                         
                         'nomor_stok'=>$nomor,
                         'kode'=>$request->kode_tukar,
+                        'status'=>2,
+                        
+                    ],[
                         'tukar_id'=>$data->id,
                         'harga_beli'=>ubah_uang($request->harga_beli),
                         'harga_jual'=>ubah_uang($request->harga_jual),
-                        'qty'=>ubah_uang($request->qty_tukar),
-                        'total_jual'=>(ubah_uang($request->harga_jual)*ubah_uang($request->qty_tukar)),
-                        'total_beli'=>(ubah_uang($request->harga_beli)*ubah_uang($request->qty_tukar)),
+                        'qty'=>$qtytukar,
+                        'total_jual'=>$hargajualtukar,
+                        'total_beli'=>$hargabelitukar,
                         'expired'=>$order->expired,
-                        'status'=>2,
                         'proses'=>3,
                         'bulan'=>date('m'),
                         'tahun'=>date('Y'),
