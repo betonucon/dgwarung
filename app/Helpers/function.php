@@ -724,6 +724,10 @@ function id_supplier($supplier){
     $data=App\Supplier::where('supplier',$supplier)->first();
     return $data['id'];
 }
+function max_satuan(){
+    $data=App\Satuan::orderBy('id','Desc')->firstOrfail();
+    return $data['kd_satuan'];
+}
 function satuan($kd_satuan){
     $data=App\Satuan::where('kd_satuan',$kd_satuan)->first();
     return $data['satuan'];
