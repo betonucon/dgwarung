@@ -380,13 +380,18 @@ class KeuanganController extends Controller
                     ]);
                     echo'@ok@';
                 }else{
+                    if($request->status_keuangan_id==3 || $request->status_keuangan_id==4){
+                        $dibayar=0;
+                    }else{
+                        $dibayar=ubah_uang($request->nilai);
+                    }
                     $keuangan=Keuangan::Updateorcreate([
                         
                         'nomor'=>$nomor,
                         'kat'=>1,
                     ],[
                         'nilai'=>ubah_uang($request->nilai),
-                        'nilai_dibayar'=>ubah_uang($request->nilai),
+                        'nilai_dibayar'=>$dibayar,
                         'status_keuangan_id'=>$request->status_keuangan_id,
                         'kategori_keuangan_id'=>$request->kategori_keuangan_id,
                         'keterangan'=>$request->keterangan,
