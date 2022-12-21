@@ -108,7 +108,7 @@ class KasirController extends Controller
         error_reporting(0);
         $template='top';
         $kode=$request->kode;
-        $data=Viewstokorder::where('kode',$request->kode)->where('status',2)->orderBy('id','Asc')->get();
+        $data=Viewstokorder::where('kode',$request->kode)->where('status',2)->distinct()->orderBy('id','Asc')->get();
         if($request->id==0){
             $disabled='';
         }else{
@@ -121,7 +121,7 @@ class KasirController extends Controller
         error_reporting(0);
         $template='top';
         $kode=$request->kode;
-        $data=Viewstokorder::where('kode',$request->kode)->where('status',2)->orderBy('id','Asc')->get();
+        $data=Viewstokorder::where('kode',$request->kode)->where('status',2)->distinct()->orderBy('id','Asc')->get();
         if($request->id==0){
             $disabled='';
         }else{
@@ -324,7 +324,7 @@ class KasirController extends Controller
         }else{
             $data=$query->where('status',$request->even);
         }
-        $data = $query->where('kode',$request->kode)->where('status','!=',1)->orderBy('update','Desc')->get();
+        $data = $query->where('kode',$request->kode)->where('status','!=',1)->distinct()->orderBy('update','Desc')->get();
 
         return Datatables::of($data)
             ->addIndexColumn()
@@ -344,7 +344,7 @@ class KasirController extends Controller
         error_reporting(0);
         $query = Viewstokorder::query();
         
-        $data = $query->where('status',4)->orderBy('update','Desc')->get();
+        $data = $query->where('status',4)->distinct()->orderBy('update','Desc')->get();
 
         return Datatables::of($data)
             ->addIndexColumn()
@@ -380,7 +380,7 @@ class KasirController extends Controller
         error_reporting(0);
         $query = Viewstokorder::query();
         
-        $data = $query->where('status',5)->orderBy('update','Desc')->get();
+        $data = $query->where('status',5)->distinct()->orderBy('update','Desc')->get();
 
         return Datatables::of($data)
             ->addIndexColumn()
