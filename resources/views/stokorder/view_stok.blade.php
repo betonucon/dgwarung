@@ -120,6 +120,7 @@
                                                     <th class="text-nowrap"  width="9%" style="text-align:left !important">H.Jual</th>
                                                     <th class="text-nowrap"  width="9%" style="text-align:left !important">H.Beli</th>
                                                     <th class="text-nowrap"  width="9%" style="text-align:left !important">H.Dasar</th>
+                                                    <th class="text-nowrap"  width="9%">R.Discon</th>
                                                     <th class="text-nowrap"  width="6%">Status</th>
                                                     <th class="text-nowrap"  width="9%">Waktu</th>
                                                     <th class="text-nowrap"  width="3%"></th>
@@ -269,6 +270,7 @@
                         { data: 'u_harga_jual' ,className: "text-right"  },
                         { data: 'u_harga_beli' ,className: "text-right"  },
                         { data: 'u_harga_awal' ,className: "text-right"  },
+                        { data: 'discon'},
                         { data: 'status_data' },
                         { data: 'updatenya' },
                         { data: 'action' },
