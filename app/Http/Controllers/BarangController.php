@@ -13,6 +13,7 @@ use App\Viewstokaktive;
 use App\Viewstokaktivejual;
 use App\Viewbaranghapus;
 use App\Viewstokbarang;
+use App\Viewdetailstok;
 use App\Hargakosong;
 use App\Viewstokorder;
 use App\Viewhargabarang;
@@ -87,7 +88,7 @@ class BarangController extends Controller
     }
     public function cari_barang_jual(request $request)
     {
-        $dT=Viewstokaktivejual::where('kode',$request->kode)->first();
+        $dT=Viewdetailstok::where('kode',$request->kode)->where('sts',1)->first();
         return '@'.$dT->satuan.'@'.$dT->sisa.'@'.$dT->nomor_stok.'@'.$dT->harga_jual.'@'.$dT->supplier.'@0';
         // if(setting_harga_jual()==1){
         //     $discon=(harga_jual($request->kode)-harga_discon($request->kode));
