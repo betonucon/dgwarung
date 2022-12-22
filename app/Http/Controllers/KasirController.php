@@ -217,7 +217,7 @@ class KasirController extends Controller
         error_reporting(0);
         $query = Viewkasir::query();
         
-        $data = $query->orderBy('nomor_stok','Desc')->get();
+        $data = $query->orderBy('waktu','Desc')->get();
 
         return Datatables::of($data)
             ->addIndexColumn()
