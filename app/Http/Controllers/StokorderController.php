@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 use App\Stokready;
+use App\Viewdetailstok;
 use App\Stokorder;
 use App\Vieworder;
 use App\Stokup;
@@ -340,8 +341,8 @@ class StokorderController extends Controller
         error_reporting(0);
         
         
-        $query = Stokup::query();
-        $data = $query->where('kode',$request->kode)->distinct()->orderBy('sisa','Desc')->get();
+        $query = Viewdetailstok::query();
+        $data = $query->where('kode',$request->kode)->orderBy('sts','Desc')->get();
         
         return Datatables::of($data)
             ->addIndexColumn()
@@ -354,7 +355,7 @@ class StokorderController extends Controller
                 
             })
             ->addColumn('nama_barang_lengkap', function ($row) {
-                return $row->nama_barang.' ('.$row->keterangan.')';
+                return $row->nama_barang;
                 
             })
             ->addColumn('qty_awal', function ($row) {
@@ -378,31 +379,23 @@ class StokorderController extends Controller
                 
             })
             ->addColumn('status_data', function ($row) {
-                if($row->sisa>0){
-                    if(nomor_stok_ready($row->kode)==$row->nomor_stok){
-                        return '<font color="blue">Aktive</font>';
-                    }else{
-                        return '<font color="red">Proses</font>';
-                    }
+                
+                if($row->sts==1){
+                    return '<font color="blue">Aktive</font>';
                 }else{
-                    return '<font color="red">Habis</font>';
+                    return '<font color="red">Proses</font>';
                 }
+               
                 
             })
             ->addColumn('action', function ($row) {
-                if($row->sisa>0){
-                    $btn='
-                        <div class="btn-group">
-                            <span class="btn btn-primary btn-xs" onclick="ubah_data('.$row->id.')"><i class="fas fa-pencil-alt text-white"></i></span>
-                        </div>
-                    ';
-                }else{
-                    $btn='
-                        <div class="btn-group">
-                            <span class="btn btn-white btn-xs" ><i class="fas fa-pencil-alt text-white"></i></span>
-                        </div>
-                    '; 
-                }
+                
+                $btn='
+                    <div class="btn-group">
+                        <span class="btn btn-primary btn-xs" onclick="ubah_data('.$row->id.')"><i class="fas fa-pencil-alt text-white"></i></span>
+                    </div>
+                ';
+                
                 return $btn;
             })
             ->rawColumns(['action','status_data'])
