@@ -717,6 +717,7 @@ class StokorderController extends Controller
                             'urut'=>($no+1),
                             'status'=>2,
                             'aktif'=>0,
+                            'supplier_id'=>$odr->supplier_id,
                             'kategori_opname_id'=>$odr->kategori_opname_id,
                             'users_id'=>Auth::user()->id,
                             'nama_user'=>Auth::user()->name,
@@ -957,6 +958,7 @@ class StokorderController extends Controller
                         
                         'nomor_stok'=>$request->nomor_stok,
                         'kode'=>$request->kode,
+                        'supplier_id'=>$mst->supplier_id,
                         'harga_beli'=>ubah_uang($order->harga_beli),
                         'harga_jual'=>ubah_uang($order->harga_jual),
                         'qty'=>ubah_uang($request->qty_keluar),
@@ -1023,6 +1025,7 @@ class StokorderController extends Controller
                         
                     ],[
                         'tukar_id'=>$data->id,
+                        'supplier_id'=>$mst->supplier_id,
                         'harga_beli'=>ubah_uang($request->harga_beli),
                         'harga_jual'=>ubah_uang($request->harga_jual),
                         'qty'=>$qtytukar,
