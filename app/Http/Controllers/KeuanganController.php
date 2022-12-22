@@ -112,17 +112,17 @@ class KeuanganController extends Controller
         $even=$request->even;
         if($even==0){
             if(Auth::user()->role_id==1){
-               
+                $data=$query->where('tahun',$request->tahun);
             }else{
-                $data=$query->whereIn('kategori_keuangan_id',array(1,2));
+                $data=$query->where('tahun',$request->tahun)->whereIn('kategori_keuangan_id',array(1,2));
             }
         }else{
             if(Auth::user()->role_id==1){
                 if($even==8 || $even==10){
                     if($even==8){
-                        $data=$query->whereIn('kategori_keuangan_id',array(6));
+                        $data=$query->where('tahun',$request->tahun)->whereIn('kategori_keuangan_id',array(6));
                     }else{
-                        $data=$query->whereIn('kategori_keuangan_id',array(3,4,5));
+                        $data=$query->where('tahun',$request->tahun)->whereIn('kategori_keuangan_id',array(3,4,5));
                     }
                 }else{
                     if($even==9 || $even==11){
@@ -143,16 +143,16 @@ class KeuanganController extends Controller
                 }
             }else{
                 if($even==8){
-                    $data=$query->where('status_keuangan_id',3);
+                    $data=$query->where('tahun',$request->tahun)->where('status_keuangan_id',3);
                 }else{
-                    $data=$query->where('kategori_keuangan_id',$even);
+                    $data=$query->where('tahun',$request->tahun)->where('kategori_keuangan_id',$even);
                 }
                 
             }
             
            
         }
-        $data = $query->where('tahun',$request->tahun)->orderBy('tanggal','Desc')->get();
+        $data = $query->orderBy('id','Desc')->get();
 
         return Datatables::of($data)
             ->addIndexColumn()
