@@ -270,6 +270,9 @@
             $('#modal-cetak').modal('show');
             $('#tampil-form-cetak').load("{{url('kasir/print')}}?id={{$id}}")
         }
+        function download_data(){
+            window.open("{{url('kasir/cetak')}}?id={{$id}}");
+        }
        
         function printDiv(divId,title) {
 
