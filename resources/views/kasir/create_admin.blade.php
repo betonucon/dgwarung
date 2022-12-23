@@ -272,7 +272,9 @@
             $('#modal-cetak').modal('show');
             $('#tampil-form-cetak').load("{{url('kasir/print')}}?id={{$id}}")
         }
-       
+        function download_data(){
+            window.open("{{url('kasir/cetak')}}?id={{$id}}");
+        }
         function printDiv(divId,title) {
 
             let mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=150');
