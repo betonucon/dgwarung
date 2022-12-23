@@ -116,7 +116,7 @@ class BarangController extends Controller
             $data = $query->orderBy('nama_barang','Asc')->paginate(1);
         }else{
            
-            $data = $query->where('nama_barang','LIKE','%'.$search.'%');
+            $data = $query->where('nama_barang','LIKE','%'.$search.'%')->orWhere('kode','LIKE','%'.$search.'%');
             $data = $query->orderBy('nama_barang','Asc')->paginate(10);
         }
         
