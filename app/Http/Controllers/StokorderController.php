@@ -202,7 +202,7 @@ class StokorderController extends Controller
         $query = Viewstokorder::query();
         
         $data = $query->where('nomor_stok',$request->nomor_stok)->whereIn('status',array(1,2));
-        $data = $query->orderBy('id','Asc')->get();
+        $data = $query->where('tukar_id',null)->orderBy('id','Asc')->get();
 
         return Datatables::of($data)
             ->addIndexColumn()

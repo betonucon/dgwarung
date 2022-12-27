@@ -262,6 +262,9 @@
             location.assign("{{url('kasir/create')}}?id=0")
         }
 
+        function share_data(){
+            window.location="whatsapp://send?text=text={{url('kasir/cetak')}}?id={{$id}}";
+        }
         function terima_data(){
             $('#modal-terima .modal-title').text('Konfirmasi ');
             $('#modal-terima').modal('show');
