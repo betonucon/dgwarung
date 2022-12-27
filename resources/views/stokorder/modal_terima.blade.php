@@ -16,8 +16,8 @@
                 <div class="col-lg-7" style="padding: 1% 1% 2% 1%;">
                     <div class="input-group input-group-sm">
                         <select  name="status_keuangan_id" onchange="pilih_status_keuangan(this.value)" class="form-control form-control-sm" placeholder="Ketik disini....">
-                            <option value="2" >Pembayaran Langsung</option>
-                            <option value="3">Pembayaran Tempo</option>
+                            <option value="3" >Piutang</option>
+                            <option value="2">Cash</option>
                         </select>
                         
                     </div>
@@ -39,7 +39,7 @@
     </div>
 
     <script>
-        $("#hidden_tanggal_tempo").hide();
+        
         $("#currency1").inputmask({ alias : "currency", prefix: '','groupSeparator': ',', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
         $("#currency2").inputmask({ alias : "currency", prefix: '','groupSeparator': ',', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
         $("#currency3").inputmask({ alias : "currency", prefix: '', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
@@ -53,6 +53,19 @@
             if(id==3){
                 $("#hidden_tanggal_tempo").show();
             }else{
+                swal({
+                    title: "Yakin menggunakan pembayaran cash ?",
+                    text: "Periksa kembali jika iya silahkan lanjutkan",
+                    type: "info",
+                    icon: "info",
+                    showCancelButton: true,
+                    align:"center",
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }).then((willDelete) => {
+                   
+                });
                 $("#hidden_tanggal_tempo").hide();
             }
         }
