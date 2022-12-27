@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 use App\Stokready;
 use App\Viewdetailstok;
+use App\Viewdetailorder;
 use App\Stokorder;
 use App\Vieworder;
 use App\Stokup;
@@ -199,7 +200,7 @@ class StokorderController extends Controller
     public function get_data(request $request)
     {
         error_reporting(0);
-        $query = Viewstokorder::query();
+        $query = Viewdetailorder::query();
         
         $data = $query->where('nomor_stok',$request->nomor_stok)->whereIn('status',array(1,2));
         $data = $query->where('tukar_id',null)->orderBy('id','Asc')->get();

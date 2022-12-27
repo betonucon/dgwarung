@@ -92,7 +92,7 @@
                         <span class="btn btn-success btn-sm" onclick="data_baru()"><i class="fas fa-plus"></i> Buat Baru </span>
                         <span class="btn btn-success btn-sm" onclick="cetak_data()"><i class="fas fa-print"></i> Print </span>
                         <span class="btn btn-success btn-sm" onclick="download_data()"><i class="fas fa-print"></i> Download </span>
-                        <span class="btn btn-success btn-sm" onclick="share_data()"><i class="fas fa-print"></i> Download </span>
+                        <!-- <span class="btn btn-success btn-sm" onclick="share_data()"><i class="fas fa-print"></i> Download </span> -->
                     @endif
                 </div>
             </div>

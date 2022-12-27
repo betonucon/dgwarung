@@ -323,19 +323,19 @@ function total_item_jual($nomor_transaksi){
 }
 function cetak_item($nomor_stok,$x){
     if($x==1){
-        $data=App\Viewstokorder::where('nomor_stok',$nomor_stok)->where('status',2)->whereBetween('urut',[1,18])->orderBy('urut','Asc')->get();
+        $data=App\Viewdetailorder::where('nomor_stok',$nomor_stok)->whereBetween('urut',[1,18])->orderBy('urut','Asc')->get();
     }
     if($x==2){
-        $data=App\Viewstokorder::where('nomor_stok',$nomor_stok)->where('status',2)->whereBetween('urut',[19,37])->orderBy('urut','Asc')->get();
+        $data=App\Viewdetailorder::where('nomor_stok',$nomor_stok)->whereBetween('urut',[19,37])->orderBy('urut','Asc')->get();
     }
     if($x==3){
-        $data=App\Viewstokorder::where('nomor_stok',$nomor_stok)->where('status',2)->whereBetween('urut',[37,56])->orderBy('urut','Asc')->get();
+        $data=App\Viewdetailorder::where('nomor_stok',$nomor_stok)->whereBetween('urut',[37,56])->orderBy('urut','Asc')->get();
     }
     if($x==4){
-        $data=App\Viewstokorder::where('nomor_stok',$nomor_stok)->where('status',2)->whereBetween('urut',[56,75])->orderBy('urut','Asc')->get();
+        $data=App\Viewdetailorder::where('nomor_stok',$nomor_stok)->whereBetween('urut',[56,75])->orderBy('urut','Asc')->get();
     }
     if($x==5){
-        $data=App\Viewstokorder::where('nomor_stok',$nomor_stok)->where('status',2)->whereBetween('urut',[75,94])->orderBy('urut','Asc')->get();
+        $data=App\Viewdetailorder::where('nomor_stok',$nomor_stok)->whereBetween('urut',[75,94])->orderBy('urut','Asc')->get();
     }
     
     return $data;
