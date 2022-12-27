@@ -244,7 +244,7 @@ class StokorderController extends Controller
         error_reporting(0);
         $query = Vieworder::query();
         
-        $data = $query->whereIn('status',array(0,1))->orderBy('tanggal','Desc')->get();
+        $data = $query->whereIn('status',array(0,1))->where('kat',null)->orderBy('tanggal','Desc')->get();
 
         return Datatables::of($data)
             ->addIndexColumn()
