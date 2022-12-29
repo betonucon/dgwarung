@@ -88,6 +88,12 @@
 							<span>Barang</span>
 						</a>
 					</li>
+					<li class=" @if(Request::is('barang')==1) active @endif">
+						<a href="{{url('barang/hapus')}}">
+							<i class="fas fa-calculator"></i> 
+							<span>Restore Barang</span>
+						</a>
+					</li>
 					<li class=" @if(Request::is('supplier')==1) active @endif">
 						<a href="{{url('/supplier')}}">
 							<i class="fas fa-users"></i> 
