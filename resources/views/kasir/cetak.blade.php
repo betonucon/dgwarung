@@ -121,7 +121,7 @@
                     $csum+=$o->total_jual;
                 ?>
                 <tr>
-                    <td class="ttdc">{{$no+1}}</td>
+                    <td class="ttdc">{{$o->urut}}</td>
                     <td class="ttd">{{$o->nama_barang}} {{$o->satuan}}</td>
                     <td class="ttdr">{{$o->qty}}</td>
                     <td class="ttd">{{$o->satuan}}</td>
