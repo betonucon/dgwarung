@@ -593,7 +593,7 @@ function total_keluar($id){
     return $saldo;
 }
 function total_piutang($id){
-    $saldo=App\Keuangan::whereIn('status_keuangan_id',array(3))->where('tahun',$id)->where('kategori_keuangan_id',1)->sum('nilai');
+    $saldo=App\Keuangan::whereIn('status_keuangan_id',array(3))->where('kategori_keuangan_id',1)->sum('nilai');
     return $saldo;
 }
 function total_tempo($id){
