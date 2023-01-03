@@ -652,6 +652,11 @@ function total_saldo($id){
     $saldo=App\Keuangan::where('status_keuangan_id',1)->where('tahun',$id)->where('kategori_keuangan_id',2)->sum('nilai');
     return ($saldo-total_keluar($id));
 }
+function total_saldo_neto($id){
+    $saldo=App\Keuangan::where('status_keuangan_id',1)->where('tahun',$id)->where('kategori_keuangan_id',2)->sum('nilai');
+    $provit=App\Keuangan::where('status_keuangan_id',1)->where('tahun',$id)->where('kategori_keuangan_id',6)->sum('nilai');
+    return (($saldo-total_keluar($id))-$provit);
+}
 function total_saldo_bulan($bulan,$tahun,$tanggal){
     $saldo=App\Keuangan::where('status_keuangan_id',1)->where('kategori_keuangan_id',2)->where('bulan',$bulan)->where('tahun',$tahun)->sum('nilai');
     return ($saldo);

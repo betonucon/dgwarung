@@ -42,15 +42,19 @@
                                     <label style="padding: 0% 1% 0% 1%;" class="col-lg-12 col-form-label">REKAPAN KEUANGAN {{$tahun}}</label>
                                 </div>
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Saldo</label>
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Saldo Bruto</label>
                                     <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_saldo($tahun))}}</div>
+                                </div>
+                                <div class="form-group row">
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Saldo Neto</label>
+                                    <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_saldo_neto($tahun))}}</div>
                                 </div>
                                 <div class="form-group row">
                                     <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Pembelian</label>
                                     <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_keluar($tahun))}}</div>
                                 </div>
                                 <div class="form-group row">
-                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Piutang</label>
+                                    <label style="padding: 0% 1% 0% 3%;" class="col-lg-4 col-form-label">Tagihan</label>
                                     <div class="col-lg-5" style="padding: 0% 1% 0% 1%;">{{uang(total_piutang($tahun))}}</div>
                                 </div>
                                 <div class="form-group row">
@@ -156,14 +160,14 @@
                             
                             <li class="nav-item">
                                 <a href="{{url('keuangan')}}?tanggal={{$tanggal}}&act={{encoder(9)}}" class="nav-link @if($act==9) active @endif">
-                                    <span class="d-sm-none">Piutang</span>
-                                    <span class="d-sm-block d-none">Piutang</span>
+                                    <span class="d-sm-none">Tagihan</span>
+                                    <span class="d-sm-block d-none">Tagihan</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{url('keuangan')}}?tanggal={{$tanggal}}&act={{encoder(11)}}" class="nav-link @if($act==11) active @endif">
-                                    <span class="d-sm-none">Piutang Lunas</span>
-                                    <span class="d-sm-block d-none">Piutang Lunas</span>
+                                    <span class="d-sm-none">Tagihan Lunas</span>
+                                    <span class="d-sm-block d-none">Tagihan Lunas</span>
                                 </a>
                             </li>
                             
