@@ -143,8 +143,9 @@ class KeuanganController extends Controller
                 }
             }else{
                 if($even==8){
-                    $data=$query->where('tahun',$request->tahun)->where('status_keuangan_id',3);
+                    $data=$query->where('status_keuangan_id',3)->where('nilai','>',0);
                 }else{
+                    
                     $data=$query->where('tahun',$request->tahun)->where('kategori_keuangan_id',$even);
                 }
                 
