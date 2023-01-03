@@ -61,7 +61,7 @@
                             </li>
                             @endforeach
                             <li class="nav-item">
-                                <a href="{{url('keuangan')}}?tanggal={{$tanggal}}&act={{encoder(8)}}" class="nav-link @if($act==0) active @endif">
+                                <a href="{{url('keuangan')}}?tanggal={{$tanggal}}&act={{encoder(8)}}" class="nav-link @if($act==8) active @endif">
                                     <span class="d-sm-none">Piutang</span>
                                     <span class="d-sm-block d-none">Piutang</span>
                                 </a>
