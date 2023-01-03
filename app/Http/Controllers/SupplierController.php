@@ -75,7 +75,9 @@ class SupplierController extends Controller
     
 
     public function delete_data(request $request){
-        $data = Supplier::where('id',$request->id)->delete();
+        $data = Supplier::where('id',$request->id)->update([
+            'status'=>0,
+        ]);
     }
 
     

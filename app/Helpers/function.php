@@ -456,7 +456,7 @@ function pembulatan($uang)
     return $akhir;
 }
 function get_supplier(){
-    $data=App\Supplier::orderBy('supplier','Asc')->get();
+    $data=App\Supplier::where('status',1)->orderBy('supplier','Asc')->get();
     return $data;
 }
 function get_barang(){
