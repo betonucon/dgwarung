@@ -114,6 +114,7 @@ class SupplierController extends Controller
                         
                         'supplier'=>$request->supplier,
                         'no_telepon'=>$request->no_telepon,
+                        'status'=>1,
                     ]);
 
                     echo'@ok';
