@@ -49,9 +49,6 @@
                                     <th class="text-nowrap"  width="9%"style="text-align:left !important">H.jual</th>
                                     <th class="text-nowrap"  width="9%"style="text-align:left !important">H.Beli</th>
                                     <th class="text-nowrap"  width="7%">Stok</th>
-                                    <th class="text-nowrap"  width="7%">Jual</th>
-                                    <th class="text-nowrap"  width="7%">Retur</th>
-                                    <th class="text-nowrap"  width="7%">Tukar</th>
                                     <th class="text-nowrap"  width="7%">Update</th>
                                     <th class="text-nowrap"  width="5%"></th>
                                 </tr>
@@ -132,9 +129,6 @@
 						{ data: 'u_harga_jual' ,className: "text-right"  },
 						{ data: 'u_harga_beli' ,className: "text-right"  },
 						{ data: 'sisa' },
-						{ data: 'jual' },
-						{ data: 'retur' },
-						{ data: 'tukar' },
 						{ data: 'tanggal_simple' },
 						{ data: 'action' },
 						
