@@ -301,7 +301,7 @@ class StokorderController extends Controller
         if($request->search!=""){
             $data = $query->where('nama_barang','LIKE','%'.$request->search.'%')->orWhere('kode','LIKE','%'.$request->search.'%')->orderBy('abnormal','Desc')->paginate('10');
         }else{
-            $data = $query->orderBy('abnormal','Desc')->paginate('40');
+            $data = $query->orderBy('abnormal','Desc')->paginate('10');
         }
         
 
