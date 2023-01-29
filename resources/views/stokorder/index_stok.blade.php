@@ -35,14 +35,7 @@
                 <!-- end panel-heading -->
                 <!-- begin panel-body -->
                 <div class="panel-body" style="padding: 5px">
-                    <div class="row">
-                        <div class="col-md-8">
-
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" class="form-control" onkeyup="cari_data(this.value)" placeholder="cari.....">
-                        </div>
-                    </div>
+                    
                 </div>
                 <div class="panel-body">       
                     <div class="table-responsive ">
@@ -125,7 +118,6 @@
                         header: true,
                         headerOffset: $('#header').height()
                     },
-                    searching:false,
                     responsive: false,
                     ajax:"{{ url('stok/get_data')}}",
 					columns: [
@@ -173,10 +165,6 @@
             $('#tampil-form').load("{{url('barang/modal')}}?id=0")
 		});
 
-        function cari_data(search){
-            var table=$('#data-table-fixed-header').DataTable();
-				table.ajax.url("{{ url('stok/get_data')}}?search="+search).load();
-        }
         function edit_data(id){
             $('#tampil-form').load("{{url('barang/modal')}}?id="+id)
         }

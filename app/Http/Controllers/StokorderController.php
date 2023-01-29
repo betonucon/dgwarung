@@ -298,12 +298,8 @@ class StokorderController extends Controller
     {
         error_reporting(0);
         $query = Viewstokaktive::query();
-        if($request->search!=""){
-            $data = $query->where('nama_barang','LIKE','%'.$request->search.'%')->orWhere('kode','LIKE','%'.$request->search.'%')->orderBy('abnormal','Desc')->paginate('10');
-        }else{
-            $data = $query->orderBy('abnormal','Desc')->paginate('10');
-        }
         
+        $data = $query->orderBy('abnormal','Desc')->get();
 
         return Datatables::of($data)
             ->addIndexColumn()
