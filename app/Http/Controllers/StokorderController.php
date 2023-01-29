@@ -298,8 +298,12 @@ class StokorderController extends Controller
     {
         error_reporting(0);
         $query = Viewstokaktive::query();
+        if($request->search!=""){
+            $data = $query->where('nama_barang','LIKE','%'.$request->search.'%')->orWhere('kode','LIKE','%'.$request->search.'%')->orderBy('abnormal','Desc')->paginate('10');
+        }else{
+            $data = $query->orderBy('abnormal','Desc')->paginate('40');
+        }
         
-        $data = $query->orderBy('abnormal','Desc')->get();
 
         return Datatables::of($data)
             ->addIndexColumn()
@@ -638,7 +642,7 @@ class StokorderController extends Controller
                     $harga_jual=ubah_uang($request->harga_jual);
                     $hdiscon=$harga_jual-(($harga_jual*discon_barang($gt->kode))/100);
                     $bar=Barang::where('kode',$gt->kode)->update([ 
-                        'harga_jual'=>$harga_jual,
+                        'harga_jual'=>ubah_uang($request->harga_jual),
                         'harga_discon'=>$hdiscon,
                         'update'=>date('Y-m-d H:i:s'),
                     ]);
