@@ -112,6 +112,9 @@
                         header: true,
                         headerOffset: $('#header').height()
                     },
+                    processing: true,
+                    serverSide: true,
+                    
                     responsive: false,
                     ajax:"{{ url('stok/get_data')}}",
 					columns: [
