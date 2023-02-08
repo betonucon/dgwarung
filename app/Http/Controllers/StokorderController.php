@@ -301,7 +301,7 @@ class StokorderController extends Controller
         $query = Viewbarangstok::query();
         
         $data = $query->orderBy('nama_barang','Asc')->get();
-        $data=$data->take(5);
+        
         return Datatables::of($data)
             ->addIndexColumn()
             
