@@ -16,7 +16,7 @@ use App\Vieworder;
 use App\Stokup;
 use App\Stok;
 use App\Viewstokorder;
-use App\Viewbarangstok;
+use App\Stoktersedia;
 use App\Viewstokaktive;
 use App\Barang;
 use App\Keuangan;
@@ -298,13 +298,33 @@ class StokorderController extends Controller
     public function get_data_stok(request $request)
     {
         error_reporting(0);
-        $query = Viewbarangstok::query();
+        $query = Stoktersedia::query();
         
-        $data = $query->orderBy('nama_barang','Asc')->get();
-        
+        $data = $query->orderBy('abnormal','Desc')->get();
+
         return Datatables::of($data)
             ->addIndexColumn()
-            
+            ->addColumn('u_harga_jual', function ($row) {
+                if($row->abnormal>0){
+                    $btn='<b><font color="red">'.uang($row->harga_jual).'</font></b>';
+                }else{
+                    $btn=uang($row->harga_jual);
+                }
+                
+                return $btn;
+            })
+            ->addColumn('u_harga_beli', function ($row) {
+                if($row->abnormal>0){
+                    $btn='<b><font color="red">'.uang($row->harga_beli).'</font></b>';
+                }else{
+                    $btn=uang($row->harga_beli);
+                }
+                return $btn;
+            })
+            ->addColumn('tanggal_simple', function ($row) {
+                $btn=tanggal_simple($row->update);
+                return $btn;
+            })
             ->addColumn('action', function ($row) {
                 $btn='
                     <div class="btn-group">
@@ -314,7 +334,7 @@ class StokorderController extends Controller
                 return $btn;
             })
             
-            ->rawColumns(['action'])
+            ->rawColumns(['action','u_harga_jual','u_harga_beli'])
             ->make(true);
     }
     
