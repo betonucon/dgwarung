@@ -38,7 +38,7 @@
                 
                 <div class="col-lg-3" style="padding: 0% 1% 0% 0%;">
                     <div class="input-group input-group-sm">
-                        <input type="text"  readonly  name="nilai" id="nilai"  value="{{(($data->nilai+$data->nilai_dibayar)-$data->discon)}}"  class="form-control form-control-sm" placeholder="Ketik disini...." />
+                        <input type="text"  readonly  name="nilai" id="nilai"  value="{{($data->nilai-$data->discon)}}"  class="form-control form-control-sm" placeholder="Ketik disini...." />
                         
                     </div>
                 </div>
