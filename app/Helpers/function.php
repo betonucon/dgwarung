@@ -345,31 +345,31 @@ function cetak_item_kasir($nomor_transaksi,$x){
         $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[1,18])->orderBy('urut','Asc')->get();
     }
     if($x==2){
-        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[19,37])->orderBy('urut','Asc')->get();
+        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[19,36])->orderBy('urut','Asc')->get();
     }
     if($x==3){
-        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[38,56])->orderBy('urut','Asc')->get();
+        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[37,54])->orderBy('urut','Asc')->get();
     }
     if($x==4){
-        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[57,75])->orderBy('urut','Asc')->get();
+        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[55,72])->orderBy('urut','Asc')->get();
     }
     if($x==5){
-        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[76,94])->orderBy('urut','Asc')->get();
+        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[73,90])->orderBy('urut','Asc')->get();
     }
     if($x==6){
-        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[95,113])->orderBy('urut','Asc')->get();
+        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[91,108])->orderBy('urut','Asc')->get();
     }
     if($x==7){
-        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[114,132])->orderBy('urut','Asc')->get();
+        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[109,126])->orderBy('urut','Asc')->get();
     }
     if($x==8){
-        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[133,151])->orderBy('urut','Asc')->get();
+        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[127,144])->orderBy('urut','Asc')->get();
     }
     if($x==9){
-        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[152,170])->orderBy('urut','Asc')->get();
+        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[145,162])->orderBy('urut','Asc')->get();
     }
     if($x==10){
-        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[171,189])->orderBy('urut','Asc')->get();
+        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[163,180])->orderBy('urut','Asc')->get();
     }
     
     return $data;
