@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>CETAK</title>
+        <title>CETAK NOTA</title>
         <style>
             html{
                 color:#000;
