@@ -565,6 +565,36 @@ class KeuanganController extends Controller
            
         }
     }
+    public function store_discon(request $request){
+        error_reporting(0);
+        $rules = [];
+        $messages = [];
+        
+        $rules['discon']= 'required|min:0|not_in:0';
+        $messages['discon.required']= 'Lengkapi nilai discon';
+        $messages['discon.not_in']= 'Lengkapi Nilai discon';
+        
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        $val=$validator->Errors();
+
+
+        if ($validator->fails()) {
+            echo'<div class="nitof"><b>Oops Error !</b><br><div class="isi-nitof">';
+                foreach(parsing_validator($val) as $value){
+                    
+                    foreach($value as $isi){
+                        echo'-&nbsp;'.$isi.'<br>';
+                    }
+                }
+            echo'</div></div>';
+        }else{
+                $data=Keuangan::where('id',$request->keuangan_id)->update(['discon'=>ubah_uang($request->discon)]);
+                echo'@ok@'.$request->keuangan_id;
+           
+           
+        }
+    }
 
     public function cetak(Request $request)
     {

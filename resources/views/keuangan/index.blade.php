@@ -509,7 +509,8 @@
                     }
                 });
                 
-            }      
+            } 
+
             function simpan_bayar(){
             
                 var form=document.getElementById('mydatabayar');
@@ -559,6 +560,57 @@
                             
                         }
                     });
+            };       
+            function proses_enter(e){
+                if(e.keyCode === 13){
+                    var form=document.getElementById('mydatabayar');
+                
+                    
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ url('keuangan/store_discon') }}",
+                        data: new FormData(form),
+                        contentType: false,
+                        cache: false,
+                        processData:false,
+                        beforeSend: function() {
+                            document.getElementById("loadnya").style.width = "100%";
+                        },
+                        success: function(msg){
+                            var bat=msg.split('@');
+                            if(bat[1]=='ok'){
+                                document.getElementById("loadnya").style.width = "0px";
+                                swal({
+                                        title: "Success! berhasil update!",
+                                        icon: "success",
+                                });
+                                $('#tampil-form-bayar').load("{{url('keuangan/modal_bayar')}}?id="+bat[2]) 
+                            }else{
+                                document.getElementById("loadnya").style.width = "0px";
+                                swal({
+                                    title: 'Notifikasi',
+                                
+                                    html:true,
+                                    text:'ss',
+                                    icon: 'error',
+                                    buttons: {
+                                        cancel: {
+                                            text: 'Tutup',
+                                            value: null,
+                                            visible: true,
+                                            className: 'btn btn-dangers',
+                                            closeModal: true,
+                                        },
+                                        
+                                    }
+                                });
+                                $('.swal-text').html('<div style="width:100%;background:#f2f2f5;padding:1%;text-align:left;font-size:13px">'+msg+'</div>')
+                            }
+                            
+                            
+                        }
+                    });
+                }
             };       
             function simpan_tukar(){
             

@@ -1,5 +1,6 @@
 
     <input type="hidden" name="id" value="{{$id}}">
+    <input type="hidden" name="keuangan_id" value="{{$data->id}}">
     <div class="note note-warning note-with-right-icon m-b-15">
         <div class="note-content text-right">
             <h4><b>Perhatian</b></h4>
@@ -33,11 +34,17 @@
             </div>
             
             <div class="form-group row" >
-                <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Nilai Tagihan</label>
+                <label style="padding: 0% 1% 0% 3%;" class="col-lg-3 col-form-label">Nilai Tagihan & Discon</label>
                 
                 <div class="col-lg-3" style="padding: 0% 1% 0% 0%;">
                     <div class="input-group input-group-sm">
-                        <input type="text"  readonly  name="nilai" id="nilai"  value="{{$data->nilai}}"  class="form-control form-control-sm" placeholder="Ketik disini...." />
+                        <input type="text"  readonly  name="nilai" id="nilai"  value="{{($data->nilai-$data->discon)}}"  class="form-control form-control-sm" placeholder="Ketik disini...." />
+                        
+                    </div>
+                </div>
+                <div class="col-lg-3" style="padding: 0% 1% 0% 0%;">
+                    <div class="input-group input-group-sm">
+                        <input type="text"    name="discon" id="discon" onkeypress="proses_enter(event)" value="{{$data->discon}}"  class="form-control form-control-sm" placeholder="Ketik disini...." />
                         
                     </div>
                 </div>
@@ -113,6 +120,7 @@
         $("#currency1").inputmask({ alias : "currency", prefix: '','groupSeparator': ',', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
         $("#nilai_dibayarkan").inputmask({ alias : "currency", prefix: '','groupSeparator': ',', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
         $("#nilai").inputmask({ alias : "currency", prefix: '', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
+        $("#discon").inputmask({ alias : "currency", prefix: '', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
         $("#qty_retur").inputmask({ alias : "currency", prefix: '', 'autoGroup': true, 'digits': 0, 'digitsOptional': false });
         
         $('#tanggal').datepicker({

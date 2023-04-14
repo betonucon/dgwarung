@@ -61,6 +61,7 @@ Route::group(['prefix' => 'keuangan','middleware'    => 'auth'],function(){
     Route::get('/modal_bayar','KeuanganController@modal_bayar');
     Route::post('/','KeuanganController@store');
     Route::post('/store_bayar','KeuanganController@store_bayar');
+    Route::post('/store_discon','KeuanganController@store_discon');
     Route::post('/import','KeuanganController@import');
 });
 Route::group(['prefix' => 'setting','middleware'    => 'auth'],function(){
