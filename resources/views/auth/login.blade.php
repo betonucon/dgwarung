@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>DG WARUNG</title>
+	<title>BP SUPPLIER</title>
 	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
 	<meta content="" name="description" />
 	<meta content="" name="author" />
@@ -34,11 +34,9 @@
 			<!-- begin brand -->
 			<div class="login-header">
 				<div class="brand">
-                    <img src="{{url_plug()}}/img/logo.png" width="100%">
+                    <img src="{{url_plug()}}/img/logo.png?v={{date('Y-m-d')}}" width="100%">
 				</div>
-				<div class="icon">
-					<i class="fa fa-lock"></i>
-				</div>
+				
 			</div>
 			<!-- end brand -->
 			<!-- begin login-content -->

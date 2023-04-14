@@ -163,7 +163,7 @@
 			opacity: .5
 		}
 		.img-logo-png{
-			width:100%;
+			width:83%;
 		}
 		@media only screen and (max-width: 700px) {
 			#hidden-mobile{
