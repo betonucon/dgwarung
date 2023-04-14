@@ -356,6 +356,21 @@ function cetak_item_kasir($nomor_transaksi,$x){
     if($x==5){
         $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[76,94])->orderBy('urut','Asc')->get();
     }
+    if($x==6){
+        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[95,113])->orderBy('urut','Asc')->get();
+    }
+    if($x==7){
+        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[114,132])->orderBy('urut','Asc')->get();
+    }
+    if($x==8){
+        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[133,151])->orderBy('urut','Asc')->get();
+    }
+    if($x==9){
+        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[152,170])->orderBy('urut','Asc')->get();
+    }
+    if($x==10){
+        $data=App\Viewtransaksikasir::where('nomor_transaksi',$nomor_transaksi)->whereBetween('urut',[171,189])->orderBy('urut','Asc')->get();
+    }
     
     return $data;
 }
