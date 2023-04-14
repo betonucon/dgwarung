@@ -104,13 +104,14 @@
                 </tr> -->
                 
             </table>
-            <table width="97%" style="margin-left:3%" >
+            <table width="99%" style="margin-left:3%" >
                 <tr>
                     <td class="ttdh" width="5%">No</td>
                     <td class="ttdh">Barang</td>
                     <td class="ttdh"  width="8%">Qty</td>
                     <td class="ttdh"  width="8%">Satuan</td>
                     <td class="ttdh"  width="14%">Harga</td>
+                    <td class="ttdh"  width="14%">Discon</td>
                     <td class="ttdh"  width="14%">Total</td>
                 </tr>
                 <?php
@@ -126,22 +127,23 @@
                     <td class="ttdr">{{$o->qty}}</td>
                     <td class="ttd">{{$o->satuan}}</td>
                     <td class="ttdr">{{uang($o->harga_jual)}}</td>
+                    <td class="ttdr">{{uang($o->discon_jual)}}</td>
                     <td class="ttdr">{{uang($o->total_jual)}}</td>
                 </tr>
                 @endforeach
                 @if($ford==$x)
                 <tr>
-                    <td class="ttdro" colspan="5">TOTAL HALAMAN {{$x}}</td>
+                    <td class="ttdro" colspan="6">TOTAL HALAMAN {{$x}}</td>
                     <td class="ttdr">{{uang($csum)}}</td>
                 </tr>
                 <tr>
-                    <td class="ttdro" colspan="5">SUB TOTAL</td>
+                    <td class="ttdro" colspan="6">SUB TOTAL</td>
                     <td class="ttdr">{{uang(sum_item_order_kasir($order->nomor_transaksi))}}</td>
                 </tr>
                 
                 @else
                 <tr>
-                    <td class="ttdro" colspan="5">TOTAL HALAMAN {{$x}}</td>
+                    <td class="ttdro" colspan="6">TOTAL HALAMAN {{$x}}</td>
                     <td class="ttdr">{{uang($csum)}}</td>
                 </tr>
                 @endif
