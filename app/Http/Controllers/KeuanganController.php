@@ -570,9 +570,8 @@ class KeuanganController extends Controller
         $rules = [];
         $messages = [];
         
-        $rules['discon']= 'required|min:0|not_in:0';
+        $rules['discon']= 'required';
         $messages['discon.required']= 'Lengkapi nilai discon';
-        $messages['discon.not_in']= 'Lengkapi Nilai discon';
         
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -589,6 +588,7 @@ class KeuanganController extends Controller
                 }
             echo'</div></div>';
         }else{
+            
                 $data=Keuangan::where('id',$request->keuangan_id)->update(['discon'=>ubah_uang($request->discon)]);
                 echo'@ok@'.$request->keuangan_id;
            
