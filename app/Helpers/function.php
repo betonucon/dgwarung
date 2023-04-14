@@ -326,16 +326,16 @@ function cetak_item($nomor_stok,$x){
         $data=App\Viewdetailorder::where('nomor_stok',$nomor_stok)->whereBetween('urut',[1,18])->orderBy('urut','Asc')->get();
     }
     if($x==2){
-        $data=App\Viewdetailorder::where('nomor_stok',$nomor_stok)->whereBetween('urut',[19,37])->orderBy('urut','Asc')->get();
+        $data=App\Viewdetailorder::where('nomor_stok',$nomor_stok)->whereBetween('urut',[19,36])->orderBy('urut','Asc')->get();
     }
     if($x==3){
-        $data=App\Viewdetailorder::where('nomor_stok',$nomor_stok)->whereBetween('urut',[37,56])->orderBy('urut','Asc')->get();
+        $data=App\Viewdetailorder::where('nomor_stok',$nomor_stok)->whereBetween('urut',[37,54])->orderBy('urut','Asc')->get();
     }
     if($x==4){
-        $data=App\Viewdetailorder::where('nomor_stok',$nomor_stok)->whereBetween('urut',[56,75])->orderBy('urut','Asc')->get();
+        $data=App\Viewdetailorder::where('nomor_stok',$nomor_stok)->whereBetween('urut',[55,72])->orderBy('urut','Asc')->get();
     }
     if($x==5){
-        $data=App\Viewdetailorder::where('nomor_stok',$nomor_stok)->whereBetween('urut',[75,94])->orderBy('urut','Asc')->get();
+        $data=App\Viewdetailorder::where('nomor_stok',$nomor_stok)->whereBetween('urut',[73,90])->orderBy('urut','Asc')->get();
     }
     
     return $data;
