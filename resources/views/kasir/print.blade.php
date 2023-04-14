@@ -126,7 +126,7 @@
                     <td class="ttd">{{$o->nama_barang}} {{$o->satuan}}</td>
                     <td class="ttdr">{{$o->qty}}</td>
                     <td class="ttd">{{$o->satuan}}</td>
-                    <td class="ttdr">{{uang($o->harga_jual)}}</td>
+                    <td class="ttdr">{{uang($o->harga_jual+$o->discon_jual)}}</td>
                     <td class="ttdr">{{uang($o->discon_jual)}}</td>
                     <td class="ttdr">{{uang($o->total_jual)}}</td>
                 </tr>
