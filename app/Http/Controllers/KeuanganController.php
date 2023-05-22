@@ -13,6 +13,7 @@ use App\Stokorder;
 use App\Viewstatuskategori;
 use App\Viewkeuangan;
 use App\Viewstokkasir;
+use App\Viewheaderstok;
 use App\Kasir;
 use App\Gaji;
 use PDF;
@@ -456,8 +457,8 @@ class KeuanganController extends Controller
                     if($mstr->kat==1){
                         $keterangan='Pembayaran piutang '.$request->nomor;
                     }else{
-                        $odr=Stokorder::where('nomor_stok',$request->nomor_stok)->first();
-                        $keterangan='Pembayaran Nomor Order '.$request->nomor_stok.' '.$odr->msupplier['supplier'];
+                        $odr=Viewheaderstok::where('nomor_stok',$request->nomor_stok)->first();
+                        $keterangan='Pembayaran  kepada '.$odr->supplier.' NO:'.$request->nomor_stok;
                     }
                     
                     if(ubah_uang($request->nilai_dibayarkan)>ubah_uang($request->nilai)){

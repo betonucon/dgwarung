@@ -818,7 +818,6 @@ class StokorderController extends Controller
                         'total_beli'=>(ubah_uang($request->harga_beli)*ubah_uang($request->qty)),
                         'expired'=>$request->expired,
                         'discon'=>$request->discon,
-                        'status'=>1,
                         'bulan'=>date('m'),
                         'tahun'=>date('Y'),
                         'waktu'=>date('Y-m-d H:i:s'),
