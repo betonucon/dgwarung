@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-lg-4" style="padding: 0% 1% 0% 0%;">
                     <div class="input-group input-group-sm">
-                        <input type="text" readonly  name="nomor_stok" value="{{substr($data->nomor,1,11)}}" class="form-control form-control-sm" placeholder="Ketik disini...." />
+                        <input type="text" readonly  name="nomor_stok" value="{{substr($data->nomor,2,11)}}" class="form-control form-control-sm" placeholder="Ketik disini...." />
                         
                     </div>
                 </div>
